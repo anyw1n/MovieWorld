@@ -10,6 +10,12 @@
 		30F557066B050037D21B3C92 /* Pods_MovieWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59C6FC7A90A130B102354A99 /* Pods_MovieWorld.framework */; };
 		5009CAF623F97AA4003758C8 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5009CAF523F97AA4003758C8 /* Colors.xcassets */; };
 		50C713C623F96DC20043F2D1 /* MWCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C713C523F96DC20043F2D1 /* MWCardView.swift */; };
+		50E10E70240165BA00F774F9 /* MWInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E10E6F240165BA00F774F9 /* MWInterface.swift */; };
+		50E10E722401684100F774F9 /* MWMainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E10E712401684100F774F9 /* MWMainTabBarController.swift */; };
+		50E10E742401688800F774F9 /* MWMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E10E732401688800F774F9 /* MWMainViewController.swift */; };
+		50E10E762401689A00F774F9 /* MWCategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E10E752401689A00F774F9 /* MWCategoryViewController.swift */; };
+		50E10E78240168B000F774F9 /* MWSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E10E77240168B000F774F9 /* MWSearchViewController.swift */; };
+		50E10E7B2401860D00F774F9 /* MWTitleArrowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E10E7A2401860D00F774F9 /* MWTitleArrowCell.swift */; };
 		50F700E623F7AEE00029A997 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F700E523F7AEE00029A997 /* AppDelegate.swift */; };
 		50F700EA23F7AEE00029A997 /* MWViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F700E923F7AEE00029A997 /* MWViewController.swift */; };
 		50F700EF23F7AEE20029A997 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 50F700EE23F7AEE20029A997 /* Assets.xcassets */; };
@@ -21,6 +27,12 @@
 		3BCBB235D6CABA58FB477A8D /* Pods-MovieWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.debug.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.debug.xcconfig"; sourceTree = "<group>"; };
 		5009CAF523F97AA4003758C8 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		50C713C523F96DC20043F2D1 /* MWCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCardView.swift; sourceTree = "<group>"; };
+		50E10E6F240165BA00F774F9 /* MWInterface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWInterface.swift; sourceTree = "<group>"; };
+		50E10E712401684100F774F9 /* MWMainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMainTabBarController.swift; sourceTree = "<group>"; };
+		50E10E732401688800F774F9 /* MWMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMainViewController.swift; sourceTree = "<group>"; };
+		50E10E752401689A00F774F9 /* MWCategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCategoryViewController.swift; sourceTree = "<group>"; };
+		50E10E77240168B000F774F9 /* MWSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSearchViewController.swift; sourceTree = "<group>"; };
+		50E10E7A2401860D00F774F9 /* MWTitleArrowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWTitleArrowCell.swift; sourceTree = "<group>"; };
 		50F700E223F7AEE00029A997 /* MovieWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		50F700E523F7AEE00029A997 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		50F700E923F7AEE00029A997 /* MWViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWViewController.swift; sourceTree = "<group>"; };
@@ -45,7 +57,7 @@
 		500A3A8D23F98A61004A29DE /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				50F700E923F7AEE00029A997 /* MWViewController.swift */,
+				50E10E732401688800F774F9 /* MWMainViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -55,24 +67,165 @@
 			children = (
 				50F700EE23F7AEE20029A997 /* Assets.xcassets */,
 				5009CAF523F97AA4003758C8 /* Colors.xcassets */,
+				50F700F023F7AEE20029A997 /* LaunchScreen.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		500A3A8F23F98AA3004A29DE /* Controls */ = {
+		506EC40724015C8A0020240A /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				500A3A9023F98AA9004A29DE /* Views */,
+				506EC40824015C9B0020240A /* Navigation */,
+				506EC40924015CA60020240A /* Controllers */,
+				506EC40A24015CB20020240A /* Controls */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		506EC40824015C9B0020240A /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				50E10E6F240165BA00F774F9 /* MWInterface.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
+		506EC40924015CA60020240A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				50F700E923F7AEE00029A997 /* MWViewController.swift */,
+				50E10E712401684100F774F9 /* MWMainTabBarController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		506EC40A24015CB20020240A /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				50E10E792401835200F774F9 /* Cells */,
+				506EC4192401604E0020240A /* Views */,
 			);
 			path = Controls;
 			sourceTree = "<group>";
 		};
-		500A3A9023F98AA9004A29DE /* Views */ = {
+		506EC40B24015CF80020240A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		506EC40D24015D110020240A /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		506EC40E24015D3B0020240A /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				506EC41124015D5A0020240A /* Main */,
+				506EC41024015D520020240A /* Category */,
+				506EC40F24015D4A0020240A /* Search */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		506EC40F24015D4A0020240A /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				506EC41524015DA90020240A /* Views */,
+				506EC41424015DA20020240A /* Controllers */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		506EC41024015D520020240A /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				506EC41824015DBF0020240A /* Views */,
+				506EC41724015DB90020240A /* Controllers */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		506EC41124015D5A0020240A /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				506EC41224015D850020240A /* Models */,
+				506EC41324015D8C0020240A /* Views */,
+				500A3A8D23F98A61004A29DE /* Controllers */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		506EC41224015D850020240A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		506EC41324015D8C0020240A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		506EC41424015DA20020240A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				50E10E77240168B000F774F9 /* MWSearchViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		506EC41524015DA90020240A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		506EC41724015DB90020240A /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				50E10E752401689A00F774F9 /* MWCategoryViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		506EC41824015DBF0020240A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				50E10E7C24018FDC00F774F9 /* Cells */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		506EC4192401604E0020240A /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				50C713C523F96DC20043F2D1 /* MWCardView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		50E10E792401835200F774F9 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		50E10E7C24018FDC00F774F9 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				50E10E7A2401860D00F774F9 /* MWTitleArrowCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		50F700D923F7AEE00029A997 = {
@@ -98,10 +251,11 @@
 			children = (
 				50F700E523F7AEE00029A997 /* AppDelegate.swift */,
 				50F700F323F7AEE20029A997 /* Info.plist */,
-				500A3A8D23F98A61004A29DE /* Controllers */,
-				500A3A8F23F98AA3004A29DE /* Controls */,
+				506EC40724015C8A0020240A /* Common */,
+				506EC40E24015D3B0020240A /* Features */,
+				506EC40D24015D110020240A /* Utility */,
+				506EC40B24015CF80020240A /* Extensions */,
 				500A3A8E23F98A74004A29DE /* Resources */,
-				50F700F023F7AEE20029A997 /* LaunchScreen.storyboard */,
 			);
 			path = MovieWorld;
 			sourceTree = "<group>";
@@ -238,9 +392,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50E10E78240168B000F774F9 /* MWSearchViewController.swift in Sources */,
 				50F700EA23F7AEE00029A997 /* MWViewController.swift in Sources */,
+				50E10E722401684100F774F9 /* MWMainTabBarController.swift in Sources */,
+				50E10E70240165BA00F774F9 /* MWInterface.swift in Sources */,
+				50E10E762401689A00F774F9 /* MWCategoryViewController.swift in Sources */,
 				50F700E623F7AEE00029A997 /* AppDelegate.swift in Sources */,
 				50C713C623F96DC20043F2D1 /* MWCardView.swift in Sources */,
+				50E10E742401688800F774F9 /* MWMainViewController.swift in Sources */,
+				50E10E7B2401860D00F774F9 /* MWTitleArrowCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

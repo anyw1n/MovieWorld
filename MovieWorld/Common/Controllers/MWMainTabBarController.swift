@@ -1,0 +1,50 @@
+//
+//  MWMainTabBarController.swift
+//  MovieWorld
+//
+//  Created by Alexey Zhizhensky on 2/22/20.
+//  Copyright © 2020 Alexey Zhizhensky. All rights reserved.
+//
+
+import UIKit
+
+class MWMainTabBarController: UITabBarController {
+
+    let mainController: MWMainViewController = {
+        let controller = MWMainViewController()
+        controller.tabBarItem = UITabBarItem(title: "Main",
+                                             image: UIImage(named: "mainTabBarIcon"),
+                                             selectedImage: UIImage(named: "mainTabBarIcon"))
+        return controller
+    }()
+    
+    let categoryController: MWCategoryViewController = {
+        let controller = MWCategoryViewController()
+        controller.tabBarItem = UITabBarItem(title: "Category",
+                                             image: UIImage(named: "categoryTabBarIcon"),
+                                             selectedImage: UIImage(named: "categoryTabBarIcon"))
+        return controller
+    }()
+    
+    let searchController: MWSearchViewController = {
+        let controller = MWSearchViewController()
+        controller.tabBarItem = UITabBarItem(title: "Search",
+                                             image: UIImage(named: "searchTabBarIcon"),
+                                             selectedImage: UIImage(named: "searchTabBarIcon"))
+        return controller
+    }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        let controllers: [UIViewController] = [self.mainController,
+                                               self.categoryController,
+                                               self.searchController]
+        self.viewControllers = controllers.map { UINavigationController(rootViewController: $0) }
+        
+        self.tabBar.barTintColor = .white
+        self.tabBar.tintColor = UIColor(named: "accentColor")
+        self.tabBar.unselectedItemTintColor = UIColor(named: "textColor")
+    }
+    
+}

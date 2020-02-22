@@ -16,11 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         self.window = UIWindow()
-        let viewController = MWViewController()
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.navigationBar.isTranslucent = false
-        self.window?.rootViewController = navigationController
-        self.window?.makeKeyAndVisible()
+        MWI.sh.setup(window: self.window ?? UIWindow())
         
         return true
     }
