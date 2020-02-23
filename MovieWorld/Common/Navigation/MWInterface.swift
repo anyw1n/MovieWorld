@@ -20,14 +20,25 @@ class MWInterface {
     
     private init() {}
     
-    func setup(window: UIWindow) {
+    func setup(window: UIWindow?) {
         
         self.window = window
 
         self.setupNavigationBarStyle()
 
-        window.rootViewController = self.tabBarController
-        window.makeKeyAndVisible()
+        window?.rootViewController = self.tabBarController
+        window?.makeKeyAndVisible()
+    }
+    
+    func push(_ vc: UIViewController) {
+        guard let navigationController =
+            self.tabBarController.selectedViewController as? UINavigationController else { return }
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    func pop() {
+        guard let navigationController = self.tabBarController.selectedViewController as? UINavigationController else { return }
+        navigationController.popViewController(animated: true)
     }
     
     private func setupNavigationBarStyle() {
@@ -47,14 +58,4 @@ class MWInterface {
         }
     }
     
-    func push(vc: UIViewController) {
-        guard let navigationController =
-            self.tabBarController.selectedViewController as? UINavigationController else { return }
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
-    func pop() {
-        guard let navigationController = self.tabBarController.selectedViewController as? UINavigationController else { return }
-        navigationController.popViewController(animated: true)
-    }
 }
