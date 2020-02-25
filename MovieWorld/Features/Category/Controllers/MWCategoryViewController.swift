@@ -10,7 +10,7 @@ import UIKit
 
 class MWCategoryViewController: MWViewController {
     
-    let tableView = UITableView()
+    let tableView = UITableView(frame: CGRect.zero, style: .grouped)
     private let cellID = "titleArrowCell"
     private let headerID = "spaceHeaderView"
     var categories: [String] = Array(repeating: "Top 250", count: 25)
