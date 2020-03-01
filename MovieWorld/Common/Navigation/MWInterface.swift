@@ -43,7 +43,6 @@ class MWInterface {
     
     private func setupNavigationBarStyle() {
         let standartNavBar = UINavigationBar.appearance()
-        standartNavBar.backgroundColor = .white
         standartNavBar.tintColor = UIColor(named: "accentColor")
         standartNavBar.prefersLargeTitles = true
         standartNavBar.largeTitleTextAttributes =

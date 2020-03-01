@@ -10,20 +10,20 @@ import UIKit
 
 class MWCardView: UIView {
     
-    private lazy var imageView: UIImageView = {
+    lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "bookImage")
         imageView.layer.cornerRadius = 5
         return imageView
     }()
-    private lazy var titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "Green Book"
         titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
         titleLabel.textColor = UIColor(named: "textColor")
         return titleLabel
     }()
-    private lazy var subtitleLabel: UILabel = {
+    lazy var subtitleLabel: UILabel = {
         let subtitleLabel = UILabel()
         subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
         subtitleLabel.text = "2018, USA"
@@ -31,7 +31,7 @@ class MWCardView: UIView {
         subtitleLabel.textColor = UIColor(named: "textColor")
         return subtitleLabel
     }()
-    private lazy var genreLabel: UILabel = {
+    lazy var genreLabel: UILabel = {
         let genreLabel = UILabel()
         genreLabel.translatesAutoresizingMaskIntoConstraints = false
         genreLabel.text = "Comedy, Drama, Foreign"
@@ -41,7 +41,7 @@ class MWCardView: UIView {
         genreLabel.textColor = UIColor(named: "textColor")
         return genreLabel
     }()
-    private lazy var ratingLabel: UILabel = {
+    lazy var ratingLabel: UILabel = {
         let ratingLabel = UILabel()
         ratingLabel.translatesAutoresizingMaskIntoConstraints = false
         ratingLabel.text = "IMDB 8.2, KP 8.3"
@@ -85,7 +85,7 @@ class MWCardView: UIView {
     }
     
     init() {
-        super.init(frame: CGRect.zero)
+        super.init(frame: CGRect())
         
         self.backgroundColor = .white
         self.addSubviews()

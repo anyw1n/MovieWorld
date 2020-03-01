@@ -10,6 +10,8 @@ import UIKit
 
 class MWTitleArrowCell: UITableViewCell {
     
+    static let reuseID = "titleArrowCell"
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(named: "textColor")

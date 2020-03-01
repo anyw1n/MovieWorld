@@ -11,17 +11,16 @@ import UIKit
 class MWCategoryViewController: MWViewController {
     
     let tableView = UITableView(frame: CGRect.zero, style: .grouped)
-    private let cellID = "titleArrowCell"
-    private let headerID = "spaceHeaderView"
+    
     var categories: [String] = Array(repeating: "Top 250", count: 25)
 
     private func setupTableView() {
         self.tableView.delegate = self
         self.tableView.dataSource = self
-        self.tableView.register(MWTitleArrowCell.self, forCellReuseIdentifier: self.cellID)
-        self.tableView.register(UITableViewHeaderFooterView.self,
-                                forHeaderFooterViewReuseIdentifier: self.headerID)
+        self.tableView.register(MWTitleArrowCell.self, forCellReuseIdentifier: MWTitleArrowCell.reuseID)
         self.tableView.separatorStyle = .none
+        self.tableView.showsHorizontalScrollIndicator = false
+        self.tableView.showsVerticalScrollIndicator = false
         self.view.addSubview(self.tableView)
     }
     
@@ -46,11 +45,16 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = self.tableView.dequeueReusableHeaderFooterView(withIdentifier: self.headerID)
-        let background = UIView()
-        background.backgroundColor = .white
-        header?.backgroundView = background
+        let header = UIView()
         return header
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return CGFloat.leastNonzeroMagnitude
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -62,7 +66,8 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: self.cellID, for: indexPath)
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: MWTitleArrowCell.reuseID,
+                                                      for: indexPath)
             as? MWTitleArrowCell ?? MWTitleArrowCell()
         cell.titleLabel.text = self.categories[indexPath.section]
         return cell

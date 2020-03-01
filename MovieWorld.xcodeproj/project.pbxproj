@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		30F557066B050037D21B3C92 /* Pods_MovieWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59C6FC7A90A130B102354A99 /* Pods_MovieWorld.framework */; };
 		5009CAF623F97AA4003758C8 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5009CAF523F97AA4003758C8 /* Colors.xcassets */; };
+		507F690D240B85C600564DEC /* MWCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507F690C240B85C600564DEC /* MWCollectionViewCell.swift */; };
+		507F690F240B892E00564DEC /* MWCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507F690E240B892E00564DEC /* MWCollectionTableViewCell.swift */; };
 		50C713C623F96DC20043F2D1 /* MWCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C713C523F96DC20043F2D1 /* MWCardView.swift */; };
 		50CAB43124057946005AB8AF /* MWRoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CAB43024057946005AB8AF /* MWRoundedButton.swift */; };
 		50CAB43324057B47005AB8AF /* MWMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CAB43224057B47005AB8AF /* MWMovie.swift */; };
@@ -29,6 +31,8 @@
 		36A3E57DB34D6042BDC136E4 /* Pods-MovieWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.release.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.release.xcconfig"; sourceTree = "<group>"; };
 		3BCBB235D6CABA58FB477A8D /* Pods-MovieWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.debug.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.debug.xcconfig"; sourceTree = "<group>"; };
 		5009CAF523F97AA4003758C8 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		507F690C240B85C600564DEC /* MWCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCollectionViewCell.swift; sourceTree = "<group>"; };
+		507F690E240B892E00564DEC /* MWCollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCollectionTableViewCell.swift; sourceTree = "<group>"; };
 		50C713C523F96DC20043F2D1 /* MWCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCardView.swift; sourceTree = "<group>"; };
 		50CAB43024057946005AB8AF /* MWRoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWRoundedButton.swift; sourceTree = "<group>"; };
 		50CAB43224057B47005AB8AF /* MWMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovie.swift; sourceTree = "<group>"; };
@@ -178,6 +182,7 @@
 		506EC41324015D8C0020240A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				507F690B240B85B100564DEC /* Cells */,
 				50CAB43424058128005AB8AF /* MWTableViewHeader.swift */,
 			);
 			path = Views;
@@ -220,6 +225,15 @@
 				50C713C523F96DC20043F2D1 /* MWCardView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		507F690B240B85B100564DEC /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				507F690C240B85C600564DEC /* MWCollectionViewCell.swift */,
+				507F690E240B892E00564DEC /* MWCollectionTableViewCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		50CAB42F24057929005AB8AF /* Buttons */ = {
@@ -412,9 +426,11 @@
 				50E10E78240168B000F774F9 /* MWSearchViewController.swift in Sources */,
 				50F700EA23F7AEE00029A997 /* MWViewController.swift in Sources */,
 				50E10E722401684100F774F9 /* MWMainTabBarController.swift in Sources */,
+				507F690F240B892E00564DEC /* MWCollectionTableViewCell.swift in Sources */,
 				50E10E70240165BA00F774F9 /* MWInterface.swift in Sources */,
 				50E10E762401689A00F774F9 /* MWCategoryViewController.swift in Sources */,
 				50F700E623F7AEE00029A997 /* AppDelegate.swift in Sources */,
+				507F690D240B85C600564DEC /* MWCollectionViewCell.swift in Sources */,
 				50C713C623F96DC20043F2D1 /* MWCardView.swift in Sources */,
 				50CAB43124057946005AB8AF /* MWRoundedButton.swift in Sources */,
 				50E10E742401688800F774F9 /* MWMainViewController.swift in Sources */,

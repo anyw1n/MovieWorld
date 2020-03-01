@@ -42,7 +42,6 @@ class MWMainTabBarController: UITabBarController {
                                                self.searchController]
         self.viewControllers = controllers.map { UINavigationController(rootViewController: $0) }
         
-        self.tabBar.barTintColor = .white
         self.tabBar.tintColor = UIColor(named: "accentColor")
         self.tabBar.unselectedItemTintColor = UIColor(named: "textColor")
     }
