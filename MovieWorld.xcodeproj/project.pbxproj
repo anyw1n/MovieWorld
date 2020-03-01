@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		30F557066B050037D21B3C92 /* Pods_MovieWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59C6FC7A90A130B102354A99 /* Pods_MovieWorld.framework */; };
 		5009CAF623F97AA4003758C8 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5009CAF523F97AA4003758C8 /* Colors.xcassets */; };
+		5019069F240BB039008D1009 /* String+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019069E240BB039008D1009 /* String+Ex.swift */; };
+		501906A1240BB067008D1009 /* MWNetwork+ExUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501906A0240BB067008D1009 /* MWNetwork+ExUtility.swift */; };
+		501906A3240BB1A8008D1009 /* MWNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501906A2240BB1A8008D1009 /* MWNetwork.swift */; };
 		507F690D240B85C600564DEC /* MWCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507F690C240B85C600564DEC /* MWCollectionViewCell.swift */; };
 		507F690F240B892E00564DEC /* MWCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507F690E240B892E00564DEC /* MWCollectionTableViewCell.swift */; };
 		50C713C623F96DC20043F2D1 /* MWCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C713C523F96DC20043F2D1 /* MWCardView.swift */; };
@@ -31,6 +34,9 @@
 		36A3E57DB34D6042BDC136E4 /* Pods-MovieWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.release.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.release.xcconfig"; sourceTree = "<group>"; };
 		3BCBB235D6CABA58FB477A8D /* Pods-MovieWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.debug.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.debug.xcconfig"; sourceTree = "<group>"; };
 		5009CAF523F97AA4003758C8 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		5019069E240BB039008D1009 /* String+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ex.swift"; sourceTree = "<group>"; };
+		501906A0240BB067008D1009 /* MWNetwork+ExUtility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MWNetwork+ExUtility.swift"; sourceTree = "<group>"; };
+		501906A2240BB1A8008D1009 /* MWNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWNetwork.swift; sourceTree = "<group>"; };
 		507F690C240B85C600564DEC /* MWCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCollectionViewCell.swift; sourceTree = "<group>"; };
 		507F690E240B892E00564DEC /* MWCollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCollectionTableViewCell.swift; sourceTree = "<group>"; };
 		50C713C523F96DC20043F2D1 /* MWCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCardView.swift; sourceTree = "<group>"; };
@@ -122,6 +128,8 @@
 		506EC40B24015CF80020240A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				5019069E240BB039008D1009 /* String+Ex.swift */,
+				501906A0240BB067008D1009 /* MWNetwork+ExUtility.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -129,6 +137,7 @@
 		506EC40D24015D110020240A /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				501906A2240BB1A8008D1009 /* MWNetwork.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -425,10 +434,12 @@
 			files = (
 				50E10E78240168B000F774F9 /* MWSearchViewController.swift in Sources */,
 				50F700EA23F7AEE00029A997 /* MWViewController.swift in Sources */,
+				501906A3240BB1A8008D1009 /* MWNetwork.swift in Sources */,
 				50E10E722401684100F774F9 /* MWMainTabBarController.swift in Sources */,
 				507F690F240B892E00564DEC /* MWCollectionTableViewCell.swift in Sources */,
 				50E10E70240165BA00F774F9 /* MWInterface.swift in Sources */,
 				50E10E762401689A00F774F9 /* MWCategoryViewController.swift in Sources */,
+				5019069F240BB039008D1009 /* String+Ex.swift in Sources */,
 				50F700E623F7AEE00029A997 /* AppDelegate.swift in Sources */,
 				507F690D240B85C600564DEC /* MWCollectionViewCell.swift in Sources */,
 				50C713C623F96DC20043F2D1 /* MWCardView.swift in Sources */,
@@ -436,6 +447,7 @@
 				50E10E742401688800F774F9 /* MWMainViewController.swift in Sources */,
 				50CAB43324057B47005AB8AF /* MWMovie.swift in Sources */,
 				50CAB43524058128005AB8AF /* MWTableViewHeader.swift in Sources */,
+				501906A1240BB067008D1009 /* MWNetwork+ExUtility.swift in Sources */,
 				50E10E7B2401860D00F774F9 /* MWTitleArrowCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

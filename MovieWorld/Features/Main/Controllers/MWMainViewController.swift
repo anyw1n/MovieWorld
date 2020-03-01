@@ -10,27 +10,7 @@ import UIKit
 
 class MWMainViewController: MWViewController {
     
-    private let movies: [String: [MWMovie]] =
-        ["New": [MWMovie(title: "GreenBook11", description: "2018, Comedy"),
-                 MWMovie(title: "GreenBook12", description: "2018, Comedy"),
-                 MWMovie(title: "GreenBook13", description: "2018, Comedy"),
-                 MWMovie(title: "GreenBook14", description: "2018, Comedy"),
-                 MWMovie(title: "GreenBook15", description: "2018, Comedy")],
-         "Movies": [MWMovie(title: "GreenBook21", description: "2018, Comedy"),
-                    MWMovie(title: "GreenBook22", description: "2018, Comedy"),
-                    MWMovie(title: "GreenBook23", description: "2018, Comedy"),
-                    MWMovie(title: "GreenBook24", description: "2018, Comedy"),
-                    MWMovie(title: "GreenBook25", description: "2018, Comedy")],
-         "Series and shows": [MWMovie(title: "GreenBook31", description: "2018, Comedy"),
-                              MWMovie(title: "GreenBook32", description: "2018, Comedy"),
-                              MWMovie(title: "GreenBook33", description: "2018, Comedy"),
-                              MWMovie(title: "GreenBook34", description: "2018, Comedy"),
-                              MWMovie(title: "GreenBook35", description: "2018, Comedy")],
-         "Animated movies": [MWMovie(title: "GreenBook41", description: "2018, Comedy"),
-                             MWMovie(title: "GreenBook42", description: "2018, Comedy"),
-                             MWMovie(title: "GreenBook43", description: "2018, Comedy"),
-                             MWMovie(title: "GreenBook44", description: "2018, Comedy"),
-                             MWMovie(title: "GreenBook45", description: "2018, Comedy")]]
+    private var movies: [String: [MWMovie]] = [:]
     
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: CGRect(), style: .grouped)
@@ -45,16 +25,46 @@ class MWMainViewController: MWViewController {
         return view
     }()
     
+    private lazy var refreshControl: UIRefreshControl = {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(self.refreshTableView), for: .valueChanged)
+        return refresh
+    }()
+    
+    @objc private func refreshTableView() {
+        print("reload")
+        self.tableView.reloadData()
+        self.refreshControl.endRefreshing()
+    }
+    
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
     }
     
+    private func getMovies() {
+        MWN.sh.request(typeOfResult: [String: Any].self, url: "/movie/popular",
+                       successHandler: { results in
+            guard let movies = results["results"] as? [[String : Any]] else { return }
+            self.movies["Popular"] = []
+            movies.forEach { (movie) in
+                if let id = movie["id"] {
+                    //self.movies["Popular"]?.append(MWMovie.parse(movieId: id))
+                }
+            }
+            self.tableView.reloadData()
+        },
+                       errorHandler: { errorType in })
+    }
+    
     override func initController() {
         self.navigationItem.title = "Season"
         
+
+        self.getMovies()
         self.view.addSubview(self.tableView)
+        self.tableView.addSubview(self.refreshControl)
         self.makeConstraints()
     }
 }

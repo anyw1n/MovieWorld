@@ -21,4 +21,24 @@ struct MWMovie {
         self.description = description
         self.image = image
     }
+    
+    private init() {
+        self.title = ""
+        self.description = ""
+        self.image = UIImage(named: "bookImage") ?? UIImage()
+    }
+    
+    static func parse(movieId: String) -> MWMovie {
+        var movie = MWMovie()
+        MWN.sh.request(typeOfResult: [String: Any].self,
+                       url: "/movie/" + movieId, successHandler: { (result) in
+            movie.title = result["title"] as? String ?? ""
+            movie.description = String((result["release_date"] as? String)?.split(separator: "-").first ?? "")
+            //movie.image = UIImage(named: "bookImage") ?? UIImage()
+        }) { (error) in
+            
+        }
+        
+        return movie
+    }
 }
