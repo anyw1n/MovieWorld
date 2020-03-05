@@ -50,7 +50,7 @@ class MWCollectionViewCell: UICollectionViewCell {
         self.titleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.imageView.snp.bottom).offset(12)
             make.height.equalTo(22)
-            make.left.equalToSuperview()
+            make.left.right.equalToSuperview()
         }
         self.subtitleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.titleLabel.snp.bottom)

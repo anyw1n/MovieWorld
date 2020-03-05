@@ -75,7 +75,7 @@ extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewD
         
         cell.imageView.image = movie?.image
         cell.titleLabel.text = movie?.title
-        cell.subtitleLabel.text = movie?.description
+        cell.subtitleLabel.text = "\(movie?.releaseYear ?? ""), \(movie?.genres.first ?? "")"
         return cell
     }
     

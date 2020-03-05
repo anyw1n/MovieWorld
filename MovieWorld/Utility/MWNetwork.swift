@@ -26,6 +26,11 @@ struct URLPaths {
     static let topMovies: String = "movie/top_rated"
 }
 
+struct Genres {
+    static var movies: [Int: String] = [:]
+    static var tv: [Int: String] = [:]
+}
+
 class MWNetwork {
     
     static let sh = MWNetwork()
@@ -69,4 +74,30 @@ class MWNetwork {
         }
     }
     
+    func getMovieGenres() {
+        MWN.sh.request(typeOfResult: [[String: Any]].self,
+                       url: "/genre/movie/list",
+                       successHandler: { response in
+            response.forEach { (genre) in
+                Genres.movies[genre["id"] as? Int ?? -1] = genre["name"] as? String ?? "NaN"
+            }
+                        print("Genres loaded")
+        },
+                       errorHandler: { error in
+                        print(error)
+        })
+    }
+    
+//    func getTVGenres() -> [Int: String] {
+//        var genres: [Int: String] = [:]
+//        MWN.sh.request(typeOfResult: [[String: Any]].self,
+//                       url: "/genre/tv/list",
+//                       successHandler: { response in
+//            response.forEach { (genre) in
+//                genres[genre["id"] as? Int ?? -1] = genre["name"] as? String ?? "NaN"
+//            }
+//        },
+//                       errorHandler: { error in })
+//        return genres
+//    }
 }
