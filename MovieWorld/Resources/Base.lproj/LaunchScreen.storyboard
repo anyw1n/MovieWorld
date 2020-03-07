@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="42" translatesAutoresizingMaskIntoConstraints="NO" id="kAJ-n1-7aY">
-                                <rect key="frame" x="40" y="157.5" width="334" height="591"/>
+                                <rect key="frame" x="40" y="54" width="334" height="591"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie World" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sqw-O5-hrR">
                                         <rect key="frame" x="0.0" y="0.0" width="334" height="41"/>
@@ -34,7 +34,7 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="kAJ-n1-7aY" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="Q0t-bD-e1Z"/>
+                            <constraint firstAttribute="bottom" secondItem="kAJ-n1-7aY" secondAttribute="bottom" constant="251" id="6Vs-q1-CcN"/>
                             <constraint firstItem="kAJ-n1-7aY" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="40" id="emY-c3-aSU"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="kAJ-n1-7aY" secondAttribute="trailing" constant="40" id="pAQ-2U-8Kg"/>
                         </constraints>

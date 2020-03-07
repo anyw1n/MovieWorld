@@ -43,6 +43,13 @@ struct URLPaths {
     static let topMovies: String = "movie/top_rated"
     static let discoverMovies: String = "/discover/movie"
     static let upcomingMovies: String = "/movie/upcoming"
+    static let movieGenres: String = "/genre/movie/list"
+    static let tvGenres: String = "/genre/tv/list"
+}
+
+struct Genres {
+    static var movie: [Int: String] = [:]
+    static var tv: [Int: String] = [:]
 }
 
 class MWNetwork {

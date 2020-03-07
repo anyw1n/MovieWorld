@@ -17,6 +17,7 @@ class MWCollectionViewCell: UICollectionViewCell {
         let view = UIImageView()
         view.image = UIImage(named: "bookImage")
         view.layer.cornerRadius = 5
+        view.clipsToBounds = true
         return view
     }()
     
