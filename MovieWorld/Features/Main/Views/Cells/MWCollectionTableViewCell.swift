@@ -25,6 +25,7 @@ class MWCollectionTableViewCell: UITableViewCell {
         layout.sectionInset = self.sectionInsets
         return layout
     }()
+    
     lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: CGRect(),
                                     collectionViewLayout: self.collectionViewFlowLayout)

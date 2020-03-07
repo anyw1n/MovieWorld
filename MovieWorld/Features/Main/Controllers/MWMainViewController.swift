@@ -10,18 +10,16 @@ import UIKit
 
 class MWMainViewController: MWViewController {
     
-    private var movies: [String: [MWMovie]] = ["Popular": [],
-                                               "New": [],
-                                               "Animated Movies": [],
-                                               "Upcoming": []]
+    private var movies: [String: [MWMovie]] = [:]
     
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: CGRect(), style: .grouped)
         view.delegate = self
         view.dataSource = self
-        view.register(MWCollectionTableViewCell.self, forCellReuseIdentifier: MWCollectionTableViewCell.reuseID)
+        view.register(MWCollectionTableViewCell.self,
+                      forCellReuseIdentifier: MWCollectionTableViewCell.reuseID)
         view.register(MWTableViewHeader.self,
-                                forHeaderFooterViewReuseIdentifier: MWTableViewHeader.reuseID)
+                      forHeaderFooterViewReuseIdentifier: MWTableViewHeader.reuseID)
         view.separatorStyle = .none
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
@@ -31,11 +29,11 @@ class MWMainViewController: MWViewController {
     private lazy var refreshControl: UIRefreshControl = {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(self.refreshTableView), for: .valueChanged)
+        refresh.tintColor = UIColor(named: "accentColor")
         return refresh
     }()
     
     @objc private func refreshTableView() {
-        print("reload")
         self.getMovies()
         self.refreshControl.endRefreshing()
     }
@@ -51,66 +49,82 @@ class MWMainViewController: MWViewController {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         
-        MWN.sh.request(typeOfResult: [String: Any].self,
-                       url: "/movie/popular",
-                       successHandler: { response in
-            guard let objects = response["results"] as? [[String: Any]] else { return }
-            objects.forEach { (object) in
-                if let data = try? JSONSerialization.data(withJSONObject: object) {
-                    if let movie = try? JSONDecoder().decode(MWMovie.self, from: data) {
-                        self.movies["Popular"]?.append(movie)
-                    }
+        MWN.sh.request(url: URLPaths.popularMovies,
+                       successHandler:
+            { [weak self] (response: [String: Any]) in
+                guard let objects = response["results"] as? [[String: Any]] else { return }
+                self?.movies["Popular"] = []
+                objects.forEach { (object) in
+                    guard let data = try? JSONSerialization.data(withJSONObject: object),
+                        let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
+                        else { return }
+                    self?.movies["Popular"]?.append(movie)
                 }
-            }
-            self.tableView.reloadData() },
-                       errorHandler: { errorType in })
+                self?.tableView.reloadData()
+            },
+                       errorHandler:
+            { error in
+                error.printInConsole()
+        })
         
-        MWN.sh.request(typeOfResult: [String: Any].self,
-                   url: "/discover/movie",
-                   queryParameters: ["release_date.lte": formatter.string(from: currentDate),
-                                     "sort_by": "release_date.desc"],
-                   successHandler: { response in
-            guard let objects = response["results"] as? [[String: Any]] else { return }
-            objects.forEach { (object) in
-                if let data = try? JSONSerialization.data(withJSONObject: object) {
-                    if let movie = try? JSONDecoder().decode(MWMovie.self, from: data) {
-                        self.movies["New"]?.append(movie)
-                    }
+        MWN.sh.request(url: URLPaths.discoverMovies,
+                       queryParameters: ["release_date.lte": formatter.string(from: currentDate),
+                                         "sort_by": "release_date.desc"],
+                       successHandler:
+            { [weak self] (response: [String: Any]) in
+                guard let objects = response["results"] as? [[String: Any]] else { return }
+                self?.movies["New"] = []
+                objects.forEach { (object) in
+                    guard let data = try? JSONSerialization.data(withJSONObject: object),
+                        let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
+                        else { return }
+                    self?.movies["New"]?.append(movie)
                 }
-            }
-            self.tableView.reloadData() },
-                   errorHandler: { errorType in })
-        
-        MWN.sh.request(typeOfResult: [String: Any].self,
-                   url: "/discover/movie",
-                   queryParameters: ["release_date.lte": formatter.string(from: currentDate),
-                                     "sort_by": "release_date.desc",
-                                     "with_genres": "16"],
-                   successHandler: { response in
-            guard let objects = response["results"] as? [[String: Any]] else { return }
-            objects.forEach { (object) in
-                if let data = try? JSONSerialization.data(withJSONObject: object) {
-                    if let movie = try? JSONDecoder().decode(MWMovie.self, from: data) {
-                        self.movies["Animated Movies"]?.append(movie)
-                    }
+                self?.tableView.reloadData()
+            },
+                       errorHandler:
+            { error in
+                error.printInConsole()
+        })
+
+        MWN.sh.request(url: URLPaths.discoverMovies,
+                       queryParameters: ["release_date.lte": formatter.string(from: currentDate),
+                                         "sort_by": "release_date.desc",
+                                         "with_genres": "16"],
+                       successHandler:
+            { [weak self] (response: [String: Any]) in
+                guard let objects = response["results"] as? [[String: Any]] else { return }
+                self?.movies["Animated movies"] = []
+                objects.forEach { (object) in
+                    guard let data = try? JSONSerialization.data(withJSONObject: object),
+                    let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
+                    else { return }
+                    self?.movies["Animated movies"]?.append(movie)
                 }
-            }
-            self.tableView.reloadData() },
-                   errorHandler: { errorType in })
-        
-        MWN.sh.request(typeOfResult: [String: Any].self,
-                       url: "/movie/upcoming",
-                       successHandler: { response in
-            guard let objects = response["results"] as? [[String: Any]] else { return }
-            objects.forEach { (object) in
-                if let data = try? JSONSerialization.data(withJSONObject: object) {
-                    if let movie = try? JSONDecoder().decode(MWMovie.self, from: data) {
-                        self.movies["Upcoming"]?.append(movie)
-                    }
+                self?.tableView.reloadData()
+            },
+                       errorHandler:
+            { error in
+                error.printInConsole()
+        })
+
+        MWN.sh.request(url: URLPaths.upcomingMovies,
+                       successHandler:
+            { [weak self] (response: [String: Any]) in
+                guard let objects = response["results"] as? [[String: Any]] else { return }
+                self?.movies["Upcoming"] = []
+                objects.forEach { (object) in
+                    guard let data = try? JSONSerialization.data(withJSONObject: object),
+                        let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
+                        else { return }
+                    self?.movies["Upcoming"]?.append(movie)
                 }
-            }
-            self.tableView.reloadData() },
-                       errorHandler: { errorType in })
+                self?.tableView.reloadData()
+            },
+                       errorHandler:
+            { error in
+                error.printInConsole()
+        })
     }
  
     override func initController() {
@@ -118,7 +132,7 @@ class MWMainViewController: MWViewController {
         
         self.getMovies()
         self.view.addSubview(self.tableView)
-        self.tableView.addSubview(self.refreshControl)
+        self.tableView.refreshControl = self.refreshControl
         self.makeConstraints()
     }
 }

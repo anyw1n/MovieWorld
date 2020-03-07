@@ -19,16 +19,30 @@ enum MWNetError {
     case unauthError(apiKey: String)
     
     case unknown
+    
+    func printInConsole() {
+        switch self {
+        case .incorrectUrl(let url):
+            print("Error! Incorrect URL: \(url)")
+        case .networkError(let error):
+            print("Error! Network error: \(error)")
+        case .serverError(let statusCode):
+            print("Error! Server error, status code: \(statusCode)")
+        case .parsingError(let error):
+            print("Error! Can't parse: \(error)")
+        case .unauthError(let apiKey):
+            print("Error! Incorrect api key: \(apiKey)")
+        case .unknown:
+            print("Unknown error!")
+        }
+    }
 }
 
 struct URLPaths {
-    static let popularMovies: String = "movie/popular"
+    static let popularMovies: String = "/movie/popular"
     static let topMovies: String = "movie/top_rated"
-}
-
-struct Genres {
-    static var movies: [Int: String] = [:]
-    static var tv: [Int: String] = [:]
+    static let discoverMovies: String = "/discover/movie"
+    static let upcomingMovies: String = "/movie/upcoming"
 }
 
 class MWNetwork {
@@ -40,11 +54,10 @@ class MWNetwork {
     
     private init() {}
     
-    func request<T>(typeOfResult: T.Type,
-                    url path: String,
-                    queryParameters: Parameters? = nil,
-                    successHandler: @escaping (T) -> Void,
-                    errorHandler: @escaping (MWNetError) -> Void) {
+    func request<Decodable>(url path: String,
+                            queryParameters: Parameters? = nil,
+                            successHandler: @escaping (Decodable) -> Void,
+                            errorHandler: @escaping (MWNetError) -> Void) {
         let url = self.baseURL + path
         let key = "?api_key=" + self.apiKey
         
@@ -53,7 +66,7 @@ class MWNetwork {
             
             switch statusCode {
             case 200..<300:
-                if let value = response.value as? T {
+                if let value = response.value as? Decodable {
                     successHandler(value)
                 } else {
                     if let error = response.error {
@@ -73,31 +86,4 @@ class MWNetwork {
             }
         }
     }
-    
-    func getMovieGenres() {
-        MWN.sh.request(typeOfResult: [[String: Any]].self,
-                       url: "/genre/movie/list",
-                       successHandler: { response in
-            response.forEach { (genre) in
-                Genres.movies[genre["id"] as? Int ?? -1] = genre["name"] as? String ?? "NaN"
-            }
-                        print("Genres loaded")
-        },
-                       errorHandler: { error in
-                        print(error)
-        })
-    }
-    
-//    func getTVGenres() -> [Int: String] {
-//        var genres: [Int: String] = [:]
-//        MWN.sh.request(typeOfResult: [[String: Any]].self,
-//                       url: "/genre/tv/list",
-//                       successHandler: { response in
-//            response.forEach { (genre) in
-//                genres[genre["id"] as? Int ?? -1] = genre["name"] as? String ?? "NaN"
-//            }
-//        },
-//                       errorHandler: { error in })
-//        return genres
-//    }
 }

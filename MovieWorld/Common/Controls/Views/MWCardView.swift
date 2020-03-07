@@ -16,6 +16,7 @@ class MWCardView: UIView {
         imageView.layer.cornerRadius = 5
         return imageView
     }()
+    
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = "Green Book"
@@ -23,6 +24,7 @@ class MWCardView: UIView {
         titleLabel.textColor = UIColor(named: "textColor")
         return titleLabel
     }()
+    
     lazy var subtitleLabel: UILabel = {
         let subtitleLabel = UILabel()
         subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -31,6 +33,7 @@ class MWCardView: UIView {
         subtitleLabel.textColor = UIColor(named: "textColor")
         return subtitleLabel
     }()
+    
     lazy var genreLabel: UILabel = {
         let genreLabel = UILabel()
         genreLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -41,6 +44,7 @@ class MWCardView: UIView {
         genreLabel.textColor = UIColor(named: "textColor")
         return genreLabel
     }()
+    
     lazy var ratingLabel: UILabel = {
         let ratingLabel = UILabel()
         ratingLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -56,10 +60,10 @@ class MWCardView: UIView {
         self.addSubview(self.subtitleLabel)
         self.addSubview(self.genreLabel)
         self.addSubview(self.ratingLabel)
-        self.makeConstraintsBySnapKit()
+        self.makeConstraints()
     }
     
-    private func makeConstraintsBySnapKit() {
+    private func makeConstraints() {
         self.imageView.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview().inset(10)
             make.left.equalToSuperview().inset(16)
@@ -79,7 +83,7 @@ class MWCardView: UIView {
             make.left.equalTo(self.imageView.snp.right).offset(16)
         }
         self.ratingLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.genreLabel.snp.bottom).offset(8)
+            make.bottom.equalToSuperview().offset(8)
             make.left.equalTo(self.imageView.snp.right).offset(16)
         }
     }

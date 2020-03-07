@@ -9,25 +9,19 @@
 import UIKit
 
 enum MoviesCodingKeys: String, CodingKey {
-    case title, id, genre_ids, release_date
+    case title, id, genreIDs = "genre_ids", releaseDate = "release_date"
 }
 
 struct MWMovie: Decodable {
     
     var title: String
     var id: Int
-    var genre_ids: [Int]
-    var release_date: String
+    var genreIDs: [Int]
+    var releaseDate: String
     var image: UIImage
-    var genres: [String] {
-        var genres: [String] = []
-        self.genre_ids.forEach { (id) in
-            genres.append(Genres.movies[id] ?? "NaN")
-        }
-        return genres
-    }
+    
     var releaseYear: String {
-        return String(self.release_date.split(separator: "-").first ?? "NaN")
+        return String(self.releaseDate.split(separator: "-").first ?? "NaN")
     }
     
     init(from decoder: Decoder) throws {
@@ -35,9 +29,9 @@ struct MWMovie: Decodable {
         self.title =
             (try? container.decode(String.self, forKey: .title)) ?? "NaN"
         self.id = (try? container.decode(Int.self, forKey: .id)) ?? -1
-        self.release_date =
-            (try? container.decode(String.self, forKey: .release_date)) ?? "NaN"
+        self.releaseDate =
+            (try? container.decode(String.self, forKey: .releaseDate)) ?? "NaN"
         self.image = UIImage(named: "bookImage") ?? UIImage()
-        self.genre_ids = (try? container.decode([Int].self, forKey: .genre_ids)) ?? []
+        self.genreIDs = (try? container.decode([Int].self, forKey: .genreIDs)) ?? []
     }
 }

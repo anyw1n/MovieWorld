@@ -19,17 +19,17 @@ class MWCollectionViewCell: UICollectionViewCell {
         view.layer.cornerRadius = 5
         return view
     }()
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Green Book"
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textColor = UIColor(named: "textColor")
         return label
     }()
+    
     lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "2018, USA"
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor(named: "textColor")
         return label

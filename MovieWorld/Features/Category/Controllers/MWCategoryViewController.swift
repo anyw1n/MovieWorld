@@ -46,6 +46,7 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = UIView()
+        header.backgroundColor = .white
         return header
     }
     

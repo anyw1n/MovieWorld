@@ -25,7 +25,6 @@ class MWInterface {
         self.window = window
 
         self.setupNavigationBarStyle()
-        MWN.sh.getMovieGenres()
 
         window?.rootViewController = self.tabBarController
         window?.makeKeyAndVisible()
