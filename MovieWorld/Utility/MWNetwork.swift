@@ -11,55 +11,20 @@ import Alamofire
 
 typealias MWN = MWNetwork
 
-enum MWNetError {
-    case incorrectUrl(url: String)
-    case networkError(error: Error)
-    case serverError(statusCode: Int)
-    case parsingError(error: Error)
-    case unauthError(apiKey: String)
-    
-    case unknown
-    
-    func printInConsole() {
-        switch self {
-        case .incorrectUrl(let url):
-            print("Error! Incorrect URL: \(url)")
-        case .networkError(let error):
-            print("Error! Network error: \(error)")
-        case .serverError(let statusCode):
-            print("Error! Server error, status code: \(statusCode)")
-        case .parsingError(let error):
-            print("Error! Can't parse: \(error)")
-        case .unauthError(let apiKey):
-            print("Error! Incorrect api key: \(apiKey)")
-        case .unknown:
-            print("Unknown error!")
-        }
-    }
-}
-
-struct URLPaths {
-    static let popularMovies: String = "/movie/popular"
-    static let topMovies: String = "movie/top_rated"
-    static let discoverMovies: String = "/discover/movie"
-    static let upcomingMovies: String = "/movie/upcoming"
-    static let movieGenres: String = "/genre/movie/list"
-    static let tvGenres: String = "/genre/tv/list"
-}
-
-struct Genres {
-    static var movie: [Int: String] = [:]
-    static var tv: [Int: String] = [:]
-}
-
 class MWNetwork {
+    
+    //MARK: - variables
     
     static let sh = MWNetwork()
     
-    let apiKey = "79d5894567be5b76ab7434fc12879584"
-    let baseURL = "https://api.themoviedb.org/3"
+    private let apiKey = "79d5894567be5b76ab7434fc12879584"
+    private let baseURL = "https://api.themoviedb.org/3"
+    
+    //MARK: - init
     
     private init() {}
+    
+    //MARK: - functions
     
     func request<Decodable>(url path: String,
                             queryParameters: Parameters? = nil,
@@ -92,5 +57,16 @@ class MWNetwork {
                 break
             }
         }
+    }
+    
+    func getImage(size: Sizes,
+                  imagePath: String,
+                  handler: @escaping (UIImage?) -> Void) {
+        guard let baseURL = MWS.sh.configuration?.secureBaseURL else { return }
+        let url = baseURL + size.rawValue + imagePath
+        AF.request(url).responseData(completionHandler: { (response) in
+            guard let data = response.data else { return }
+            handler(UIImage(data: data))
+        })
     }
 }

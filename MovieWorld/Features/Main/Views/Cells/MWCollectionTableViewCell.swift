@@ -10,14 +10,18 @@ import UIKit
 
 class MWCollectionTableViewCell: UITableViewCell {
     
-    static let reuseID = "collectionViewTableViewCell"
+    //MARK: - variables
     
-    var movies: [MWMovie]?
+    static let reuseID = "collectionViewTableViewCell"
     
     private let itemSize = CGSize(width: 130, height: 237)
     private let sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
     
-    lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
+    var movies: [MWMovie]?
+    
+    //MARK: - gui variables
+    
+    private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = self.itemSize
         layout.scrollDirection = .horizontal
@@ -26,7 +30,7 @@ class MWCollectionTableViewCell: UITableViewCell {
         return layout
     }()
     
-    lazy var collectionView: UICollectionView = {
+    private(set) lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: CGRect(),
                                     collectionViewLayout: self.collectionViewFlowLayout)
         view.dataSource = self
@@ -39,16 +43,7 @@ class MWCollectionTableViewCell: UITableViewCell {
         return view
     }()
     
-    private func addSubviews() {
-        self.contentView.addSubview(self.collectionView)
-        self.makeConstraints()
-    }
-    
-    private func makeConstraints() {
-        self.collectionView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
-    }
+    //MARK: - init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -60,7 +55,24 @@ class MWCollectionTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    //MARK: - constraints
+    
+    private func makeConstraints() {
+        self.collectionView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    //MARK: - functions
+    
+    private func addSubviews() {
+        self.contentView.addSubview(self.collectionView)
+        self.makeConstraints()
+    }
 }
+
+//MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 
 extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -79,5 +91,4 @@ extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewD
         cell.subtitleLabel.text = "\(movie?.releaseYear ?? ""), \(movie?.genres.first ?? "")"
         return cell
     }
-    
 }

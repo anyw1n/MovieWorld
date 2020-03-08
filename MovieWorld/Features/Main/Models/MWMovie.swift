@@ -8,11 +8,16 @@
 
 import UIKit
 
-enum MoviesCodingKeys: String, CodingKey {
-    case title, id, genreIDs = "genre_ids", releaseDate = "release_date", posterPath = "poster_path"
-}
+
 
 class MWMovie: Decodable {
+    
+    private enum CodingKeys: String, CodingKey {
+        case title, id, genreIDs = "genre_ids", releaseDate = "release_date",
+        posterPath = "poster_path"
+    }
+    
+    //MARK: - variables
     
     var title: String?
     var id: Int
@@ -26,15 +31,14 @@ class MWMovie: Decodable {
     }
     var genres: [String] {
         var genres: [String] = []
-        self.genreIDs?.forEach({ (id) in
-            genres.append(Genres.movie[id] ?? "no genre")
-        })
+        self.genreIDs?.forEach { genres.append(MWS.sh.genres?.movie[$0] ?? "no genre") }
         return genres
     }
     
+    //MARK: - init
     
     required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: MoviesCodingKeys.self)
+        let container = try decoder.container(keyedBy: CodingKeys.self)
         self.title = (try? container.decode(String.self, forKey: .title))
         self.id = (try? container.decode(Int.self, forKey: .id)) ?? -1
         self.releaseDate = (try? container.decode(String.self, forKey: .releaseDate))
@@ -42,7 +46,7 @@ class MWMovie: Decodable {
         self.posterPath = (try? container.decode(String.self, forKey: .posterPath))
         
         if let posterPath = self.posterPath {
-            MWC.sh.getImage(size: .w154,
+            MWN.sh.getImage(size: .w154,
                             imagePath: posterPath,
                             handler: { [weak self] (image) in
                                 self?.image = image

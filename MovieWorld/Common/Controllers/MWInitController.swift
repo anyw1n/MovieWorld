@@ -10,11 +10,14 @@ import UIKit
 
 class MWInitController: MWViewController {
     
-    private let stackViewInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
+    //MARK: - variables
+    
+    private let stackViewInsets = UIEdgeInsets(top: 224, left: 40, bottom: 0, right: 40)
     private let spinnerInsets = UIEdgeInsets(top: 0, left: 0, bottom: 76, right: 0)
     private let spinnerSize = CGSize(width: 35, height: 35)
-    
     private let dispatchGroup = DispatchGroup()
+    
+    //MARK: - gui variables
     
     private lazy var textLabel: UILabel = {
         let label = UILabel()
@@ -48,9 +51,32 @@ class MWInitController: MWViewController {
         return view
     }()
     
+    //MARK: - init
+    
+    override func initController() {
+        super.initController()
+        self.view.addSubview(self.stackView)
+        self.view.addSubview(self.spinner)
+        
+        self.makeConstraints()
+        
+        self.spinner.startAnimating()
+        
+        MWS.sh.genres = MWCategories()
+        self.loadMovieGenres()
+        self.loadTVGenres()
+        self.loadConfiguration()
+        
+        self.dispatchGroup.notify(queue: DispatchQueue.main) {
+            MWI.sh.window?.rootViewController = MWI.sh.tabBarController
+        }
+    }
+    
+    //MARK: - constraints
+    
     private func makeConstraints() {
         self.stackView.snp.makeConstraints { (make) in
-            make.left.right.equalToSuperview().inset(self.stackViewInsets)
+            make.left.right.top.equalToSuperview().inset(self.stackViewInsets)
         }
         self.spinner.snp.makeConstraints { (make) in
             make.top.equalTo(self.stackView.snp.bottom).offset(140)
@@ -59,6 +85,8 @@ class MWInitController: MWViewController {
             make.size.equalTo(self.spinnerSize)
         }
     }
+    
+    //MARK: - functions
     
     private func loadMovieGenres() {
         self.dispatchGroup.enter()
@@ -70,7 +98,7 @@ class MWInitController: MWViewController {
                 genres.forEach { (genre) in
                     guard let id = genre["id"] as? Int,
                         let name = genre["name"] as? String else { return }
-                    Genres.movie[id] = name
+                    MWS.sh.genres?.movie[id] = name
                 }
                 self?.dispatchGroup.leave()
             },
@@ -90,7 +118,7 @@ class MWInitController: MWViewController {
                 genres.forEach { (genre) in
                     guard let id = genre["id"] as? Int,
                         let name = genre["name"] as? String else { return }
-                    Genres.tv[id] = name
+                    MWS.sh.genres?.tv[id] = name
                 }
                 self?.dispatchGroup.leave()
             },
@@ -100,19 +128,22 @@ class MWInitController: MWViewController {
         })
     }
     
-    override func initController() {
-        self.view.addSubview(self.stackView)
-        self.view.addSubview(self.spinner)
+    private func loadConfiguration() {
+        self.dispatchGroup.enter()
         
-        self.makeConstraints()
-        
-        self.spinner.startAnimating()
-        
-        self.loadMovieGenres()
-        self.loadTVGenres()
-        
-        self.dispatchGroup.notify(queue: DispatchQueue.main) {
-            MWI.sh.window?.rootViewController = MWI.sh.tabBarController
-        }
+        MWN.sh.request(url: URLPaths.configuration,
+                       successHandler:
+            { [weak self] (response: [String: Any]) in
+                guard let images = response["images"] as? [String: Any] else { return }
+                guard let data = try? JSONSerialization.data(withJSONObject: images),
+                    let configuration = try? JSONDecoder().decode(MWConfiguration.self, from: data)
+                    else { return }
+                MWS.sh.configuration = configuration
+                self?.dispatchGroup.leave()
+            },
+                       errorHandler: { [weak self]  (error) in
+                        error.printInConsole()
+                        self?.dispatchGroup.leave()
+        })
     }
 }

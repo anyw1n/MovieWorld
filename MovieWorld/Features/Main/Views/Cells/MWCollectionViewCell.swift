@@ -10,10 +10,14 @@ import UIKit
 
 class MWCollectionViewCell: UICollectionViewCell {
     
+    //MARK: - variables
+    
     static let reuseID = "imageTitleDescriptionCell"
     private let imageSize = CGSize(width: 130, height: 185)
     
-    lazy var imageView: UIImageView = {
+    //MARK: - gui variables
+    
+    private(set) lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "bookImage")
         view.layer.cornerRadius = 5
@@ -21,14 +25,14 @@ class MWCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    lazy var titleLabel: UILabel = {
+    private(set) lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textColor = UIColor(named: "textColor")
         return label
     }()
     
-    lazy var subtitleLabel: UILabel = {
+    private(set) lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 13)
@@ -36,29 +40,7 @@ class MWCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private func addSubviews() {
-        self.contentView.addSubview(self.imageView)
-        self.contentView.addSubview(self.titleLabel)
-        self.contentView.addSubview(self.subtitleLabel)
-        self.makeConstraints()
-    }
-    
-    private func makeConstraints() {
-        self.imageView.snp.makeConstraints { (make) in
-            make.top.left.equalToSuperview()
-            make.height.width.equalTo(self.imageSize)
-        }
-        self.titleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.imageView.snp.bottom).offset(12)
-            make.height.equalTo(22)
-            make.left.right.equalToSuperview()
-        }
-        self.subtitleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.titleLabel.snp.bottom)
-            make.height.equalTo(18)
-            make.left.equalToSuperview()
-        }
-    }
+    //MARK: - init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -69,5 +51,31 @@ class MWCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: - constraints
+    
+    private func makeConstraints() {
+        self.imageView.snp.updateConstraints { (make) in
+            make.top.left.right.equalToSuperview()
+            make.size.equalTo(self.imageSize)
+        }
+        self.titleLabel.snp.updateConstraints { (make) in
+            make.top.equalTo(self.imageView.snp.bottom).offset(12)
+            make.left.right.equalToSuperview()
+        }
+        self.subtitleLabel.snp.updateConstraints { (make) in
+            make.top.equalTo(self.titleLabel.snp.bottom)
+            make.left.right.bottom.equalToSuperview()
+        }
+    }
+    
+    //MARK: - functions
+    
+    private func addSubviews() {
+        self.contentView.addSubview(self.imageView)
+        self.contentView.addSubview(self.titleLabel)
+        self.contentView.addSubview(self.subtitleLabel)
+        self.makeConstraints()
     }
 }

@@ -11,6 +11,8 @@ import SnapKit
 
 class MWViewController: UIViewController {
 
+    //MARK: - init
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

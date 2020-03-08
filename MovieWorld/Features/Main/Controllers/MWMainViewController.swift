@@ -10,7 +10,14 @@ import UIKit
 
 class MWMainViewController: MWViewController {
     
-    private var movies: [String: [MWMovie]] = [:]
+    //MARK: - variables
+    
+    private var movies: [String: [MWMovie]] = ["Popular": [],
+                                               "New": [],
+                                               "Animated movies": [],
+                                               "Upcoming": []]
+    
+    //MARK: - gui variables
     
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: CGRect(), style: .grouped)
@@ -33,15 +40,31 @@ class MWMainViewController: MWViewController {
         return refresh
     }()
     
-    @objc private func refreshTableView() {
+    //MARK: - init
+    
+    override func initController() {
+        super.initController()
+        self.navigationItem.title = "Season"
+        
         self.getMovies()
-        self.refreshControl.endRefreshing()
+        self.view.addSubview(self.tableView)
+        self.tableView.refreshControl = self.refreshControl
+        self.makeConstraints()
     }
+    
+    //MARK: - constraints
     
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+    }
+    
+    //MARK: - functions
+
+    @objc private func refreshTableView() {
+        self.getMovies()
+        self.refreshControl.endRefreshing()
     }
     
     private func getMovies() {
@@ -126,16 +149,9 @@ class MWMainViewController: MWViewController {
                 error.printInConsole()
         })
     }
- 
-    override func initController() {
-        self.navigationItem.title = "Season"
-        
-        self.getMovies()
-        self.view.addSubview(self.tableView)
-        self.tableView.refreshControl = self.refreshControl
-        self.makeConstraints()
-    }
 }
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
     

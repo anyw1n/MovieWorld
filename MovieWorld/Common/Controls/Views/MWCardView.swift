@@ -10,83 +10,51 @@ import UIKit
 
 class MWCardView: UIView {
     
-    lazy var imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "bookImage")
-        imageView.layer.cornerRadius = 5
-        return imageView
+    //MARK: - variables
+    
+    private let imageInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 0)
+    private let imageSize = CGSize(width: 70, height: 100)
+    
+    //MARK: - gui variables
+    
+    private lazy var imageView: UIImageView = {
+        let view = UIImageView()
+        view.layer.cornerRadius = 5
+        view.clipsToBounds = true
+        return view
     }()
     
-    lazy var titleLabel: UILabel = {
-        let titleLabel = UILabel()
-        titleLabel.text = "Green Book"
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 17)
-        titleLabel.textColor = UIColor(named: "textColor")
-        return titleLabel
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.textColor = UIColor(named: "textColor")
+        return label
     }()
     
-    lazy var subtitleLabel: UILabel = {
-        let subtitleLabel = UILabel()
-        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
-        subtitleLabel.text = "2018, USA"
-        subtitleLabel.font = UIFont.systemFont(ofSize: 13)
-        subtitleLabel.textColor = UIColor(named: "textColor")
-        return subtitleLabel
+    private lazy var subtitleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor(named: "textColor")
+        return label
     }()
     
-    lazy var genreLabel: UILabel = {
-        let genreLabel = UILabel()
-        genreLabel.translatesAutoresizingMaskIntoConstraints = false
-        genreLabel.text = "Comedy, Drama, Foreign"
-        genreLabel.font = UIFont.systemFont(ofSize: 13)
-        genreLabel.numberOfLines = 2
-        genreLabel.alpha = 0.5
-        genreLabel.textColor = UIColor(named: "textColor")
-        return genreLabel
+    private lazy var genreLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.numberOfLines = 2
+        label.alpha = 0.5
+        label.textColor = UIColor(named: "textColor")
+        return label
     }()
     
-    lazy var ratingLabel: UILabel = {
-        let ratingLabel = UILabel()
-        ratingLabel.translatesAutoresizingMaskIntoConstraints = false
-        ratingLabel.text = "IMDB 8.2, KP 8.3"
-        ratingLabel.font = UIFont.systemFont(ofSize: 13)
-        ratingLabel.textColor = UIColor(named: "textColor")
-        return ratingLabel
+    private lazy var ratingLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 13)
+        label.textColor = UIColor(named: "textColor")
+        return label
     }()
     
-    private func addSubviews() {
-        self.addSubview(self.imageView)
-        self.addSubview(self.titleLabel)
-        self.addSubview(self.subtitleLabel)
-        self.addSubview(self.genreLabel)
-        self.addSubview(self.ratingLabel)
-        self.makeConstraints()
-    }
-    
-    private func makeConstraints() {
-        self.imageView.snp.makeConstraints { (make) in
-            make.top.bottom.equalToSuperview().inset(10)
-            make.left.equalToSuperview().inset(16)
-            make.height.equalTo(100)
-            make.width.equalTo(70)
-        }
-        self.titleLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().inset(10)
-            make.left.equalTo(self.imageView.snp.right).offset(16)
-        }
-        self.subtitleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.titleLabel.snp.bottom).offset(3)
-            make.left.equalTo(self.imageView.snp.right).offset(16)
-        }
-        self.genreLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.subtitleLabel.snp.bottom).offset(1)
-            make.left.equalTo(self.imageView.snp.right).offset(16)
-        }
-        self.ratingLabel.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview().offset(8)
-            make.left.equalTo(self.imageView.snp.right).offset(16)
-        }
-    }
+    //MARK: - init
     
     init() {
         super.init(frame: CGRect())
@@ -100,5 +68,45 @@ class MWCardView: UIView {
         
         self.backgroundColor = .white
         self.addSubviews()
+    }
+    
+    //MARK: - constraints
+    
+    private func makeConstraints() {
+        self.imageView.snp.makeConstraints { (make) in
+            make.top.bottom.left.equalToSuperview().inset(self.imageInsets)
+            make.size.equalTo(self.imageSize)
+        }
+        self.titleLabel.snp.makeConstraints { (make) in
+            make.top.equalToSuperview().inset(10)
+            make.left.equalTo(self.imageView.snp.right).offset(16)
+            make.right.equalToSuperview()
+        }
+        self.subtitleLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(self.titleLabel.snp.bottom).offset(3)
+            make.left.equalTo(self.imageView.snp.right).offset(16)
+            make.right.equalToSuperview()
+        }
+        self.genreLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(self.subtitleLabel.snp.bottom).offset(1)
+            make.left.equalTo(self.imageView.snp.right).offset(16)
+            make.right.equalToSuperview()
+        }
+        self.ratingLabel.snp.makeConstraints { (make) in
+            make.bottom.equalToSuperview().offset(8)
+            make.left.equalTo(self.imageView.snp.right).offset(16)
+            make.right.equalToSuperview()
+        }
+    }
+    
+    //MARK: - functions
+    
+    private func addSubviews() {
+        self.addSubview(self.imageView)
+        self.addSubview(self.titleLabel)
+        self.addSubview(self.subtitleLabel)
+        self.addSubview(self.genreLabel)
+        self.addSubview(self.ratingLabel)
+        self.makeConstraints()
     }
 }

@@ -10,7 +10,9 @@ import UIKit
 
 class MWMainTabBarController: UITabBarController {
 
-    let mainController: MWMainViewController = {
+    //MARK: - gui variables
+    
+    private let mainController: MWMainViewController = {
         let controller = MWMainViewController()
         controller.tabBarItem = UITabBarItem(title: "Main",
                                              image: UIImage(named: "mainTabBarIcon"),
@@ -18,7 +20,7 @@ class MWMainTabBarController: UITabBarController {
         return controller
     }()
     
-    let categoryController: MWCategoryViewController = {
+    private let categoryController: MWCategoryViewController = {
         let controller = MWCategoryViewController()
         controller.tabBarItem = UITabBarItem(title: "Category",
                                              image: UIImage(named: "categoryTabBarIcon"),
@@ -26,13 +28,15 @@ class MWMainTabBarController: UITabBarController {
         return controller
     }()
     
-    let searchController: MWSearchViewController = {
+    private let searchController: MWSearchViewController = {
         let controller = MWSearchViewController()
         controller.tabBarItem = UITabBarItem(title: "Search",
                                              image: UIImage(named: "searchTabBarIcon"),
                                              selectedImage: UIImage(named: "searchTabBarIcon"))
         return controller
     }()
+    
+    //MARK: - init
     
     override func viewDidLoad() {
         super.viewDidLoad()

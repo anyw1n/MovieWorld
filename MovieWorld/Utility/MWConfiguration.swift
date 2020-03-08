@@ -7,30 +7,23 @@
 //
 
 import Foundation
-import Alamofire
 
-enum Sizes: String {
-    case w45, w92, w154, w185, w300, w342, w500, w780, w1280, original
-}
+struct MWConfiguration: Decodable {
 
-typealias MWC = MWConfiguration
-
-struct MWConfiguration {
-
-    static let sh = MWConfiguration()
+    private enum CodingKeys: String, CodingKey {
+        case baseURL = "base_url", secureBaseURL = "secure_base_url"
+    }
     
-    let baseURL = "https://image.tmdb.org/t/p/"
+    //MARK: - variables
+
+    let baseURL: String?
+    let secureBaseURL: String?
     
-    private init() {}
-    
-    func getImage(size: Sizes,
-                  imagePath: String,
-                  handler: @escaping (UIImage?) -> Void) {
-        let url = self.baseURL + size.rawValue + imagePath
-        
-        AF.request(url).responseData(completionHandler: { (response) in
-            guard let data = response.data else { return }
-            handler(UIImage(data: data))
-        })
+    //MARK: - init
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.baseURL = (try? container.decode(String.self, forKey: .baseURL))
+        self.secureBaseURL = (try? container.decode(String.self, forKey: .secureBaseURL))
     }
 }

@@ -10,33 +10,43 @@ import UIKit
 
 class MWCategoryViewController: MWViewController {
     
-    let tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    //MARK: - variables
     
     var categories: [String] = Array(repeating: "Top 250", count: 25)
+    
+    //MARK: - gui variables
+    
+    private lazy var tableView: UITableView = {
+        let view = UITableView(frame: CGRect.zero, style: .grouped)
+        view.delegate = self
+        view.dataSource = self
+        view.register(MWTitleArrowCell.self, forCellReuseIdentifier: MWTitleArrowCell.reuseID)
+        view.separatorStyle = .none
+        view.showsHorizontalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
+        return view
+    }()
+    
+    //MARK: - init
 
-    private func setupTableView() {
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.register(MWTitleArrowCell.self, forCellReuseIdentifier: MWTitleArrowCell.reuseID)
-        self.tableView.separatorStyle = .none
-        self.tableView.showsHorizontalScrollIndicator = false
-        self.tableView.showsVerticalScrollIndicator = false
+    override func initController() {
+        super.initController()
+        self.navigationItem.title = "Category"
+        
         self.view.addSubview(self.tableView)
+        self.makeConstraints()
     }
+    
+    //MARK: - constraints
     
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
     }
-    
-    override func initController() {
-        self.navigationItem.title = "Category"
-        
-        self.setupTableView()
-        self.makeConstraints()
-    }
 }
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
     

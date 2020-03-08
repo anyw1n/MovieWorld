@@ -10,28 +10,27 @@ import UIKit
 
 class MWTitleArrowCell: UITableViewCell {
     
+    //MARK: - variables
+    
     static let reuseID = "titleArrowCell"
     
-    lazy var titleLabel: UILabel = {
+    //MARK: - gui variables
+    
+    private(set) lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = UIColor(named: "textColor")
         label.font = UIFont.systemFont(ofSize: 17)
         return label
     }()
     
-    lazy var arrowImageView: UIImageView = {
+    private lazy var arrowImageView: UIImageView = {
         let image = UIImageView(image: UIImage(named: "arrowImage"))
         image.tintColor = UIColor(named: "textColor")
         image.alpha = 0.5
         return image
     }()
-    
-    private func makeConstraints() {
-        self.titleLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview().offset(11)
-            make.left.equalToSuperview().offset(16)
-        }
-    }
+
+    //MARK: - init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -43,5 +42,14 @@ class MWTitleArrowCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    //MARK: - constraints
+    
+    private func makeConstraints() {
+        self.titleLabel.snp.updateConstraints { (make) in
+            make.top.equalToSuperview().offset(11)
+            make.left.right.equalToSuperview().offset(16)
+        }
     }
 }

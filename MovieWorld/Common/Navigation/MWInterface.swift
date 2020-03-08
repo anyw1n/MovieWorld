@@ -12,13 +12,19 @@ typealias MWI = MWInterface
 
 class MWInterface {
     
+    //MARK: - variables
+    
     static let sh = MWInterface()
     
+    let tabBarController = MWMainTabBarController()
+
     weak var window: UIWindow?
     
-    let tabBarController = MWMainTabBarController()
+    //MARK: - init
     
     private init() {}
+    
+    //MARK: - functions
     
     func setup(window: UIWindow?) {
         
@@ -31,14 +37,13 @@ class MWInterface {
     }
     
     func push(_ vc: UIViewController) {
-        guard let navigationController =
-            self.tabBarController.selectedViewController as? UINavigationController else { return }
-        navigationController.pushViewController(vc, animated: true)
+        (self.tabBarController.selectedViewController as? UINavigationController)?
+            .pushViewController(vc, animated: true)
     }
     
     func pop() {
-        guard let navigationController = self.tabBarController.selectedViewController as? UINavigationController else { return }
-        navigationController.popViewController(animated: true)
+        (self.tabBarController.selectedViewController as? UINavigationController)?
+            .popViewController(animated: true)
     }
     
     private func setupNavigationBarStyle() {
