@@ -19,9 +19,9 @@ class MWCollectionViewCell: UICollectionViewCell {
     
     private(set) lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "bookImage")
         view.layer.cornerRadius = 5
         view.clipsToBounds = true
+        view.contentMode = .scaleAspectFill
         return view
     }()
     

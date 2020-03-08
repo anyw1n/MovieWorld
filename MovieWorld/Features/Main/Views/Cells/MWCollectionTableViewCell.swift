@@ -84,11 +84,16 @@ extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewD
             .dequeueReusableCell(withReuseIdentifier: MWCollectionViewCell.reuseID,
                                  for: indexPath)
             as? MWCollectionViewCell ?? MWCollectionViewCell()
-        let movie = self.movies?[indexPath.row]
         
-        cell.imageView.image = movie?.image
+        let movie = self.movies?[indexPath.row]
         cell.titleLabel.text = movie?.title
         cell.subtitleLabel.text = "\(movie?.releaseYear ?? ""), \(movie?.genres.first ?? "")"
+        movie?.imageLoaded = { id in
+            if id == movie?.id {
+                cell.imageView.image = movie?.image
+            }
+        }
+        cell.imageView.image = movie?.image
         return cell
     }
 }

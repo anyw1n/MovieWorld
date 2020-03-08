@@ -8,14 +8,16 @@
 
 import UIKit
 
+typealias Section = (name: String, movies: [MWMovie])
+
 class MWMainViewController: MWViewController {
     
     //MARK: - variables
     
-    private var movies: [String: [MWMovie]] = ["Popular": [],
-                                               "New": [],
-                                               "Animated movies": [],
-                                               "Upcoming": []]
+    private var movies: [Section] = [("Popular", []),
+                                     ("New", []),
+                                     ("Animated movies", []),
+                                     ("Upcoming", [])]
     
     //MARK: - gui variables
     
@@ -76,12 +78,12 @@ class MWMainViewController: MWViewController {
                        successHandler:
             { [weak self] (response: [String: Any]) in
                 guard let objects = response["results"] as? [[String: Any]] else { return }
-                self?.movies["Popular"] = []
+                self?.movies[0].movies = []
                 objects.forEach { (object) in
                     guard let data = try? JSONSerialization.data(withJSONObject: object),
                         let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
                         else { return }
-                    self?.movies["Popular"]?.append(movie)
+                    self?.movies[0].movies.append(movie)
                 }
                 self?.tableView.reloadData()
             },
@@ -96,12 +98,12 @@ class MWMainViewController: MWViewController {
                        successHandler:
             { [weak self] (response: [String: Any]) in
                 guard let objects = response["results"] as? [[String: Any]] else { return }
-                self?.movies["New"] = []
+                self?.movies[1].movies = []
                 objects.forEach { (object) in
                     guard let data = try? JSONSerialization.data(withJSONObject: object),
                         let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
                         else { return }
-                    self?.movies["New"]?.append(movie)
+                    self?.movies[1].movies.append(movie)
                 }
                 self?.tableView.reloadData()
             },
@@ -117,12 +119,12 @@ class MWMainViewController: MWViewController {
                        successHandler:
             { [weak self] (response: [String: Any]) in
                 guard let objects = response["results"] as? [[String: Any]] else { return }
-                self?.movies["Animated movies"] = []
+                self?.movies[2].movies = []
                 objects.forEach { (object) in
                     guard let data = try? JSONSerialization.data(withJSONObject: object),
                     let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
                     else { return }
-                    self?.movies["Animated movies"]?.append(movie)
+                    self?.movies[2].movies.append(movie)
                 }
                 self?.tableView.reloadData()
             },
@@ -135,12 +137,12 @@ class MWMainViewController: MWViewController {
                        successHandler:
             { [weak self] (response: [String: Any]) in
                 guard let objects = response["results"] as? [[String: Any]] else { return }
-                self?.movies["Upcoming"] = []
+                self?.movies[3].movies = []
                 objects.forEach { (object) in
                     guard let data = try? JSONSerialization.data(withJSONObject: object),
                         let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
                         else { return }
-                    self?.movies["Upcoming"]?.append(movie)
+                    self?.movies[3].movies.append(movie)
                 }
                 self?.tableView.reloadData()
             },
@@ -169,7 +171,7 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let view = view as? MWTableViewHeader else { return }
-        view.titleLabel.text = Array(self.movies.keys)[section]
+        view.titleLabel.text = self.movies[section].name
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -188,7 +190,7 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = self.tableView
             .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseID, for: indexPath)
             as? MWCollectionTableViewCell ?? MWCollectionTableViewCell()
-        cell.movies = Array(self.movies.values)[indexPath.section]
+        cell.movies = self.movies[indexPath.section].movies
         cell.collectionView.reloadData()
         return cell
     }
