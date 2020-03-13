@@ -10,27 +10,26 @@ import Foundation
 
 enum MWNetError {
     case incorrectUrl(url: String)
-    case networkError(error: Error)
+    case networkError(_ error: Error)
     case serverError(statusCode: Int)
-    case parsingError(error: Error)
+    case parsingError(_ error: Error)
     case unauthError(apiKey: String)
-    
-    case unknown
+    case unknown(error: Error)
     
     func printInConsole() {
         switch self {
         case .incorrectUrl(let url):
             print("Error! Incorrect URL: \(url)")
         case .networkError(let error):
-            print("Error! Network error: \(error)")
+            print("Network error: \(error.localizedDescription)")
         case .serverError(let statusCode):
-            print("Error! Server error, status code: \(statusCode)")
+            print("Server error, status code: \(statusCode)")
         case .parsingError(let error):
-            print("Error! Can't parse: \(error)")
+            print("Error! Can't parse: \(error.localizedDescription)")
         case .unauthError(let apiKey):
             print("Error! Incorrect api key: \(apiKey)")
-        case .unknown:
-            print("Unknown error!")
+        case .unknown(let error):
+            print("Unknown error! \(error.localizedDescription)")
         }
     }
 }

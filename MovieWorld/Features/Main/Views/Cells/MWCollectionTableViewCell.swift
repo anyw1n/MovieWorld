@@ -49,6 +49,7 @@ class MWCollectionTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.backgroundColor = .white
+        self.selectionStyle = .none
         self.addSubviews()
     }
     

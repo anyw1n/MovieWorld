@@ -8,16 +8,40 @@
 
 import UIKit
 
-typealias Section = (name: String, movies: [MWMovie])
-
 class MWMainViewController: MWViewController {
+    
+    private class Section {
+        let name: String
+        let url: String
+        let requestParameters: [String: Any]?
+        var movies: [MWMovie] = []
+        
+        init(name: String, url: String, parameters: [String: Any]? = nil) {
+            self.name = name
+            self.url = url
+            self.requestParameters = parameters
+        }
+    }
     
     //MARK: - variables
     
-    private var movies: [Section] = [("Popular", []),
-                                     ("New", []),
-                                     ("Animated movies", []),
-                                     ("Upcoming", [])]
+    private lazy var sections: [Section] = {
+        let currentDate = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        
+        return [Section(name: "Popular", url: URLPaths.popularMovies),
+                Section(name: "New",
+                        url: URLPaths.discoverMovies,
+                        parameters: ["release_date.lte": formatter.string(from: currentDate),
+                                     "sort_by": "release_date.desc"]),
+                Section(name: "Animated movies",
+                        url: URLPaths.discoverMovies,
+                        parameters: ["release_date.lte": formatter.string(from: currentDate),
+                                     "sort_by": "release_date.desc",
+                                     "with_genres": "16"]),
+                Section(name: "Upcoming", url: URLPaths.upcomingMovies)]
+    }()
     
     //MARK: - gui variables
     
@@ -27,6 +51,8 @@ class MWMainViewController: MWViewController {
         view.dataSource = self
         view.register(MWCollectionTableViewCell.self,
                       forCellReuseIdentifier: MWCollectionTableViewCell.reuseID)
+        view.register(MWRefreshTableViewCell.self,
+                      forCellReuseIdentifier: MWRefreshTableViewCell.reuseID)
         view.register(MWTableViewHeader.self,
                       forHeaderFooterViewReuseIdentifier: MWTableViewHeader.reuseID)
         view.separatorStyle = .none
@@ -47,8 +73,8 @@ class MWMainViewController: MWViewController {
     override func initController() {
         super.initController()
         self.navigationItem.title = "Season"
-        
-        self.getMovies()
+
+        self.loadMovies()
         self.view.addSubview(self.tableView)
         self.tableView.refreshControl = self.refreshControl
         self.makeConstraints()
@@ -65,91 +91,25 @@ class MWMainViewController: MWViewController {
     //MARK: - functions
 
     @objc private func refreshTableView() {
-        self.getMovies()
+        self.loadMovies()
         self.refreshControl.endRefreshing()
     }
     
-    private func getMovies() {
-        let currentDate = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        
-        MWN.sh.request(url: URLPaths.popularMovies,
-                       successHandler:
-            { [weak self] (response: [String: Any]) in
-                guard let objects = response["results"] as? [[String: Any]] else { return }
-                self?.movies[0].movies = []
-                objects.forEach { (object) in
-                    guard let data = try? JSONSerialization.data(withJSONObject: object),
-                        let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
-                        else { return }
-                    self?.movies[0].movies.append(movie)
-                }
-                self?.tableView.reloadData()
-            },
-                       errorHandler:
-            { error in
+    private func loadMovies(into section: Section? = nil) {
+        if let section = section {
+            let index = self.sections.firstIndex { $0.name == section.name } ?? -1
+            MWN.sh.request(url: section.url,
+                           queryParameters: section.requestParameters,
+                           successHandler: { [weak self] (response: [MWMovie]) in
+                            section.movies = response
+                            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
+                                                       with: .automatic)
+            }) { error in
                 error.printInConsole()
-        })
-        
-        MWN.sh.request(url: URLPaths.discoverMovies,
-                       queryParameters: ["release_date.lte": formatter.string(from: currentDate),
-                                         "sort_by": "release_date.desc"],
-                       successHandler:
-            { [weak self] (response: [String: Any]) in
-                guard let objects = response["results"] as? [[String: Any]] else { return }
-                self?.movies[1].movies = []
-                objects.forEach { (object) in
-                    guard let data = try? JSONSerialization.data(withJSONObject: object),
-                        let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
-                        else { return }
-                    self?.movies[1].movies.append(movie)
-                }
-                self?.tableView.reloadData()
-            },
-                       errorHandler:
-            { error in
-                error.printInConsole()
-        })
-
-        MWN.sh.request(url: URLPaths.discoverMovies,
-                       queryParameters: ["release_date.lte": formatter.string(from: currentDate),
-                                         "sort_by": "release_date.desc",
-                                         "with_genres": "16"],
-                       successHandler:
-            { [weak self] (response: [String: Any]) in
-                guard let objects = response["results"] as? [[String: Any]] else { return }
-                self?.movies[2].movies = []
-                objects.forEach { (object) in
-                    guard let data = try? JSONSerialization.data(withJSONObject: object),
-                    let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
-                    else { return }
-                    self?.movies[2].movies.append(movie)
-                }
-                self?.tableView.reloadData()
-            },
-                       errorHandler:
-            { error in
-                error.printInConsole()
-        })
-
-        MWN.sh.request(url: URLPaths.upcomingMovies,
-                       successHandler:
-            { [weak self] (response: [String: Any]) in
-                guard let objects = response["results"] as? [[String: Any]] else { return }
-                self?.movies[3].movies = []
-                objects.forEach { (object) in
-                    guard let data = try? JSONSerialization.data(withJSONObject: object),
-                        let movie = try? JSONDecoder().decode(MWMovie.self, from: data)
-                        else { return }
-                    self?.movies[3].movies.append(movie)
-                }
-                self?.tableView.reloadData()
-            },
-                       errorHandler:
-            { error in
-                error.printInConsole()
-        })
+            }
+        } else {
+            self.sections.forEach { self.loadMovies(into: $0) }
+        }
     }
 }
 
@@ -158,7 +118,7 @@ class MWMainViewController: MWViewController {
 extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.movies.count
+        return self.sections.count
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -171,7 +131,7 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let view = view as? MWTableViewHeader else { return }
-        view.titleLabel.text = self.movies[section].name
+        view.titleLabel.text = self.sections[section].name
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -187,12 +147,24 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView
-            .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseID, for: indexPath)
-            as? MWCollectionTableViewCell ?? MWCollectionTableViewCell()
-        cell.movies = self.movies[indexPath.section].movies
-        cell.collectionView.reloadData()
-        return cell
+        if self.sections[indexPath.section].movies.count != 0 {
+            let cell = self.tableView
+                .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseID,
+                                     for: indexPath)
+                as? MWCollectionTableViewCell ?? MWCollectionTableViewCell()
+            cell.movies = self.sections[indexPath.section].movies
+            cell.collectionView.reloadData()
+            return cell
+        } else {
+            let cell = self.tableView
+                .dequeueReusableCell(withIdentifier: MWRefreshTableViewCell.reuseID,
+                                     for: indexPath)
+                as? MWRefreshTableViewCell ?? MWRefreshTableViewCell()
+            cell.refreshTapped = { [weak self] in
+                self?.loadMovies(into: self?.sections[indexPath.section])
+            }
+            return cell
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -9,6 +9,11 @@
 import Foundation
 
 typealias MWS = MWSystem
+typealias MWCategories = [MWCategory: [MWGenre]]
+
+enum MWCategory: String, CaseIterable {
+    case movie, tv
+}
 
 class MWSystem {
     
@@ -17,5 +22,15 @@ class MWSystem {
     static let sh = MWSystem()
     
     var configuration: MWConfiguration?
-    var genres: MWCategories?
+    var genres: MWCategories = [:]
+    
+    //MARK: - init
+    
+    private init() {}
+    
+    //MARK: - functions
+    
+    func getGenreBy(id: Int, in category: MWCategory) -> MWGenre? {
+        return self.genres[category]?.first { $0.id == id }
+    }
 }

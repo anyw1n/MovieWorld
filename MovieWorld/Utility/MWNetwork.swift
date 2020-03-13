@@ -26,34 +26,63 @@ class MWNetwork {
     
     //MARK: - functions
     
-    func request<Decodable>(url path: String,
+    func request<T: Decodable>(url path: String,
                             queryParameters: Parameters? = nil,
-                            successHandler: @escaping (Decodable) -> Void,
+                            successHandler: @escaping (T) -> Void,
                             errorHandler: @escaping (MWNetError) -> Void) {
         let url = self.baseURL + path
         let key = "?api_key=" + self.apiKey
         
-        AF.request(url + key, parameters: queryParameters).responseJSON { (response) in
-            guard let statusCode = response.response?.statusCode else { return }
-            
-            switch statusCode {
-            case 200..<300:
-                if let value = response.value as? Decodable {
-                    successHandler(value)
-                } else {
-                    if let error = response.error {
-                        errorHandler(.parsingError(error: error))
+        AF.request(url + key, parameters: queryParameters).validate().responseJSON { (response) in
+            switch response.result {
+            case .success(let value):
+                var data: Data?
+                switch path {
+                case URLPaths.configuration:
+                    if let json = (value as? [String: Any])?["images"] {
+                        data = try? JSONSerialization.data(withJSONObject: json,
+                                                           options: .prettyPrinted)
+                    }
+                case URLPaths.movieGenres, URLPaths.tvGenres:
+                    if let json = (value as? [String: Any])?["genres"] {
+                        data = try? JSONSerialization.data(withJSONObject: json,
+                                                           options: .prettyPrinted)
+                    }
+                default:
+                    if let json = (value as? [String: Any])?["results"] {
+                        data = try? JSONSerialization.data(withJSONObject: json,
+                                                           options: .prettyPrinted)
                     }
                 }
+                do {
+                    if let data = data {
+                        try successHandler(JSONDecoder().decode(T.self, from: data))
+                    }
+                } catch {
+                    errorHandler(.parsingError(error))
+                }
                 break
-            case 401:
-                errorHandler(.unauthError(apiKey: self.apiKey))
-                break
-            case 404:
-                errorHandler(.incorrectUrl(url: url))
-                break
-            default:
-                errorHandler(.unknown)
+            case .failure(let error):
+                if let code = error.responseCode {
+                    switch code {
+                    case 401:
+                        errorHandler(.unauthError(apiKey: self.apiKey))
+                        break
+                    case 404:
+                        errorHandler(.incorrectUrl(url: url))
+                        break
+                    default:
+                        errorHandler(.serverError(statusCode: code))
+                        break
+                    }
+                } else {
+                    if let underlyingError = error.underlyingError as NSError?,
+                    underlyingError.code == URLError.Code.notConnectedToInternet.rawValue {
+                        errorHandler(.networkError(error))
+                    } else {
+                        errorHandler(.unknown(error: error))
+                    }
+                }
                 break
             }
         }
@@ -61,12 +90,39 @@ class MWNetwork {
     
     func getImage(size: Sizes,
                   imagePath: String,
-                  handler: @escaping (UIImage?) -> Void) {
+                  successHandler: @escaping (UIImage?) -> Void,
+                  errorHandler: @escaping (MWNetError) -> Void) {
         guard let baseURL = MWS.sh.configuration?.secureBaseURL else { return }
         let url = baseURL + size.rawValue + imagePath
-        AF.request(url).responseData(completionHandler: { (response) in
-            guard let data = response.data else { return }
-            handler(UIImage(data: data))
+        
+        AF.request(url).validate().responseData(completionHandler: { (response) in
+            switch response.result {
+            case .success(let value):
+                successHandler(UIImage(data: value))
+                break
+            case .failure(let error):
+                if let code = error.responseCode {
+                    switch code {
+                    case 401:
+                        errorHandler(.unauthError(apiKey: self.apiKey))
+                        break
+                    case 404:
+                        errorHandler(.incorrectUrl(url: url))
+                        break
+                    default:
+                        errorHandler(.serverError(statusCode: code))
+                        break
+                    }
+                } else {
+                    if let underlyingError = error.underlyingError as NSError?,
+                        underlyingError.code == URLError.Code.notConnectedToInternet.rawValue {
+                        errorHandler(.networkError(error))
+                    } else {
+                        errorHandler(.unknown(error: error))
+                    }
+                }
+                break
+            }
         })
     }
 }

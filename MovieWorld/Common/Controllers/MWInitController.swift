@@ -62,9 +62,7 @@ class MWInitController: MWViewController {
         
         self.spinner.startAnimating()
         
-        MWS.sh.genres = MWCategories()
-        self.loadMovieGenres()
-        self.loadTVGenres()
+        MWCategory.allCases.forEach { self.loadGenres(category: $0) }
         self.loadConfiguration()
         
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
@@ -88,62 +86,43 @@ class MWInitController: MWViewController {
     
     //MARK: - functions
     
-    private func loadMovieGenres() {
+    private func loadGenres(category: MWCategory) {
         self.dispatchGroup.enter()
         
-        MWN.sh.request(url: URLPaths.movieGenres,
-                       successHandler:
-            { [weak self] (response: [String: Any]) in
-                guard let genres = response["genres"] as? [[String: Any]] else { return }
-                genres.forEach { (genre) in
-                    guard let id = genre["id"] as? Int,
-                        let name = genre["name"] as? String else { return }
-                    MWS.sh.genres?.movie[id] = name
-                }
-                self?.dispatchGroup.leave()
-            },
-                       errorHandler: { [weak self]  (error) in
-                        error.printInConsole()
-                        self?.dispatchGroup.leave()
-        })
-    }
-    
-    private func loadTVGenres() {
-        self.dispatchGroup.enter()
+        var url: String?
+        switch category {
+        case .movie:
+            url = URLPaths.movieGenres
+        case .tv:
+            url = URLPaths.tvGenres
+        }
         
-        MWN.sh.request(url: URLPaths.tvGenres,
-                       successHandler:
-            { [weak self] (response: [String: Any]) in
-                guard let genres = response["genres"] as? [[String: Any]] else { return }
-                genres.forEach { (genre) in
-                    guard let id = genre["id"] as? Int,
-                        let name = genre["name"] as? String else { return }
-                    MWS.sh.genres?.tv[id] = name
-                }
-                self?.dispatchGroup.leave()
-            },
-                       errorHandler: { [weak self]  (error) in
-                        error.printInConsole()
+        MWN.sh.request(url: url ?? "",
+                       successHandler: { [weak self] (response: [MWGenre]) in
+                        response.forEach { $0.category = category.rawValue }
+                        MWS.sh.genres[category] = response
                         self?.dispatchGroup.leave()
-        })
+        }) { [weak self]  (error) in
+            error.printInConsole()
+            let predicate =
+                NSPredicate(format: "category = %@", category.rawValue)
+            MWS.sh.genres[category] =
+                CDM.sh.loadData(entityName: MWGenre.entityName, predicate: predicate)
+            self?.dispatchGroup.leave()
+        }
     }
     
     private func loadConfiguration() {
         self.dispatchGroup.enter()
         
         MWN.sh.request(url: URLPaths.configuration,
-                       successHandler:
-            { [weak self] (response: [String: Any]) in
-                guard let images = response["images"] as? [String: Any] else { return }
-                guard let data = try? JSONSerialization.data(withJSONObject: images),
-                    let configuration = try? JSONDecoder().decode(MWConfiguration.self, from: data)
-                    else { return }
-                MWS.sh.configuration = configuration
-                self?.dispatchGroup.leave()
-            },
-                       errorHandler: { [weak self]  (error) in
-                        error.printInConsole()
+                       successHandler: { [weak self] (response: MWConfiguration) in
+                        MWS.sh.configuration = response
                         self?.dispatchGroup.leave()
-        })
+        }) { [weak self]  (error) in
+            error.printInConsole()
+            MWS.sh.configuration = CDM.sh.loadData(entityName: MWConfiguration.entityName)?.first
+            self?.dispatchGroup.leave()
+        }
     }
 }

@@ -31,7 +31,12 @@ class MWMovie: Decodable {
     }
     var genres: [String] {
         var genres: [String] = []
-        self.genreIDs?.forEach { genres.append(MWS.sh.genres?.movie[$0] ?? "no genre") }
+        self.genreIDs?.forEach {
+            genres.append(MWS.sh.getGenreBy(id: $0, in: .movie)?.name ?? "No genre")
+        }
+        if genres.isEmpty {
+            genres.append("No genre")
+        }
         return genres
     }
     var imageLoaded: ((Int) -> Void)?
@@ -55,14 +60,16 @@ class MWMovie: Decodable {
         if let posterPath = self.posterPath {
             MWN.sh.getImage(size: .w154,
                             imagePath: posterPath,
-                            handler: { [weak self] (image) in
+                            successHandler: { [weak self] (image) in
                                 if let image = image {
                                     self?.image = image
                                 } else {
                                     self?.image = UIImage(named: "noImage")
                                 }
                                 self?.imageLoaded?(self?.id ?? -1)
-            })
+            }) { (error) in
+                error.printInConsole()
+            }
         } else {
             self.image = UIImage(named: "noImage")
             self.imageLoaded?(self.id)
