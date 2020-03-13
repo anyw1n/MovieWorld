@@ -19,17 +19,17 @@ enum MWNetError {
     func printInConsole() {
         switch self {
         case .incorrectUrl(let url):
-            print("Error! Incorrect URL: \(url)")
+            print("Error! Incorrect URL: %@".localized(args: url))
         case .networkError(let error):
-            print("Network error: \(error.localizedDescription)")
+            print("Network error: %@".localized(args: error.localizedDescription))
         case .serverError(let statusCode):
-            print("Server error, status code: \(statusCode)")
+            print("Server error, status code: %@".localized(args: statusCode))
         case .parsingError(let error):
-            print("Error! Can't parse: \(error.localizedDescription)")
+            print("Error! Can't parse: %@".localized(args: error.localizedDescription))
         case .unauthError(let apiKey):
-            print("Error! Incorrect api key: \(apiKey)")
+            print("Error! Incorrect api key: %@".localized(args: apiKey))
         case .unknown(let error):
-            print("Unknown error! \(error.localizedDescription)")
+            print("Unknown error! %@".localized(args: error.localizedDescription))
         }
     }
 }

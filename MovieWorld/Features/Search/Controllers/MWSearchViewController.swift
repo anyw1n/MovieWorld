@@ -15,6 +15,6 @@ class MWSearchViewController: MWViewController {
     override func initController() {
         super.initController()
         
-        self.navigationItem.title = "Search"
+        self.navigationItem.title = "Search".localized()
     }
 }

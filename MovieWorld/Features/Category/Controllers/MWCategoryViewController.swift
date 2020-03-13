@@ -31,7 +31,7 @@ class MWCategoryViewController: MWViewController {
 
     override func initController() {
         super.initController()
-        self.navigationItem.title = "Category"
+        self.navigationItem.title = "Category".localized()
         
         self.view.addSubview(self.tableView)
         self.makeConstraints()

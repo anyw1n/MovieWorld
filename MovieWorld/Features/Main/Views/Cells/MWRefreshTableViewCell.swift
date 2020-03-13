@@ -21,7 +21,7 @@ class MWRefreshTableViewCell: UITableViewCell {
         let button = UIButton()
         button.setImage(UIImage(named: "refreshIcon"), for: .init())
         button.tintColor = UIColor(named: "accentColor")
-        button.setTitle("Refresh", for: .init())
+        button.setTitle("Refresh".localized(), for: .init())
         button.setTitleColor(UIColor(named: "textColor"), for: .init())
         button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 0)
         button.addTarget(self, action: #selector(self.refreshButtonTapped), for: .touchUpInside)

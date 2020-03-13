@@ -32,10 +32,10 @@ class MWMovie: Decodable {
     var genres: [String] {
         var genres: [String] = []
         self.genreIDs?.forEach {
-            genres.append(MWS.sh.getGenreBy(id: $0, in: .movie)?.name ?? "No genre")
+            genres.append(MWS.sh.getGenreBy(id: $0, in: .movie)?.name ?? "No genre".localized())
         }
         if genres.isEmpty {
-            genres.append("No genre")
+            genres.append("No genre".localized())
         }
         return genres
     }

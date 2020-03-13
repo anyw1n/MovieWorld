@@ -14,7 +14,7 @@ class MWMainTabBarController: UITabBarController {
     
     private let mainController: MWMainViewController = {
         let controller = MWMainViewController()
-        controller.tabBarItem = UITabBarItem(title: "Main",
+        controller.tabBarItem = UITabBarItem(title: "Main".localized(),
                                              image: UIImage(named: "mainTabBarIcon"),
                                              selectedImage: UIImage(named: "mainTabBarIcon"))
         return controller
@@ -22,7 +22,7 @@ class MWMainTabBarController: UITabBarController {
     
     private let categoryController: MWCategoryViewController = {
         let controller = MWCategoryViewController()
-        controller.tabBarItem = UITabBarItem(title: "Category",
+        controller.tabBarItem = UITabBarItem(title: "Category".localized(),
                                              image: UIImage(named: "categoryTabBarIcon"),
                                              selectedImage: UIImage(named: "categoryTabBarIcon"))
         return controller
@@ -30,7 +30,7 @@ class MWMainTabBarController: UITabBarController {
     
     private let searchController: MWSearchViewController = {
         let controller = MWSearchViewController()
-        controller.tabBarItem = UITabBarItem(title: "Search",
+        controller.tabBarItem = UITabBarItem(title: "Search".localized(),
                                              image: UIImage(named: "searchTabBarIcon"),
                                              selectedImage: UIImage(named: "searchTabBarIcon"))
         return controller

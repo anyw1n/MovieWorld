@@ -9,15 +9,12 @@
 import Foundation
 
 extension String {
-    subscript(integerRange: Range<Int>) -> String {
-        let start = index(startIndex, offsetBy: integerRange.lowerBound)
-        let end = index(startIndex, offsetBy: integerRange.upperBound)
-        let range = start..<end
-        return String(self[range])
+    
+    func localized() -> String {
+        return NSLocalizedString(self, comment: "")
     }
-
-    subscript(integerIndex: Int) -> Character {
-        let index = self.index(startIndex, offsetBy: integerIndex)
-        return self[index]
+    
+    func localized(args: CVarArg...) -> String {
+        return String(format: self.localized(), args)
     }
 }

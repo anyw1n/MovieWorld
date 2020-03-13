@@ -27,13 +27,15 @@ class MWNetwork {
     //MARK: - functions
     
     func request<T: Decodable>(url path: String,
-                            queryParameters: Parameters? = nil,
+                               queryParameters: Parameters? = nil,
                             successHandler: @escaping (T) -> Void,
                             errorHandler: @escaping (MWNetError) -> Void) {
         let url = self.baseURL + path
         let key = "?api_key=" + self.apiKey
+        var parameters: Parameters = queryParameters ?? [:]
+        parameters["language"] = Locale.current.identifier
         
-        AF.request(url + key, parameters: queryParameters).validate().responseJSON { (response) in
+        AF.request(url + key, parameters: parameters).validate().responseJSON { (response) in
             switch response.result {
             case .success(let value):
                 var data: Data?

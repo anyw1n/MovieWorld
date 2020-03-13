@@ -28,7 +28,7 @@ class MWTableViewHeader: UITableViewHeaderFooterView {
     }()
     
     private(set) lazy var rightButton =
-        MWRoundedButton(text: "All", image: UIImage(named: "nextIcon"))
+        MWRoundedButton(text: "All".localized(), image: UIImage(named: "nextIcon"))
     
     //MARK: - init
     

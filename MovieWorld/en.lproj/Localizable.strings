@@ -1,0 +1,24 @@
+/* 
+  Localizable.strings
+  MovieWorld
+
+  Created by Alexey Zhizhensky on 3/13/20.
+  Copyright © 2020 Alexey Zhizhensky. All rights reserved.
+*/
+
+"No genre" = "No genre";
+"Refresh" = "Refresh";
+"All" = "All";
+"Popular" = "Popular";
+"New" = "New";
+"Animated movies" = "Animated movies";
+"Upcoming" = "Upcoming";
+"Main" = "Main";
+"Category" = "Category";
+"Search" = "Search";
+"Error! Incorrect URL: %@" = "Error! Incorrect URL: %@";
+"Network error: %@" = "Network error: %@";
+"Server error, status code: %@" = "Server error, status code: %@";
+"Error! Can't parse: %@" = "Error! Can't parse: %@";
+"Error! Incorrect api key: %@" = "Error! Incorrect api key: %@";
+"Unknown error! %@" = "Unknown error! %@";

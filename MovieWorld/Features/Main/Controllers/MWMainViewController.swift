@@ -31,17 +31,17 @@ class MWMainViewController: MWViewController {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         
-        return [Section(name: "Popular", url: URLPaths.popularMovies),
-                Section(name: "New",
+        return [Section(name: "Popular".localized(), url: URLPaths.popularMovies),
+                Section(name: "New".localized(),
                         url: URLPaths.discoverMovies,
                         parameters: ["release_date.lte": formatter.string(from: currentDate),
                                      "sort_by": "release_date.desc"]),
-                Section(name: "Animated movies",
+                Section(name: "Animated movies".localized(),
                         url: URLPaths.discoverMovies,
                         parameters: ["release_date.lte": formatter.string(from: currentDate),
                                      "sort_by": "release_date.desc",
                                      "with_genres": "16"]),
-                Section(name: "Upcoming", url: URLPaths.upcomingMovies)]
+                Section(name: "Upcoming".localized(), url: URLPaths.upcomingMovies)]
     }()
     
     //MARK: - gui variables
