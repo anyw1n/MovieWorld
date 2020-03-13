@@ -25,6 +25,7 @@ class MWMainViewController: MWViewController {
     
     //MARK: - variables
     
+    private let dispatchGroup = DispatchGroup()
     private lazy var sections: [Section] = {
         let currentDate = Date()
         let formatter = DateFormatter()
@@ -58,6 +59,8 @@ class MWMainViewController: MWViewController {
         view.separatorStyle = .none
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
+        view.refreshControl = self.refreshControl
+        view.isHidden = true
         return view
     }()
     
@@ -72,11 +75,15 @@ class MWMainViewController: MWViewController {
     
     override func initController() {
         super.initController()
-        self.navigationItem.title = "Season"
+        self.navigationItem.title = "Movie World"
 
         self.loadMovies()
         self.view.addSubview(self.tableView)
-        self.tableView.refreshControl = self.refreshControl
+        
+        self.dispatchGroup.notify(queue: DispatchQueue.main) {
+            self.tableView.isHidden = false
+        }
+        
         self.makeConstraints()
     }
     
@@ -91,11 +98,17 @@ class MWMainViewController: MWViewController {
     //MARK: - functions
 
     @objc private func refreshTableView() {
+        self.tableView.isHidden = true
         self.loadMovies()
+        self.dispatchGroup.notify(queue: DispatchQueue.main) {
+            self.tableView.isHidden = false
+        }
         self.refreshControl.endRefreshing()
     }
     
     private func loadMovies(into section: Section? = nil) {
+        self.dispatchGroup.enter()
+        
         if let section = section {
             let index = self.sections.firstIndex { $0.name == section.name } ?? -1
             MWN.sh.request(url: section.url,
@@ -104,11 +117,14 @@ class MWMainViewController: MWViewController {
                             section.movies = response
                             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
                                                        with: .automatic)
-            }) { error in
+                            self?.dispatchGroup.leave()
+            }) { [weak self] error in
                 error.printInConsole()
+                self?.dispatchGroup.leave()
             }
         } else {
             self.sections.forEach { self.loadMovies(into: $0) }
+            self.dispatchGroup.leave()
         }
     }
 }

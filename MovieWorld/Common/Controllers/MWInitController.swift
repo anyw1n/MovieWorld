@@ -12,7 +12,7 @@ class MWInitController: MWViewController {
     
     //MARK: - variables
     
-    private let stackViewInsets = UIEdgeInsets(top: 224, left: 40, bottom: 0, right: 40)
+    private let stackViewInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
     private let spinnerInsets = UIEdgeInsets(top: 0, left: 0, bottom: 76, right: 0)
     private let spinnerSize = CGSize(width: 35, height: 35)
     private let dispatchGroup = DispatchGroup()
@@ -27,10 +27,7 @@ class MWInitController: MWViewController {
         return label
     }()
     
-    private lazy var imageView: UIImageView = {
-        let view = UIImageView(image: UIImage(named: "launchImage"))
-        return view
-    }()
+    private lazy var imageView = UIImageView(image: UIImage(named: "launchImage"))
     
     private lazy var spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView()
@@ -74,11 +71,12 @@ class MWInitController: MWViewController {
     
     private func makeConstraints() {
         self.stackView.snp.makeConstraints { (make) in
-            make.left.right.top.equalToSuperview().inset(self.stackViewInsets)
+            make.left.right.equalToSuperview().inset(self.stackViewInsets)
+            make.centerY.equalToSuperview()
         }
         self.spinner.snp.makeConstraints { (make) in
-            make.top.equalTo(self.stackView.snp.bottom).offset(140)
-            make.bottom.equalToSuperview().inset(self.spinnerInsets)
+            make.top.lessThanOrEqualTo(self.stackView.snp.bottom).offset(140)
+            make.bottom.lessThanOrEqualToSuperview().inset(self.spinnerInsets)
             make.centerX.equalToSuperview()
             make.size.equalTo(self.spinnerSize)
         }
