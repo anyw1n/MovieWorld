@@ -27,7 +27,11 @@ class MWInitController: MWViewController {
         return label
     }()
     
-    private lazy var imageView = UIImageView(image: UIImage(named: "launchImage"))
+    private lazy var imageView: UIImageView = {
+        let view = UIImageView(image: UIImage(named: "launchImage"))
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
     
     private lazy var spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView()
@@ -75,8 +79,7 @@ class MWInitController: MWViewController {
             make.centerY.equalToSuperview()
         }
         self.spinner.snp.makeConstraints { (make) in
-            make.top.lessThanOrEqualTo(self.stackView.snp.bottom).offset(140)
-            make.bottom.lessThanOrEqualToSuperview().inset(self.spinnerInsets)
+            make.bottom.equalToSuperview().inset(self.spinnerInsets)
             make.centerX.equalToSuperview()
             make.size.equalTo(self.spinnerSize)
         }

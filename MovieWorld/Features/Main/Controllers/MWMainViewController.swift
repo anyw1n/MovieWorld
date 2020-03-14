@@ -60,7 +60,6 @@ class MWMainViewController: MWViewController {
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
         view.refreshControl = self.refreshControl
-        view.isHidden = true
         return view
     }()
     
@@ -78,13 +77,11 @@ class MWMainViewController: MWViewController {
         self.navigationItem.title = "Movie World"
 
         self.loadMovies()
-        self.view.addSubview(self.tableView)
         
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
-            self.tableView.isHidden = false
+            self.view.addSubview(self.tableView)
+            self.makeConstraints()
         }
-        
-        self.makeConstraints()
     }
     
     //MARK: - constraints

@@ -34,7 +34,6 @@ class MWCollectionViewCell: UICollectionViewCell {
     
     private(set) lazy var subtitleLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor(named: "textColor")
         return label
@@ -61,11 +60,11 @@ class MWCollectionViewCell: UICollectionViewCell {
             make.size.equalTo(self.imageSize)
         }
         self.titleLabel.snp.updateConstraints { (make) in
-            make.top.equalTo(self.imageView.snp.bottom).offset(12)
+            make.top.greaterThanOrEqualTo(self.imageView.snp.bottom).offset(12)
             make.left.right.equalToSuperview()
         }
         self.subtitleLabel.snp.updateConstraints { (make) in
-            make.top.equalTo(self.titleLabel.snp.bottom)
+            make.top.equalTo(self.titleLabel.snp.bottom).offset(4)
             make.left.right.bottom.equalToSuperview()
         }
     }

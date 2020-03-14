@@ -24,6 +24,6 @@ public class MWGenre: NSManagedObject, Decodable {
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = (try? container.decode(Int64.self, forKey: .id)) ?? -1
-        self.name = (try? container.decode(String.self, forKey: .name))
+        self.name = (try? container.decode(String.self, forKey: .name))?.capitalizedFirstLetter()
     }
 }

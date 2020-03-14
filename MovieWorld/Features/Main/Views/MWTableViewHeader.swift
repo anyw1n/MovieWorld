@@ -50,10 +50,11 @@ class MWTableViewHeader: UITableViewHeaderFooterView {
     private func makeConstraints() {
         self.titleLabel.snp.makeConstraints { (make) in
             make.top.left.equalToSuperview().inset(self.titleInsets)
+            make.right.lessThanOrEqualTo(self.rightButton.snp.left).offset(-10)
         }
         self.rightButton.snp.makeConstraints { (make) in
             make.top.right.equalToSuperview().inset(self.buttonInsets)
-            make.size.equalTo(self.buttonSize)
+            make.size.greaterThanOrEqualTo(self.buttonSize)
         }
     }
 }
