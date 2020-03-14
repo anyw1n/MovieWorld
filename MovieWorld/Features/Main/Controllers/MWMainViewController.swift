@@ -10,38 +10,25 @@ import UIKit
 
 class MWMainViewController: MWViewController {
     
-    private class Section {
-        let name: String
-        let url: String
-        let requestParameters: [String: Any]?
-        var movies: [MWMovie] = []
-        
-        init(name: String, url: String, parameters: [String: Any]? = nil) {
-            self.name = name
-            self.url = url
-            self.requestParameters = parameters
-        }
-    }
-    
     //MARK: - variables
     
     private let dispatchGroup = DispatchGroup()
-    private lazy var sections: [Section] = {
+    private lazy var sections: [MWSection] = {
         let currentDate = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         
-        return [Section(name: "Popular".localized(), url: URLPaths.popularMovies),
-                Section(name: "New".localized(),
+        return [MWSection(name: "Popular".localized(), url: URLPaths.popularMovies),
+                MWSection(name: "New".localized(),
                         url: URLPaths.discoverMovies,
                         parameters: ["release_date.lte": formatter.string(from: currentDate),
                                      "sort_by": "release_date.desc"]),
-                Section(name: "Animated movies".localized(),
+                MWSection(name: "Animated movies".localized(),
                         url: URLPaths.discoverMovies,
                         parameters: ["release_date.lte": formatter.string(from: currentDate),
                                      "sort_by": "release_date.desc",
                                      "with_genres": "16"]),
-                Section(name: "Upcoming".localized(), url: URLPaths.upcomingMovies)]
+                MWSection(name: "Upcoming".localized(), url: URLPaths.upcomingMovies)]
     }()
     
     //MARK: - gui variables
@@ -103,7 +90,13 @@ class MWMainViewController: MWViewController {
         self.refreshControl.endRefreshing()
     }
     
-    private func loadMovies(into section: Section? = nil) {
+    @objc private func allButtonTapped(sender: UIButton) {
+        let controller = MWMovieListViewController()
+        controller.section = self.sections[sender.tag]
+        MWI.sh.push(controller)
+    }
+    
+    private func loadMovies(into section: MWSection? = nil) {
         self.dispatchGroup.enter()
         
         if let section = section {
@@ -145,6 +138,10 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let view = view as? MWTableViewHeader else { return }
         view.titleLabel.text = self.sections[section].name
+        view.rightButton.addTarget(self,
+                                   action: #selector(self.allButtonTapped),
+                                   for: .touchUpInside)
+        view.rightButton.tag = section
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
