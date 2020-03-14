@@ -52,8 +52,8 @@ class MWMainViewController: MWViewController {
         view.dataSource = self
         view.register(MWCollectionTableViewCell.self,
                       forCellReuseIdentifier: MWCollectionTableViewCell.reuseID)
-        view.register(MWRefreshTableViewCell.self,
-                      forCellReuseIdentifier: MWRefreshTableViewCell.reuseID)
+        view.register(MWRetryTableViewCell.self,
+                      forCellReuseIdentifier: MWRetryTableViewCell.reuseID)
         view.register(MWTableViewHeader.self,
                       forHeaderFooterViewReuseIdentifier: MWTableViewHeader.reuseID)
         view.separatorStyle = .none
@@ -173,10 +173,10 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let cell = self.tableView
-                .dequeueReusableCell(withIdentifier: MWRefreshTableViewCell.reuseID,
+                .dequeueReusableCell(withIdentifier: MWRetryTableViewCell.reuseID,
                                      for: indexPath)
-                as? MWRefreshTableViewCell ?? MWRefreshTableViewCell()
-            cell.refreshTapped = { [weak self] in
+                as? MWRetryTableViewCell ?? MWRetryTableViewCell()
+            cell.retryTapped = { [weak self] in
                 self?.loadMovies(into: self?.sections[indexPath.section])
             }
             return cell

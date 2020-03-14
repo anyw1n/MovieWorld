@@ -11,7 +11,7 @@
 		5009CAF623F97AA4003758C8 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5009CAF523F97AA4003758C8 /* Colors.xcassets */; };
 		500E1194241A5EDC0098A18E /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 500E1192241A5EDC0098A18E /* CoreDataModel.xcdatamodeld */; };
 		500E1196241A5F340098A18E /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500E1195241A5F340098A18E /* CoreDataManager.swift */; };
-		50131807241540D5008CFAEB /* MWRefreshTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50131806241540D5008CFAEB /* MWRefreshTableViewCell.swift */; };
+		50131807241540D5008CFAEB /* MWRetryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50131806241540D5008CFAEB /* MWRetryTableViewCell.swift */; };
 		501585BF241BD61500A12B94 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 501585C1241BD61500A12B94 /* Localizable.strings */; };
 		5019069F240BB039008D1009 /* String+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019069E240BB039008D1009 /* String+Ex.swift */; };
 		501906A3240BB1A8008D1009 /* MWNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501906A2240BB1A8008D1009 /* MWNetwork.swift */; };
@@ -48,7 +48,7 @@
 		5009CAF523F97AA4003758C8 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		500E1193241A5EDC0098A18E /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		500E1195241A5F340098A18E /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
-		50131806241540D5008CFAEB /* MWRefreshTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWRefreshTableViewCell.swift; sourceTree = "<group>"; };
+		50131806241540D5008CFAEB /* MWRetryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWRetryTableViewCell.swift; sourceTree = "<group>"; };
 		501585C0241BD61500A12B94 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		501585C3241BD66C00A12B94 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5019069E240BB039008D1009 /* String+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ex.swift"; sourceTree = "<group>"; };
@@ -284,7 +284,7 @@
 			children = (
 				507F690C240B85C600564DEC /* MWCollectionViewCell.swift */,
 				507F690E240B892E00564DEC /* MWCollectionTableViewCell.swift */,
-				50131806241540D5008CFAEB /* MWRefreshTableViewCell.swift */,
+				50131806241540D5008CFAEB /* MWRetryTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -488,7 +488,7 @@
 				507F690F240B892E00564DEC /* MWCollectionTableViewCell.swift in Sources */,
 				50E10E70240165BA00F774F9 /* MWInterface.swift in Sources */,
 				50E10E762401689A00F774F9 /* MWCategoryViewController.swift in Sources */,
-				50131807241540D5008CFAEB /* MWRefreshTableViewCell.swift in Sources */,
+				50131807241540D5008CFAEB /* MWRetryTableViewCell.swift in Sources */,
 				50272DCB2414E7C1009BD61B /* Sizes.swift in Sources */,
 				5019069F240BB039008D1009 /* String+Ex.swift in Sources */,
 				501CFF1F241A653D002991D4 /* MWGenre+CoreDataClass.swift in Sources */,
