@@ -29,7 +29,7 @@
 		5071F4EC2414F6FC0093CDF8 /* MWSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5071F4EB2414F6FC0093CDF8 /* MWSystem.swift */; };
 		507F690D240B85C600564DEC /* MWMovieCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507F690C240B85C600564DEC /* MWMovieCardCollectionViewCell.swift */; };
 		507F690F240B892E00564DEC /* MWCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507F690E240B892E00564DEC /* MWCollectionTableViewCell.swift */; };
-		50C713C623F96DC20043F2D1 /* MWCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C713C523F96DC20043F2D1 /* MWCardView.swift */; };
+		50C713C623F96DC20043F2D1 /* MWMovieCardTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C713C523F96DC20043F2D1 /* MWMovieCardTableViewCell.swift */; };
 		50CAB43124057946005AB8AF /* MWRoundedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CAB43024057946005AB8AF /* MWRoundedButton.swift */; };
 		50CAB43324057B47005AB8AF /* MWMovie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CAB43224057B47005AB8AF /* MWMovie.swift */; };
 		50CAB43524058128005AB8AF /* MWTableViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CAB43424058128005AB8AF /* MWTableViewHeader.swift */; };
@@ -70,7 +70,7 @@
 		5071F4EB2414F6FC0093CDF8 /* MWSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSystem.swift; sourceTree = "<group>"; };
 		507F690C240B85C600564DEC /* MWMovieCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieCardCollectionViewCell.swift; sourceTree = "<group>"; };
 		507F690E240B892E00564DEC /* MWCollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCollectionTableViewCell.swift; sourceTree = "<group>"; };
-		50C713C523F96DC20043F2D1 /* MWCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCardView.swift; sourceTree = "<group>"; };
+		50C713C523F96DC20043F2D1 /* MWMovieCardTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieCardTableViewCell.swift; sourceTree = "<group>"; };
 		50CAB43024057946005AB8AF /* MWRoundedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWRoundedButton.swift; sourceTree = "<group>"; };
 		50CAB43224057B47005AB8AF /* MWMovie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovie.swift; sourceTree = "<group>"; };
 		50CAB43424058128005AB8AF /* MWTableViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWTableViewHeader.swift; sourceTree = "<group>"; };
@@ -282,7 +282,7 @@
 		506EC4192401604E0020240A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				50C713C523F96DC20043F2D1 /* MWCardView.swift */,
+				50C713C523F96DC20043F2D1 /* MWMovieCardTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -511,7 +511,7 @@
 				507F690D240B85C600564DEC /* MWMovieCardCollectionViewCell.swift in Sources */,
 				5071F4EC2414F6FC0093CDF8 /* MWSystem.swift in Sources */,
 				501CFF20241A653D002991D4 /* MWGenre+CoreDataProperties.swift in Sources */,
-				50C713C623F96DC20043F2D1 /* MWCardView.swift in Sources */,
+				50C713C623F96DC20043F2D1 /* MWMovieCardTableViewCell.swift in Sources */,
 				500E1196241A5F340098A18E /* CoreDataManager.swift in Sources */,
 				50CAB43124057946005AB8AF /* MWRoundedButton.swift in Sources */,
 				50E10E742401688800F774F9 /* MWMainViewController.swift in Sources */,

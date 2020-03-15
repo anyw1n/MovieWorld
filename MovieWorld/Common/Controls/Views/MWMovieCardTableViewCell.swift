@@ -1,5 +1,5 @@
 //
-//  MWCardView.swift
+//  MWMovieCardTableViewCell.swift
 //  MovieWorld
 //
 //  Created by Alexey Zhizhensky on 2/16/20.
@@ -8,16 +8,19 @@
 
 import UIKit
 
-class MWCardView: UIView {
+class MWMovieCardTableViewCell: UITableViewCell {
     
     //MARK: - variables
     
+    static let reuseID = "movieCardTableViewCell"
     private let imageInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 0)
+    private let textInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16)
+    private let textOffset = 16
     private let imageSize = CGSize(width: 70, height: 100)
     
     //MARK: - gui variables
     
-    private lazy var imageView: UIImageView = {
+    private lazy var posterImageView: UIImageView = {
         let view = UIImageView()
         view.layer.cornerRadius = 5
         view.clipsToBounds = true
@@ -53,60 +56,68 @@ class MWCardView: UIView {
         label.textColor = UIColor(named: "textColor")
         return label
     }()
-    
+
     //MARK: - init
     
-    init() {
-        super.init(frame: CGRect())
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.backgroundColor = .white
+        self.selectionStyle = .none
         self.addSubviews()
+        self.makeConstraints()
     }
     
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        
-        self.backgroundColor = .white
-        self.addSubviews()
+        fatalError("init(coder:) has not been implemented")
     }
     
     //MARK: - constraints
     
     private func makeConstraints() {
-        self.imageView.snp.makeConstraints { (make) in
+        self.posterImageView.snp.makeConstraints { (make) in
             make.top.bottom.left.equalToSuperview().inset(self.imageInsets)
             make.size.equalTo(self.imageSize)
         }
         self.titleLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().inset(10)
-            make.left.equalTo(self.imageView.snp.right).offset(16)
-            make.right.equalToSuperview()
+            make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
+            make.height.equalTo(22)
+            make.right.equalToSuperview().inset(self.textInsets)
         }
         self.subtitleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.titleLabel.snp.bottom).offset(3)
-            make.left.equalTo(self.imageView.snp.right).offset(16)
-            make.right.equalToSuperview()
+            make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
+            make.height.equalTo(18)
+            make.right.equalToSuperview().inset(self.textInsets)
         }
         self.genreLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.subtitleLabel.snp.bottom).offset(1)
-            make.left.equalTo(self.imageView.snp.right).offset(16)
-            make.right.equalToSuperview()
+            make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
+            make.right.equalToSuperview().inset(self.textInsets)
         }
         self.ratingLabel.snp.makeConstraints { (make) in
-            make.bottom.equalToSuperview().offset(8)
-            make.left.equalTo(self.imageView.snp.right).offset(16)
-            make.right.equalToSuperview()
+            make.bottom.equalToSuperview().inset(8)
+            make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
+            make.right.equalToSuperview().inset(self.textInsets)
         }
     }
     
     //MARK: - functions
     
     private func addSubviews() {
-        self.addSubview(self.imageView)
-        self.addSubview(self.titleLabel)
-        self.addSubview(self.subtitleLabel)
-        self.addSubview(self.genreLabel)
-        self.addSubview(self.ratingLabel)
-        self.makeConstraints()
+        self.contentView.addSubview(self.posterImageView)
+        self.contentView.addSubview(self.titleLabel)
+        self.contentView.addSubview(self.subtitleLabel)
+        self.contentView.addSubview(self.genreLabel)
+        self.contentView.addSubview(self.ratingLabel)
+    }
+    
+    func setup(_ movie: MWMovie) {
+        self.posterImageView.image = movie.image
+        self.titleLabel.text = movie.title
+        self.subtitleLabel.text = "\(movie.releaseYear)"
+        self.genreLabel.text = movie.genres.joined(separator: ", ")
+        self.ratingLabel.text = "IMDB 8.2, KP 8.3"
     }
 }

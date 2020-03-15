@@ -15,7 +15,7 @@ class MWCollectionTableViewCell: UITableViewCell {
     static let reuseID = "collectionViewTableViewCell"
     
     private let itemSize = CGSize(width: 130, height: 237)
-    private let sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
+    private let sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 7)
     
     var movies: [MWMovie]?
     

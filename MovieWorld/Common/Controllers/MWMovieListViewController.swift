@@ -13,8 +13,8 @@ class MWMovieListViewController: MWViewController {
     //MARK: - variables
     
     private let sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-    private let collectionViewInsets = UIEdgeInsets(top: 16, left: 0, bottom: 26, right: 0)
-    private let collectionViewHeight = 62
+    private let collectionViewInsets = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+    private let collectionViewHeight = 94
     var section: MWSection?
     
     //MARK: - gui variables
@@ -39,6 +39,19 @@ class MWMovieListViewController: MWViewController {
         view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .white
         view.allowsMultipleSelection = true
+        view.contentInset = self.collectionViewInsets
+        return view
+    }()
+    
+    private lazy var tableView: UITableView = {
+        let view = UITableView(frame: CGRect(), style: .grouped)
+        view.delegate = self
+        view.dataSource = self
+        view.register(MWMovieCardTableViewCell.self,
+                      forCellReuseIdentifier: MWMovieCardTableViewCell.reuseID)
+        view.separatorStyle = .none
+        view.showsHorizontalScrollIndicator = false
+        view.showsVerticalScrollIndicator = false
         return view
     }()
     
@@ -48,16 +61,15 @@ class MWMovieListViewController: MWViewController {
         super.initController()
         
         self.navigationItem.title = section?.name
-        self.view.addSubview(self.collectionView)
+        self.view.addSubview(self.tableView)
         self.makeConstraints()
     }
     
     //MARK: - constraints
     
     private func makeConstraints() {
-        self.collectionView.snp.makeConstraints { (make) in
-            make.top.left.right.equalTo(self.view.safeAreaLayoutGuide).inset(self.collectionViewInsets)
-            make.height.equalTo(self.collectionViewHeight)
+        self.tableView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
         }
     }
 }
@@ -76,5 +88,41 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
             as? MWTagCollectionViewCell ?? MWTagCollectionViewCell()
         cell.titleLabel.text = MWS.sh.genres[.movie]?[indexPath.row].name
         return cell
+    }
+}
+
+//MARK: - UITableViewDelegate, UITableViewDataSource
+
+extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.section?.movies.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.tableView
+            .dequeueReusableCell(withIdentifier: MWMovieCardTableViewCell.reuseID,
+                                 for: indexPath)
+            as? MWMovieCardTableViewCell ?? MWMovieCardTableViewCell()
+        if let movie = self.section?.movies[indexPath.row] {
+            cell.setup(movie)
+        }
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return self.collectionView
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return CGFloat(self.collectionViewHeight)
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return CGFloat.leastNonzeroMagnitude
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView()
     }
 }
