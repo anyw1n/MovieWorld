@@ -22,6 +22,8 @@ class MWViewController: UIViewController {
     
     private func _initController() {
         self.view.backgroundColor = .white
+        self.navigationItem.backBarButtonItem =
+            UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
     
     func initController() { }

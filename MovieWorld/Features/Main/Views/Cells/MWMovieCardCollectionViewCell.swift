@@ -8,11 +8,11 @@
 
 import UIKit
 
-class MWCollectionViewCell: UICollectionViewCell {
+class MWMovieCardCollectionViewCell: UICollectionViewCell {
     
     //MARK: - variables
     
-    static let reuseID = "imageTitleDescriptionCell"
+    static let reuseID = "movieCardCollectionViewCell"
     private let imageSize = CGSize(width: 130, height: 185)
     
     //MARK: - gui variables

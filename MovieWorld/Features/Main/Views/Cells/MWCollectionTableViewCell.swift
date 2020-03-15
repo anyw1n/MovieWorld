@@ -35,8 +35,8 @@ class MWCollectionTableViewCell: UITableViewCell {
                                     collectionViewLayout: self.collectionViewFlowLayout)
         view.dataSource = self
         view.delegate = self
-        view.register(MWCollectionViewCell.self,
-                      forCellWithReuseIdentifier: MWCollectionViewCell.reuseID)
+        view.register(MWMovieCardCollectionViewCell.self,
+                      forCellWithReuseIdentifier: MWMovieCardCollectionViewCell.reuseID)
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .white
@@ -82,9 +82,9 @@ extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = self.collectionView
-            .dequeueReusableCell(withReuseIdentifier: MWCollectionViewCell.reuseID,
+            .dequeueReusableCell(withReuseIdentifier: MWMovieCardCollectionViewCell.reuseID,
                                  for: indexPath)
-            as? MWCollectionViewCell ?? MWCollectionViewCell()
+            as? MWMovieCardCollectionViewCell ?? MWMovieCardCollectionViewCell()
         
         let movie = self.movies?[indexPath.row]
         cell.titleLabel.text = movie?.title
