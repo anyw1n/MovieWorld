@@ -26,7 +26,7 @@ class MWMainViewController: MWViewController {
                 MWSection(name: "Animated movies".localized(),
                         url: URLPaths.discoverMovies,
                         parameters: ["release_date.lte": formatter.string(from: currentDate),
-                                     "sort_by": "release_date.desc",
+                                     "sort_by": "popularity.desc",
                                      "with_genres": "16"]),
                 MWSection(name: "Upcoming".localized(), url: URLPaths.upcomingMovies)]
     }()

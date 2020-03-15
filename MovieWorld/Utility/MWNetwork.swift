@@ -33,7 +33,12 @@ class MWNetwork {
         let url = self.baseURL + path
         let key = "?api_key=" + self.apiKey
         var parameters: Parameters = queryParameters ?? [:]
-        parameters["language"] = Locale.current.identifier
+        if let languageCode = Locale.current.languageCode {
+            parameters["language"] = languageCode
+        }
+        if let regionCode = Locale.current.regionCode {
+            parameters["region"] = regionCode
+        }
         
         AF.request(url + key, parameters: parameters).validate().responseJSON { (response) in
             switch response.result {
