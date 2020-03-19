@@ -31,6 +31,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textColor = UIColor(named: "textColor")
+        label.numberOfLines = 0
         return label
     }()
     
@@ -44,7 +45,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
     private lazy var genreLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
-        label.numberOfLines = 2
+        label.numberOfLines = 0
         label.alpha = 0.5
         label.textColor = UIColor(named: "textColor")
         return label
@@ -76,19 +77,18 @@ class MWMovieCardTableViewCell: UITableViewCell {
     
     private func makeConstraints() {
         self.posterImageView.snp.makeConstraints { (make) in
-            make.top.bottom.left.equalToSuperview().inset(self.imageInsets)
+            make.top.left.equalToSuperview().inset(self.imageInsets)
+            make.bottom.lessThanOrEqualToSuperview().inset(self.imageInsets)
             make.size.equalTo(self.imageSize)
         }
         self.titleLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().inset(10)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
-            make.height.equalTo(22)
             make.right.equalToSuperview().inset(self.textInsets)
         }
         self.subtitleLabel.snp.makeConstraints { (make) in
             make.top.equalTo(self.titleLabel.snp.bottom).offset(3)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
-            make.height.equalTo(18)
             make.right.equalToSuperview().inset(self.textInsets)
         }
         self.genreLabel.snp.makeConstraints { (make) in
@@ -97,6 +97,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
             make.right.equalToSuperview().inset(self.textInsets)
         }
         self.ratingLabel.snp.makeConstraints { (make) in
+            make.top.greaterThanOrEqualTo(self.genreLabel.snp.bottom).offset(8)
             make.bottom.equalToSuperview().inset(8)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
             make.right.equalToSuperview().inset(self.textInsets)
