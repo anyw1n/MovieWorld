@@ -115,7 +115,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
     }
     
     func setup(_ movie: MWMovie) {
-        movie.showImage(size: .w154, in: self.posterImageView)
+        movie.showImage(size: .w92, in: self.posterImageView)
         self.titleLabel.text = movie.title
         self.subtitleLabel.text = "\(movie.releaseYear)"
         self.genreLabel.text = movie.genres.joined(separator: ", ")

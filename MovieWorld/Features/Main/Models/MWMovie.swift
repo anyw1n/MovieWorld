@@ -59,10 +59,16 @@ class MWMovie: Decodable {
         }
         
         let url = URL(string: baseURL + size.rawValue + posterPath)
+        var options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
+                                              .transition(.fade(1)),
+                                              .cacheOriginalImage]
+        if imageView.bounds.size != CGSize.zero {
+            let processor = DownsamplingImageProcessor(size: imageView.bounds.size)
+            options.append(.processor(processor))
+        }
+        
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(with: url,
-                              options: [.scaleFactor(UIScreen.main.scale),
-                                        .transition(.fade(1)),
-                                        .cacheOriginalImage])
+                              options: options)
     }
 }
