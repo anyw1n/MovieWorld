@@ -8,11 +8,12 @@
 
 import Foundation
 
-class MWSection {
+class MWSection: NSCopying {
+
     let name: String
     let url: String
     var genreIds: Set<Int64>?
-    var movies: [MWMovie] = []
+    var movies: [MWMovie]
     var requestParameters: [String: Any] {
         get {
             var parameters = self._requestParameters
@@ -25,10 +26,20 @@ class MWSection {
     }
     private var _requestParameters: [String: Any]
     
-    init(name: String, url: String, parameters: [String: Any] = [:], genreIds: Set<Int64>? = nil) {
+    init(name: String, url: String, parameters: [String: Any] = [:], genreIds: Set<Int64>? = nil, movies: [MWMovie] = []) {
         self.name = name
         self.url = url
         self._requestParameters = parameters
         self.genreIds = genreIds
+        self.movies = movies
+    }
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = MWSection(name: self.name,
+                             url: self.url,
+                             parameters: self._requestParameters,
+                             genreIds: self.genreIds,
+                             movies: self.movies)
+        return copy
     }
 }

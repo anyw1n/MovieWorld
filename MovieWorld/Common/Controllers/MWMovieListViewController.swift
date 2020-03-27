@@ -56,7 +56,15 @@ class MWMovieListViewController: MWViewController {
         view.separatorStyle = .none
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
+        view.refreshControl = self.refreshControl
         return view
+    }()
+    
+    private lazy var refreshControl: UIRefreshControl = {
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(self.refreshTableView), for: .valueChanged)
+        refresh.tintColor = UIColor(named: "accentColor")
+        return refresh
     }()
     
     //MARK: - init
@@ -106,6 +114,14 @@ class MWMovieListViewController: MWViewController {
         }) { (error) in
             error.printInConsole()
         }
+    }
+    
+    @objc private func refreshTableView() {
+        self.pagesLoaded = 0
+        self.section?.movies = []
+        self.tableView.reloadData()
+        self.loadMovies()
+        self.refreshControl.endRefreshing()
     }
 }
 

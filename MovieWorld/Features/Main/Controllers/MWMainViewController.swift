@@ -92,7 +92,7 @@ class MWMainViewController: MWViewController {
     
     @objc private func allButtonTapped(sender: UIButton) {
         let controller = MWMovieListViewController()
-        controller.section = self.sections[sender.tag]
+        controller.section = self.sections[sender.tag].copy() as? MWSection
         controller.pagesLoaded = 1
         MWI.sh.push(controller)
     }
