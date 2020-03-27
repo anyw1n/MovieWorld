@@ -120,5 +120,10 @@ class MWMovieCardTableViewCell: UITableViewCell {
         self.subtitleLabel.text = "\(movie.releaseYear)"
         self.genreLabel.text = movie.genres.joined(separator: ", ")
         self.ratingLabel.text = "IMDB 8.2, KP 8.3"
+        movie.imageLoaded = { id in
+            if id == movie.id {
+                self.posterImageView.image = movie.image
+            }
+        }
     }
 }

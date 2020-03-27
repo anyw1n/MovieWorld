@@ -16,6 +16,10 @@ class MWMovieListViewController: MWViewController {
     private let collectionViewInsets = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
     private let collectionViewHeight = 94
     var section: MWSection?
+    var pagesLoaded: Int = 0
+    private var totalPages: Int = 50
+//    private var totalItems: Int = 1000
+    private var isRequestBusy: Bool = false
     
     //MARK: - gui variables
     
@@ -63,6 +67,10 @@ class MWMovieListViewController: MWViewController {
         self.navigationItem.title = section?.name
         self.view.addSubview(self.tableView)
         self.makeConstraints()
+        
+        if self.pagesLoaded == 0 {
+            self.loadMovies()
+        }
     }
     
     //MARK: - constraints
@@ -70,6 +78,33 @@ class MWMovieListViewController: MWViewController {
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
+        }
+    }
+    
+    //MARK: - functions
+    
+    private func loadMovies() {
+        guard !self.isRequestBusy, self.pagesLoaded != self.totalPages else { return }
+        self.isRequestBusy = true
+
+        self.requestMovies(page: self.pagesLoaded + 1) { [weak self] (movies) in
+            guard let self = self else { return }
+            self.isRequestBusy = false
+            self.section?.movies.append(contentsOf: movies)
+            self.pagesLoaded += 1
+            self.tableView.reloadData()
+        }
+    }
+    
+    private func requestMovies(page: Int, completion: @escaping ([MWMovie]) -> Void) {
+        guard let section = self.section else { return }
+        section.requestParameters["page"] = page
+        MWN.sh.request(url: section.url,
+                       queryParameters: section.requestParameters,
+                       successHandler: { (response: [MWMovie]) in
+                        completion(response)
+        }) { (error) in
+            error.printInConsole()
         }
     }
 }
@@ -86,8 +121,27 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
             .dequeueReusableCell(withReuseIdentifier: MWTagCollectionViewCell.reuseID,
                                  for: indexPath)
             as? MWTagCollectionViewCell ?? MWTagCollectionViewCell()
-        cell.titleLabel.text = MWS.sh.genres[.movie]?[indexPath.row].name
+        guard let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return cell }
+        cell.titleLabel.text = genre.name
+        if self.section?.genreIds?.contains(genre.id) ?? false {
+            cell.isSelected = true
+        }
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let section = self.section,
+            let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return }
+        if section.genreIds != nil {
+            section.genreIds!.insert(genre.id)
+        } else {
+            section.genreIds = [genre.id]
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        guard let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return }
+        self.section?.genreIds?.remove(genre.id)
     }
 }
 
@@ -104,8 +158,11 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
             .dequeueReusableCell(withIdentifier: MWMovieCardTableViewCell.reuseID,
                                  for: indexPath)
             as? MWMovieCardTableViewCell ?? MWMovieCardTableViewCell()
-        if let movie = self.section?.movies[indexPath.row] {
-            cell.setup(movie)
+        guard let movies = self.section?.movies else { return cell }
+        cell.setup(movies[indexPath.row])
+
+        if indexPath.row == movies.count - 5 {
+            self.loadMovies()
         }
         return cell
     }

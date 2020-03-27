@@ -20,14 +20,14 @@ class MWMainViewController: MWViewController {
         
         return [MWSection(name: "Popular".localized(), url: URLPaths.popularMovies),
                 MWSection(name: "New".localized(),
-                        url: URLPaths.discoverMovies,
-                        parameters: ["release_date.lte": formatter.string(from: currentDate),
-                                     "sort_by": "release_date.desc"]),
+                          url: URLPaths.discoverMovies,
+                          parameters: ["release_date.lte": formatter.string(from: currentDate),
+                                       "sort_by": "release_date.desc"]),
                 MWSection(name: "Animated movies".localized(),
-                        url: URLPaths.discoverMovies,
-                        parameters: ["release_date.lte": formatter.string(from: currentDate),
-                                     "sort_by": "popularity.desc",
-                                     "with_genres": "16"]),
+                          url: URLPaths.discoverMovies,
+                          parameters: ["release_date.lte": formatter.string(from: currentDate),
+                                       "sort_by": "popularity.desc"],
+                          genreIds: [16]),
                 MWSection(name: "Upcoming".localized(), url: URLPaths.upcomingMovies)]
     }()
     
@@ -93,6 +93,7 @@ class MWMainViewController: MWViewController {
     @objc private func allButtonTapped(sender: UIButton) {
         let controller = MWMovieListViewController()
         controller.section = self.sections[sender.tag]
+        controller.pagesLoaded = 1
         MWI.sh.push(controller)
     }
     
