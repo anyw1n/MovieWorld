@@ -7,8 +7,7 @@
 //
 
 import UIKit
-
-
+import Kingfisher
 
 class MWMovie: Decodable {
     
@@ -20,11 +19,10 @@ class MWMovie: Decodable {
     //MARK: - variables
 
     var title: String?
-    var id: Int
+    var id: Int?
     var genreIDs: [Int]?
     var releaseDate: String?
     var posterPath: String?
-    var image: UIImage?
     
     var releaseYear: String {
         return String(self.releaseDate?.split(separator: "-").first ?? "")
@@ -39,7 +37,6 @@ class MWMovie: Decodable {
         }
         return genres
     }
-    var imageLoaded: ((Int) -> Void)?
     
     //MARK: - init
     
@@ -50,29 +47,22 @@ class MWMovie: Decodable {
         self.releaseDate = (try? container.decode(String.self, forKey: .releaseDate))
         self.genreIDs = (try? container.decode([Int].self, forKey: .genreIDs))
         self.posterPath = (try? container.decode(String.self, forKey: .posterPath))
-        
-        self.loadImage()
     }
     
     //MARK: - functions
     
-    func loadImage() {
-        if let posterPath = self.posterPath {
-            MWN.sh.getImage(size: .w154,
-                            imagePath: posterPath,
-                            successHandler: { [weak self] (image) in
-                                if let image = image {
-                                    self?.image = image
-                                } else {
-                                    self?.image = UIImage(named: "noImage")
-                                }
-                                self?.imageLoaded?(self?.id ?? -1)
-            }) { (error) in
-                error.printInConsole()
-            }
-        } else {
-            self.image = UIImage(named: "noImage")
-            self.imageLoaded?(self.id)
+    func showImage(size: Sizes, in imageView: UIImageView) {
+        guard let posterPath = self.posterPath,
+            let baseURL = MWS.sh.configuration?.secureBaseURL else {
+                imageView.image = UIImage(named: "noImage")
+                return
         }
+        
+        let url = URL(string: baseURL + size.rawValue + posterPath)
+        imageView.kf.indicatorType = .activity
+        imageView.kf.setImage(with: url,
+                              options: [.scaleFactor(UIScreen.main.scale),
+                                        .transition(.fade(1)),
+                                        .cacheOriginalImage])
     }
 }

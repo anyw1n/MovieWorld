@@ -167,6 +167,10 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        (cell as? MWMovieCardTableViewCell)?.posterImageView.kf.cancelDownloadTask()
+    }
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return self.collectionView
     }

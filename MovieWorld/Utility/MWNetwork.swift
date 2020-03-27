@@ -94,42 +94,4 @@ class MWNetwork {
             }
         }
     }
-    
-    func getImage(size: Sizes,
-                  imagePath: String,
-                  successHandler: @escaping (UIImage?) -> Void,
-                  errorHandler: @escaping (MWNetError) -> Void) {
-        guard let baseURL = MWS.sh.configuration?.secureBaseURL else { return }
-        let url = baseURL + size.rawValue + imagePath
-        
-        AF.request(url).validate().responseData(completionHandler: { (response) in
-            switch response.result {
-            case .success(let value):
-                successHandler(UIImage(data: value))
-                break
-            case .failure(let error):
-                if let code = error.responseCode {
-                    switch code {
-                    case 401:
-                        errorHandler(.unauthError(apiKey: self.apiKey))
-                        break
-                    case 404:
-                        errorHandler(.incorrectUrl(url: url))
-                        break
-                    default:
-                        errorHandler(.serverError(statusCode: code))
-                        break
-                    }
-                } else {
-                    if let underlyingError = error.underlyingError as NSError?,
-                        underlyingError.code == URLError.Code.notConnectedToInternet.rawValue {
-                        errorHandler(.networkError(error))
-                    } else {
-                        errorHandler(.unknown(error: error))
-                    }
-                }
-                break
-            }
-        })
-    }
 }

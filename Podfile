@@ -6,6 +6,7 @@ target 'MovieWorld' do
   use_frameworks!
   pod 'SnapKit', '~> 5.0.0'
   pod 'Alamofire', '~> 5.0'
+  pod 'Kingfisher', '~> 5.0'
   # Pods for MovieWorld
 
 end
