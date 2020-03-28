@@ -9,11 +9,16 @@
 import Foundation
 
 class MWSection: NSCopying {
-
+    
+    // MARK: - variables
+    
     let name: String
     let url: String
     var genreIds: Set<Int64>?
     var movies: [MWMovie]
+    var pagesLoaded: Int = 0
+    var totalPages: Int = -1
+    var totalResults: Int = -1
     var requestParameters: [String: Any] {
         get {
             var parameters = self._requestParameters
@@ -26,7 +31,13 @@ class MWSection: NSCopying {
     }
     private var _requestParameters: [String: Any]
     
-    init(name: String, url: String, parameters: [String: Any] = [:], genreIds: Set<Int64>? = nil, movies: [MWMovie] = []) {
+    // MARK: - init
+    
+    init(name: String,
+         url: String,
+         parameters: [String: Any] = [:],
+         genreIds: Set<Int64>? = nil,
+         movies: [MWMovie] = []) {
         self.name = name
         self.url = url
         self._requestParameters = parameters
@@ -34,12 +45,31 @@ class MWSection: NSCopying {
         self.movies = movies
     }
     
+    // MARK: - functions
+    
     func copy(with zone: NSZone? = nil) -> Any {
         let copy = MWSection(name: self.name,
                              url: self.url,
                              parameters: self._requestParameters,
                              genreIds: self.genreIds,
                              movies: self.movies)
+        copy.pagesLoaded = self.pagesLoaded
+        copy.totalPages = self.totalPages
+        copy.totalResults = self.totalResults
         return copy
+    }
+    
+    func loadResults(from requestResult: MWMovieRequestResult) {
+        self.pagesLoaded = requestResult.page ?? 0
+        self.movies.append(contentsOf: requestResult.results ?? [])
+        self.totalResults = requestResult.totalResults ?? 0
+        self.totalPages = requestResult.totalPages ?? 0
+    }
+    
+    func clearResults() {
+        self.pagesLoaded = 0
+        self.movies = []
+        self.totalResults = -1
+        self.totalPages = -1
     }
 }

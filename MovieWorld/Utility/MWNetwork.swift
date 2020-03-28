@@ -28,8 +28,8 @@ class MWNetwork {
     
     func request<T: Decodable>(url path: String,
                                queryParameters: Parameters? = nil,
-                            successHandler: @escaping (T) -> Void,
-                            errorHandler: @escaping (MWNetError) -> Void) {
+                               successHandler: @escaping (T) -> Void,
+                               errorHandler: @escaping (MWNetError) -> Void) {
         let url = self.baseURL + path
         let key = "?api_key=" + self.apiKey
         var parameters: Parameters = queryParameters ?? [:]
@@ -56,10 +56,8 @@ class MWNetwork {
                                                            options: .prettyPrinted)
                     }
                 default:
-                    if let json = (value as? [String: Any])?["results"] {
-                        data = try? JSONSerialization.data(withJSONObject: json,
-                                                           options: .prettyPrinted)
-                    }
+                    data = try? JSONSerialization.data(withJSONObject: value,
+                                                       options: .prettyPrinted)
                 }
                 do {
                     if let data = data {
@@ -84,7 +82,7 @@ class MWNetwork {
                     }
                 } else {
                     if let underlyingError = error.underlyingError as NSError?,
-                    underlyingError.code == URLError.Code.notConnectedToInternet.rawValue {
+                        underlyingError.code == URLError.Code.notConnectedToInternet.rawValue {
                         errorHandler(.networkError(error))
                     } else {
                         errorHandler(.unknown(error: error))

@@ -16,9 +16,6 @@ class MWMovieListViewController: MWViewController {
     private let collectionViewInsets = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
     private let collectionViewHeight = 94
     var section: MWSection?
-    var pagesLoaded: Int = 0
-    private var totalPages: Int = 50
-//    private var totalItems: Int = 1000
     private var isRequestBusy: Bool = false
     
     //MARK: - gui variables
@@ -76,7 +73,7 @@ class MWMovieListViewController: MWViewController {
         self.view.addSubview(self.tableView)
         self.makeConstraints()
         
-        if self.pagesLoaded == 0 {
+        if self.section?.pagesLoaded == 0 {
             self.loadMovies()
         }
     }
@@ -92,24 +89,24 @@ class MWMovieListViewController: MWViewController {
     //MARK: - functions
     
     private func loadMovies() {
-        guard !self.isRequestBusy, self.pagesLoaded != self.totalPages else { return }
+        guard !self.isRequestBusy,
+            self.section?.pagesLoaded != self.section?.totalPages else { return }
         self.isRequestBusy = true
-
-        self.requestMovies(page: self.pagesLoaded + 1) { [weak self] (movies) in
+        
+        self.requestMovies(page: (self.section?.pagesLoaded ?? 0) + 1) { [weak self] (response) in
             guard let self = self else { return }
             self.isRequestBusy = false
-            self.section?.movies.append(contentsOf: movies)
-            self.pagesLoaded += 1
+            self.section?.loadResults(from: response)
             self.tableView.reloadData()
         }
     }
     
-    private func requestMovies(page: Int, completion: @escaping ([MWMovie]) -> Void) {
+    private func requestMovies(page: Int, completion: @escaping (MWMovieRequestResult) -> Void) {
         guard let section = self.section else { return }
         section.requestParameters["page"] = page
         MWN.sh.request(url: section.url,
                        queryParameters: section.requestParameters,
-                       successHandler: { (response: [MWMovie]) in
+                       successHandler: { (response: MWMovieRequestResult) in
                         completion(response)
         }) { (error) in
             error.printInConsole()
@@ -117,8 +114,7 @@ class MWMovieListViewController: MWViewController {
     }
     
     @objc private func refreshTableView() {
-        self.pagesLoaded = 0
-        self.section?.movies = []
+        self.section?.clearResults()
         self.tableView.reloadData()
         self.loadMovies()
         self.refreshControl.endRefreshing()

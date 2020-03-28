@@ -93,7 +93,6 @@ class MWMainViewController: MWViewController {
     @objc private func allButtonTapped(sender: UIButton) {
         let controller = MWMovieListViewController()
         controller.section = self.sections[sender.tag].copy() as? MWSection
-        controller.pagesLoaded = 1
         MWI.sh.push(controller)
     }
     
@@ -104,8 +103,8 @@ class MWMainViewController: MWViewController {
             let index = self.sections.firstIndex { $0.name == section.name } ?? -1
             MWN.sh.request(url: section.url,
                            queryParameters: section.requestParameters,
-                           successHandler: { [weak self] (response: [MWMovie]) in
-                            section.movies = response
+                           successHandler: { [weak self] (response: MWMovieRequestResult) in
+                            section.loadResults(from: response)
                             self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
                                                        with: .automatic)
                             self?.dispatchGroup.leave()

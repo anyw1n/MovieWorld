@@ -21,6 +21,7 @@
 		501CFF1E241A653D002991D4 /* MWConfiguration+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501CFF18241A653D002991D4 /* MWConfiguration+CoreDataProperties.swift */; };
 		501CFF1F241A653D002991D4 /* MWGenre+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501CFF19241A653D002991D4 /* MWGenre+CoreDataClass.swift */; };
 		501CFF20241A653D002991D4 /* MWGenre+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501CFF1A241A653D002991D4 /* MWGenre+CoreDataProperties.swift */; };
+		501E215D242FAAEB00A3F290 /* MWMovieRequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E215C242FAAEB00A3F290 /* MWMovieRequestResult.swift */; };
 		501E7771241E290900B37345 /* MWTagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E7770241E290900B37345 /* MWTagCollectionViewCell.swift */; };
 		50213C4A2414058D007C7D15 /* MWInitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50213C492414058D007C7D15 /* MWInitController.swift */; };
 		50272DCB2414E7C1009BD61B /* Sizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50272DCA2414E7C1009BD61B /* Sizes.swift */; };
@@ -62,6 +63,7 @@
 		501CFF18241A653D002991D4 /* MWConfiguration+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MWConfiguration+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		501CFF19241A653D002991D4 /* MWGenre+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MWGenre+CoreDataClass.swift"; sourceTree = "<group>"; };
 		501CFF1A241A653D002991D4 /* MWGenre+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MWGenre+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		501E215C242FAAEB00A3F290 /* MWMovieRequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieRequestResult.swift; sourceTree = "<group>"; };
 		501E7770241E290900B37345 /* MWTagCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWTagCollectionViewCell.swift; sourceTree = "<group>"; };
 		50213C492414058D007C7D15 /* MWInitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWInitController.swift; sourceTree = "<group>"; };
 		50272DCA2414E7C1009BD61B /* Sizes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizes.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 			children = (
 				50114334241D362F00EE31AE /* MWSection.swift */,
 				50CAB43224057B47005AB8AF /* MWMovie.swift */,
+				501E215C242FAAEB00A3F290 /* MWMovieRequestResult.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -496,6 +499,7 @@
 				50E10E722401684100F774F9 /* MWMainTabBarController.swift in Sources */,
 				507F690F240B892E00564DEC /* MWCollectionTableViewCell.swift in Sources */,
 				50E10E70240165BA00F774F9 /* MWInterface.swift in Sources */,
+				501E215D242FAAEB00A3F290 /* MWMovieRequestResult.swift in Sources */,
 				50E10E762401689A00F774F9 /* MWCategoryViewController.swift in Sources */,
 				50131807241540D5008CFAEB /* MWRetryTableViewCell.swift in Sources */,
 				50272DCB2414E7C1009BD61B /* Sizes.swift in Sources */,
