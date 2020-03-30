@@ -12,7 +12,7 @@ class MWRoundedButton: UIButton {
     
     private let titleInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 4)
     
-    init(text: String, image: UIImage? = nil) {
+    init(text: String = "", image: UIImage? = nil) {
         super.init(frame: CGRect.zero)
         self.setTitle(text, for: UIControl.State())
         self.titleLabel?.font = UIFont.systemFont(ofSize: 13)

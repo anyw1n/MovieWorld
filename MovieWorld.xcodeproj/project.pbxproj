@@ -23,6 +23,7 @@
 		501CFF20241A653D002991D4 /* MWGenre+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501CFF1A241A653D002991D4 /* MWGenre+CoreDataProperties.swift */; };
 		501E215D242FAAEB00A3F290 /* MWMovieRequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E215C242FAAEB00A3F290 /* MWMovieRequestResult.swift */; };
 		501E7771241E290900B37345 /* MWTagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501E7770241E290900B37345 /* MWTagCollectionViewCell.swift */; };
+		501F1AD92430E5DB00D34E5E /* MWTagCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F1AD82430E5DB00D34E5E /* MWTagCollectionViewLayout.swift */; };
 		50213C4A2414058D007C7D15 /* MWInitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50213C492414058D007C7D15 /* MWInitController.swift */; };
 		50272DCB2414E7C1009BD61B /* Sizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50272DCA2414E7C1009BD61B /* Sizes.swift */; };
 		50272DCD2414E803009BD61B /* MWNetError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50272DCC2414E803009BD61B /* MWNetError.swift */; };
@@ -65,6 +66,7 @@
 		501CFF1A241A653D002991D4 /* MWGenre+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MWGenre+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		501E215C242FAAEB00A3F290 /* MWMovieRequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieRequestResult.swift; sourceTree = "<group>"; };
 		501E7770241E290900B37345 /* MWTagCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWTagCollectionViewCell.swift; sourceTree = "<group>"; };
+		501F1AD82430E5DB00D34E5E /* MWTagCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWTagCollectionViewLayout.swift; sourceTree = "<group>"; };
 		50213C492414058D007C7D15 /* MWInitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWInitController.swift; sourceTree = "<group>"; };
 		50272DCA2414E7C1009BD61B /* Sizes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sizes.swift; sourceTree = "<group>"; };
 		50272DCC2414E803009BD61B /* MWNetError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWNetError.swift; sourceTree = "<group>"; };
@@ -134,12 +136,21 @@
 			path = CoreData;
 			sourceTree = "<group>";
 		};
+		501F1ADA2430E65D00D34E5E /* Layouts */ = {
+			isa = PBXGroup;
+			children = (
+				501F1AD82430E5DB00D34E5E /* MWTagCollectionViewLayout.swift */,
+			);
+			path = Layouts;
+			sourceTree = "<group>";
+		};
 		506EC40724015C8A0020240A /* Common */ = {
 			isa = PBXGroup;
 			children = (
 				506EC40824015C9B0020240A /* Navigation */,
 				506EC40924015CA60020240A /* Controllers */,
 				506EC40A24015CB20020240A /* Controls */,
+				501F1ADA2430E65D00D34E5E /* Layouts */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -506,6 +517,7 @@
 				5019069F240BB039008D1009 /* String+Ex.swift in Sources */,
 				501CFF1F241A653D002991D4 /* MWGenre+CoreDataClass.swift in Sources */,
 				501CFF1E241A653D002991D4 /* MWConfiguration+CoreDataProperties.swift in Sources */,
+				501F1AD92430E5DB00D34E5E /* MWTagCollectionViewLayout.swift in Sources */,
 				50114333241D343500EE31AE /* MWMovieListViewController.swift in Sources */,
 				50114335241D362F00EE31AE /* MWSection.swift in Sources */,
 				50F700E623F7AEE00029A997 /* AppDelegate.swift in Sources */,

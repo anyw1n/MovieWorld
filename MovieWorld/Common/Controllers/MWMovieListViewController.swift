@@ -12,26 +12,22 @@ class MWMovieListViewController: MWViewController {
     
     //MARK: - variables
     
-    private let sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-    private let collectionViewInsets = UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
-    private let collectionViewHeight = 94
+    private let collectionViewInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+    private let collectionViewHeight: CGFloat = 92
     var section: MWSection?
     private var isRequestBusy: Bool = false
     
     //MARK: - gui variables
     
-    private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.estimatedItemSize = CGSize(width: 100, height: 26)
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 10
-        layout.sectionInset = self.sectionInsets
+    private lazy var tagCollectionViewLayout: MWTagCollectionViewLayout = {
+        let layout = MWTagCollectionViewLayout()
+        layout.delegate = self
         return layout
     }()
     
     private lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: CGRect(),
-                                    collectionViewLayout: self.collectionViewFlowLayout)
+                                    collectionViewLayout: self.tagCollectionViewLayout)
         view.dataSource = self
         view.delegate = self
         view.register(MWTagCollectionViewCell.self,
@@ -134,7 +130,8 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
                                  for: indexPath)
             as? MWTagCollectionViewCell ?? MWTagCollectionViewCell()
         guard let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return cell }
-        cell.titleLabel.text = genre.name
+        
+        cell.button.setTitle(genre.name, for: .init())
         if self.section?.genreIds?.contains(genre.id) ?? false {
             cell.isSelected = true
         }
@@ -149,11 +146,26 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
         } else {
             section.genreIds = [genre.id]
         }
+        self.refreshTableView()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return }
         self.section?.genreIds?.remove(genre.id)
+        self.refreshTableView()
+    }
+}
+
+//MARK: - MWTagCollectionViewLayoutDelegate
+
+extension MWMovieListViewController: MWTagCollectionViewLayoutDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, widthForTagAtIndexPath indexPath: IndexPath) -> CGFloat {
+        let label = UILabel()
+        label.text = MWS.sh.genres[.movie]?[indexPath.row].name
+        let inset = 12
+        label.font = UIFont.systemFont(ofSize: 13)
+        return label.intrinsicContentSize.width + CGFloat(inset * 2)
     }
 }
 
@@ -188,7 +200,7 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return CGFloat(self.collectionViewHeight)
+        return self.collectionViewHeight
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
