@@ -161,11 +161,11 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
 extension MWMovieListViewController: MWTagCollectionViewLayoutDelegate {
     
     func collectionView(_ collectionView: UICollectionView, widthForTagAtIndexPath indexPath: IndexPath) -> CGFloat {
-        let label = UILabel()
-        label.text = MWS.sh.genres[.movie]?[indexPath.row].name
-        let inset = 12
-        label.font = UIFont.systemFont(ofSize: 13)
-        return label.intrinsicContentSize.width + CGFloat(inset * 2)
+        let genreName = MWS.sh.genres[.movie]?[indexPath.row].name as NSString? ?? ""
+        let genreNameWidth =
+            genreName.size(withAttributes: [.font: UIFont.systemFont(ofSize: 13)]).width
+        let inset: CGFloat = 12
+        return genreNameWidth + inset * 2
     }
 }
 
