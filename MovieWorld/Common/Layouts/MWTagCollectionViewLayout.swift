@@ -10,6 +10,8 @@ import UIKit
 
 class MWTagCollectionViewLayout: UICollectionViewLayout {
     
+    //MARK: - variables
+    
     weak var delegate: MWTagCollectionViewLayoutDelegate?
     
     private let numberOfRows = 2
@@ -32,8 +34,10 @@ class MWTagCollectionViewLayout: UICollectionViewLayout {
         return CGSize(width: self.contentWidth, height: self.contentHeight)
     }
     
+    //MARK: - functions
+    
     override func prepare() {
-        guard cache.isEmpty, let collectionView = collectionView else { return }
+        guard cache.isEmpty, let collectionView = self.collectionView else { return }
         
         let rowHeight = (self.contentHeight - self.ySpacing) / CGFloat(self.numberOfRows)
         var yOffset: [CGFloat] = []
@@ -43,7 +47,8 @@ class MWTagCollectionViewLayout: UICollectionViewLayout {
         var row = 0
         var xOffset: [CGFloat] = .init(repeating: 0, count: self.numberOfRows)
         
-        for item in 0..<collectionView.numberOfItems(inSection: 0) {
+        let numberOfItems = collectionView.numberOfItems(inSection: 0)
+        for item in 0..<numberOfItems {
             let indexPath = IndexPath(item: item, section: 0)
             
             let tagWidth = self.delegate?.collectionView(collectionView,
@@ -58,7 +63,7 @@ class MWTagCollectionViewLayout: UICollectionViewLayout {
             self.cache.append(attributes)
             
             self.contentWidth = max(self.contentWidth, frame.maxX)
-            xOffset[row] = xOffset[row] + tagWidth + (item != collectionView.numberOfItems(inSection: 0) - 1 ? self.xSpacing : 0)
+            xOffset[row] += tagWidth + (item != numberOfItems - 1 ? self.xSpacing : 0)
             
             row = row < (self.numberOfRows - 1) ? (row + 1) : 0
         }
@@ -79,6 +84,8 @@ class MWTagCollectionViewLayout: UICollectionViewLayout {
         return self.cache[indexPath.item]
     }
 }
+
+//MARK: - MWTagCollectionViewLayoutDelegate
 
 protocol MWTagCollectionViewLayoutDelegate: AnyObject {
     func collectionView(_ collectionView: UICollectionView,

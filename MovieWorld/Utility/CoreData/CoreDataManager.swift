@@ -13,10 +13,30 @@ typealias CDM = CoreDataManager
 
 class CoreDataManager {
     
+    // MARK: - variables
+    
     static let sh = CoreDataManager()
     
+    // MARK: - Core Data stack
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "CoreDataModel")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        container.viewContext.mergePolicy =
+            NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
+        return container
+    }()
+    
+    // MARK: - init
+    
     private init() {}
-
+    
+    // MARK: - functions
+    
     func fetchRequest<T: NSFetchRequestResult>(entityName: String,
                                                keysForSort: [String]? = nil,
                                                predicate: NSPredicate? = nil) -> NSFetchRequest<T> {
@@ -44,20 +64,6 @@ class CoreDataManager {
         }
         return data
     }
-    
-    // MARK: - Core Data stack
-    
-    lazy var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "CoreDataModel")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error \(error), \(error.userInfo)")
-            }
-        })
-        container.viewContext.mergePolicy =
-            NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
-        return container
-    }()
     
     // MARK: - Core Data Saving support
     

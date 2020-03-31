@@ -30,7 +30,12 @@ class MWSystem {
     
     //MARK: - functions
     
-    func getGenreBy(id: Int, in category: MWCategory) -> MWGenre? {
-        return self.genres[category]?.first { $0.id == id }
+    func getGenreBy(id: Int) -> MWGenre? {
+        for genres in self.genres.values {
+            if let genre = genres.first(where: { $0.id == id }) {
+                return genre
+            }
+        }
+        return nil
     }
 }
