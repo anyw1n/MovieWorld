@@ -14,8 +14,9 @@ class MWSection: NSCopying {
     
     let name: String
     let url: String
+    let category: MWCategory
     var genreIds: Set<Int64>?
-    var movies: [MWMovie]
+    var movies: [Movieable]
     var pagesLoaded: Int = 0
     var totalPages: Int = -1
     var totalResults: Int = -1
@@ -35,11 +36,13 @@ class MWSection: NSCopying {
     
     init(name: String,
          url: String,
+         category: MWCategory,
          parameters: [String: Any] = [:],
          genreIds: Set<Int64>? = nil,
-         movies: [MWMovie] = []) {
+         movies: [Movieable] = []) {
         self.name = name
         self.url = url
+        self.category = category
         self._requestParameters = parameters
         self.genreIds = genreIds
         self.movies = movies
@@ -50,6 +53,7 @@ class MWSection: NSCopying {
     func copy(with zone: NSZone? = nil) -> Any {
         let copy = MWSection(name: self.name,
                              url: self.url,
+                             category: self.category,
                              parameters: self._requestParameters,
                              genreIds: self.genreIds,
                              movies: self.movies)
@@ -59,7 +63,7 @@ class MWSection: NSCopying {
         return copy
     }
     
-    func loadResults(from requestResult: MWMovieRequestResult) {
+    func loadResults<T: Movieable>(from requestResult: MWMovieRequestResult<T>) {
         self.pagesLoaded = requestResult.page ?? 0
         self.movies.append(contentsOf: requestResult.results ?? [])
         self.totalResults = requestResult.totalResults ?? 0

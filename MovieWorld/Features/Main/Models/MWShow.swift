@@ -1,30 +1,30 @@
 //
-//  MWMovie.swift
+//  MWShow.swift
 //  MovieWorld
 //
-//  Created by Alexey Zhizhensky on 2/25/20.
+//  Created by Alexey Zhizhensky on 3/31/20.
 //  Copyright © 2020 Alexey Zhizhensky. All rights reserved.
 //
 
 import UIKit
 
-class MWMovie: Movieable {
+class MWShow: Movieable {
     
     private enum CodingKeys: String, CodingKey {
-        case title, id, genreIDs = "genre_ids", releaseDate = "release_date",
+        case name, id, genreIDs = "genre_ids", firstAirDate = "first_air_date",
         posterPath = "poster_path"
     }
     
     //MARK: - variables
 
-    let title: String?
+    let name: String?
     let id: Int?
     let genreIDs: [Int]?
-    let releaseDate: String?
+    let firstAirDate: String?
     let posterPath: String?
-
-    var releaseYear: String {
-        return String(self.releaseDate?.split(separator: "-").first ?? "")
+    
+    var firstAirYear: String {
+        return String(self.firstAirDate?.split(separator: "-").first ?? "")
     }
     var genres: [String] {
         var genres: [String] = []
@@ -36,4 +36,8 @@ class MWMovie: Movieable {
         }
         return genres
     }
+    
+    var title: String? { self.name }
+    var releaseDate: String? { self.firstAirDate }
+    var releaseYear: String { self.firstAirYear }
 }

@@ -114,11 +114,11 @@ class MWMovieCardTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.ratingLabel)
     }
     
-    func setup(_ movie: MWMovie) {
+    func setup(_ movie: Movieable) {
         movie.showImage(size: .w92, in: self.posterImageView)
         self.titleLabel.text = movie.title
         self.subtitleLabel.text = "\(movie.releaseYear)"
         self.genreLabel.text = movie.genres.joined(separator: ", ")
-        self.ratingLabel.text = "IMDB 8.2, KP 8.3"
+        self.ratingLabel.text = "IMDB -, KP -"
     }
 }

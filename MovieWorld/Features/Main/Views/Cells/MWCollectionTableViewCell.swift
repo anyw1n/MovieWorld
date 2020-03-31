@@ -17,7 +17,7 @@ class MWCollectionTableViewCell: UITableViewCell {
     private let itemSize = CGSize(width: 130, height: 237)
     private let sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 7)
     
-    var movies: [MWMovie]?
+    var movies: [Movieable]?
     
     //MARK: - gui variables
     

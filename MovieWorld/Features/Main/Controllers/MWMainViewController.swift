@@ -18,17 +18,27 @@ class MWMainViewController: MWViewController {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         
-        return [MWSection(name: "Popular".localized(), url: URLPaths.popularMovies),
-                MWSection(name: "New".localized(),
+        return [MWSection(name: "New".localized(),
                           url: URLPaths.discoverMovies,
+                          category: .movie,
                           parameters: ["release_date.lte": formatter.string(from: currentDate),
                                        "sort_by": "release_date.desc"]),
+                MWSection(name: "Movies".localized(),
+                          url: URLPaths.discoverMovies,
+                          category: .movie,
+                          parameters: ["release_date.lte": formatter.string(from: currentDate),
+                                       "sort_by": "popularity.desc"]),
+                MWSection(name: "Series and shows".localized(),
+                          url: URLPaths.discoverTVs,
+                          category: .tv,
+                          parameters: ["first_air_date.lte": formatter.string(from: currentDate),
+                                       "sort_by": "popularity.desc"]),
                 MWSection(name: "Animated movies".localized(),
                           url: URLPaths.discoverMovies,
+                          category: .movie,
                           parameters: ["release_date.lte": formatter.string(from: currentDate),
                                        "sort_by": "popularity.desc"],
-                          genreIds: [16]),
-                MWSection(name: "Upcoming".localized(), url: URLPaths.upcomingMovies)]
+                          genreIds: [16])]
     }()
     
     //MARK: - gui variables
@@ -101,16 +111,33 @@ class MWMainViewController: MWViewController {
         
         if let section = section {
             let index = self.sections.firstIndex { $0.name == section.name } ?? -1
-            MWN.sh.request(url: section.url,
-                           queryParameters: section.requestParameters,
-                           successHandler: { [weak self] (response: MWMovieRequestResult) in
-                            section.loadResults(from: response)
-                            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
-                                                       with: .automatic)
-                            self?.dispatchGroup.leave()
-            }) { [weak self] error in
-                error.printInConsole()
-                self?.dispatchGroup.leave()
+            switch section.category {
+            case .movie:
+                MWN.sh.request(
+                    url: section.url,
+                    queryParameters: section.requestParameters,
+                    successHandler: { [weak self] (response: MWMovieRequestResult<MWMovie>) in
+                        section.loadResults(from: response)
+                        self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
+                                                   with: .automatic)
+                        self?.dispatchGroup.leave()
+                }) { [weak self] error in
+                    error.printInConsole()
+                    self?.dispatchGroup.leave()
+                }
+            case .tv:
+                MWN.sh.request(
+                    url: section.url,
+                    queryParameters: section.requestParameters,
+                    successHandler: { [weak self] (response: MWMovieRequestResult<MWShow>) in
+                        section.loadResults(from: response)
+                        self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
+                                                   with: .automatic)
+                        self?.dispatchGroup.leave()
+                }) { [weak self] error in
+                    error.printInConsole()
+                    self?.dispatchGroup.leave()
+                }
             }
         } else {
             self.sections.forEach { self.loadMovies(into: $0) }

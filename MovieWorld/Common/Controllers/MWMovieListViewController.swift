@@ -86,18 +86,31 @@ class MWMovieListViewController: MWViewController {
     
     private func loadMovies() {
         guard !self.isRequestBusy,
-            self.section?.pagesLoaded != self.section?.totalPages else { return }
+            let section = self.section,
+            section.pagesLoaded != section.totalPages else { return }
         self.isRequestBusy = true
         
-        self.requestMovies(page: (self.section?.pagesLoaded ?? 0) + 1) { [weak self] (response) in
-            guard let self = self else { return }
-            self.isRequestBusy = false
-            self.section?.loadResults(from: response)
-            self.tableView.reloadData()
+        switch section.category {
+        case .movie:
+            self.requestMovies(page: (section.pagesLoaded) + 1) {
+                [weak self] (response: MWMovieRequestResult<MWMovie>) in
+                guard let self = self else { return }
+                self.isRequestBusy = false
+                section.loadResults(from: response)
+                self.tableView.reloadData()
+            }
+        case .tv:
+            self.requestMovies(page: (section.pagesLoaded) + 1) {
+                [weak self] (response: MWMovieRequestResult<MWShow>) in
+                guard let self = self else { return }
+                self.isRequestBusy = false
+                section.loadResults(from: response)
+                self.tableView.reloadData()
+            }
         }
     }
     
-    private func requestMovies(page: Int, completion: @escaping (MWMovieRequestResult) -> Void) {
+    private func requestMovies<T>(page: Int, completion: @escaping (MWMovieRequestResult<T>) -> Void) {
         guard let section = self.section else { return }
         section.requestParameters["page"] = page
         MWN.sh.request(url: section.url,
@@ -121,7 +134,8 @@ class MWMovieListViewController: MWViewController {
 
 extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return MWS.sh.genres[.movie]?.count ?? 0
+        guard let category = self.section?.category else { return 0 }
+        return MWS.sh.genres[category]?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -129,7 +143,8 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
             .dequeueReusableCell(withReuseIdentifier: MWTagCollectionViewCell.reuseID,
                                  for: indexPath)
             as? MWTagCollectionViewCell ?? MWTagCollectionViewCell()
-        guard let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return cell }
+        guard let category = self.section?.category,
+            let genre = MWS.sh.genres[category]?[indexPath.row] else { return cell }
         
         cell.button.setTitle(genre.name, for: .init())
         if self.section?.genreIds?.contains(genre.id) ?? false {
@@ -140,7 +155,7 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let section = self.section,
-            let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return }
+            let genre = MWS.sh.genres[section.category]?[indexPath.row] else { return }
         if section.genreIds != nil {
             section.genreIds!.insert(genre.id)
         } else {
@@ -150,8 +165,9 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return }
-        self.section?.genreIds?.remove(genre.id)
+        guard let section = self.section,
+            let genre = MWS.sh.genres[section.category]?[indexPath.row] else { return }
+        section.genreIds?.remove(genre.id)
         self.refreshTableView()
     }
 }
@@ -161,7 +177,9 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
 extension MWMovieListViewController: MWTagCollectionViewLayoutDelegate {
     
     func collectionView(_ collectionView: UICollectionView, widthForTagAtIndexPath indexPath: IndexPath) -> CGFloat {
-        let genreName = MWS.sh.genres[.movie]?[indexPath.row].name as NSString? ?? ""
+        guard let section = self.section,
+            let genre = MWS.sh.genres[section.category]?[indexPath.row] else { return 0 }
+        let genreName = genre.name as NSString? ?? ""
         let genreNameWidth =
             genreName.size(withAttributes: [.font: UIFont.systemFont(ofSize: 13)]).width
         let inset: CGFloat = 12
