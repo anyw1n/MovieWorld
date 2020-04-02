@@ -77,27 +77,27 @@ class MWMovieCardTableViewCell: UITableViewCell {
     //MARK: - constraints
     
     private func makeConstraints() {
-        self.posterImageView.snp.makeConstraints { (make) in
+        self.posterImageView.snp.updateConstraints { (make) in
             make.top.left.equalToSuperview().inset(self.imageInsets)
             make.bottom.lessThanOrEqualToSuperview().inset(self.imageInsets)
             make.size.equalTo(self.imageSize)
         }
-        self.titleLabel.snp.makeConstraints { (make) in
+        self.titleLabel.snp.updateConstraints { (make) in
             make.top.equalToSuperview().inset(10)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
             make.right.equalToSuperview().inset(self.textInsets)
         }
-        self.subtitleLabel.snp.makeConstraints { (make) in
+        self.subtitleLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.titleLabel.snp.bottom).offset(3)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
             make.right.equalToSuperview().inset(self.textInsets)
         }
-        self.genreLabel.snp.makeConstraints { (make) in
+        self.genreLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.subtitleLabel.snp.bottom).offset(1)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
             make.right.equalToSuperview().inset(self.textInsets)
         }
-        self.ratingLabel.snp.makeConstraints { (make) in
+        self.ratingLabel.snp.updateConstraints { (make) in
             make.top.greaterThanOrEqualTo(self.genreLabel.snp.bottom).offset(8)
             make.bottom.equalToSuperview().inset(8)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
@@ -106,19 +106,34 @@ class MWMovieCardTableViewCell: UITableViewCell {
     }
     
     //MARK: - functions
-    
-    private func addSubviews() {
-        self.contentView.addSubview(self.posterImageView)
-        self.contentView.addSubview(self.titleLabel)
-        self.contentView.addSubview(self.subtitleLabel)
-        self.contentView.addSubview(self.genreLabel)
-        self.contentView.addSubview(self.ratingLabel)
+
+    override func updateConstraints() {
+        self.makeConstraints()
+        super.updateConstraints()
     }
     
     func setup(_ movie: Movieable) {
         movie.showImage(size: .w92, in: self.posterImageView)
         self.titleLabel.text = movie.title
         
+        if let movie = movie as? MWMovie, movie.details == nil {
+            movie.detailsLoaded = { [weak self] in
+                self?.setSubtitle(movie: movie)
+                self?.setNeedsUpdateConstraints()
+            }
+        } else if let movie = movie as? MWShow, movie.details == nil {
+            movie.detailsLoaded = { [weak self] in
+                self?.setSubtitle(movie: movie)
+                self?.setNeedsUpdateConstraints()
+            }
+        }
+        
+        self.setSubtitle(movie: movie)
+        self.genreLabel.text = movie.genres.joined(separator: ", ")
+        self.ratingLabel.text = "IMDB -, KP -"
+    }
+    
+    private func setSubtitle(movie: Movieable) {
         if let movie = movie as? MWMovie, let details = movie.details,
             !(details.productionCountries.isEmpty) {
             self.subtitleLabel.text =
@@ -130,8 +145,13 @@ class MWMovieCardTableViewCell: UITableViewCell {
         } else {
             self.subtitleLabel.text = "\(movie.releaseYear)"
         }
-        
-        self.genreLabel.text = movie.genres.joined(separator: ", ")
-        self.ratingLabel.text = "IMDB -, KP -"
+    }
+    
+    private func addSubviews() {
+        self.contentView.addSubview(self.posterImageView)
+        self.contentView.addSubview(self.titleLabel)
+        self.contentView.addSubview(self.subtitleLabel)
+        self.contentView.addSubview(self.genreLabel)
+        self.contentView.addSubview(self.ratingLabel)
     }
 }

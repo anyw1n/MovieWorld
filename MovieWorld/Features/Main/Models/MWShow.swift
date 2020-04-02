@@ -42,6 +42,7 @@ class MWShow: Movieable {
     var releaseYear: String { self.firstAirYear }
     
     var details: MWShowDetails?
+    var detailsLoaded: (() -> Void)?
     
     //MARK: - init
     
@@ -64,6 +65,7 @@ class MWShow: Movieable {
         MWN.sh.request(url: url,
                        successHandler: { [weak self] (response: MWShowDetails) in
                         self?.details = response
+                        self?.detailsLoaded?()
         }) { (error) in
             error.printInConsole()
         }

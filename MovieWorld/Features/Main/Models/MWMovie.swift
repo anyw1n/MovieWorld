@@ -38,7 +38,8 @@ class MWMovie: Movieable {
     }
     
     var details: MWMovieDetails?
-    
+    var detailsLoaded: (() -> Void)?
+
     //MARK: - init
     
     required init(from decoder: Decoder) throws {
@@ -60,6 +61,7 @@ class MWMovie: Movieable {
         MWN.sh.request(url: url,
                        successHandler: { [weak self] (response: MWMovieDetails) in
                         self?.details = response
+                        self?.detailsLoaded?()
         }) { (error) in
             error.printInConsole()
         }

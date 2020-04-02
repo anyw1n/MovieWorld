@@ -19,6 +19,7 @@ protocol Movieable: Decodable {
     
     var releaseYear: String { get }
     var genres: [String] { get }
+    var detailsLoaded: (() -> Void)? { get set }
     
     func showImage(size: Sizes, in imageView: UIImageView)
 }
