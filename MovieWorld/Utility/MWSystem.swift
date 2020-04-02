@@ -23,6 +23,7 @@ class MWSystem {
     
     var configuration: MWConfiguration?
     var genres: MWCategories = [:]
+    var countries: [MWCountry]?
     
     //MARK: - init
     

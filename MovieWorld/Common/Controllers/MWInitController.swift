@@ -65,6 +65,7 @@ class MWInitController: MWViewController {
         
         MWCategory.allCases.forEach { self.loadGenres(category: $0) }
         self.loadConfiguration()
+        self.loadCountries()
         
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
             MWI.sh.window?.rootViewController = MWI.sh.tabBarController
@@ -123,6 +124,20 @@ class MWInitController: MWViewController {
         }) { [weak self]  (error) in
             error.printInConsole()
             MWS.sh.configuration = CDM.sh.loadData(entityName: MWConfiguration.entityName)?.first
+            self?.dispatchGroup.leave()
+        }
+    }
+    
+    private func loadCountries() {
+        self.dispatchGroup.enter()
+        
+        MWN.sh.request(url: URLPaths.countries,
+                       successHandler: { [weak self] (response: [MWCountry]) in
+                        MWS.sh.countries = response
+                        self?.dispatchGroup.leave()
+        }) { [weak self]  (error) in
+            error.printInConsole()
+            MWS.sh.countries = CDM.sh.loadData(entityName: MWCountry.entityName)
             self?.dispatchGroup.leave()
         }
     }

@@ -10,6 +10,16 @@
             </uniquenessConstraint>
         </uniquenessConstraints>
     </entity>
+    <entity name="MWCountry" representedClassName="MWCountry" syncable="YES">
+        <attribute name="isoCode" attributeType="String"/>
+        <attribute name="name" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="isoCode"/>
+                <constraint value="name"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
     <entity name="MWGenre" representedClassName="MWGenre" syncable="YES">
         <attribute name="category" attributeType="String"/>
         <attribute name="id" attributeType="Integer 64" usesScalarValueType="YES"/>
@@ -24,5 +34,6 @@
     <elements>
         <element name="MWConfiguration" positionX="-63" positionY="-18" width="128" height="88"/>
         <element name="MWGenre" positionX="-36" positionY="9" width="128" height="88"/>
+        <element name="MWCountry" positionX="-45" positionY="18" width="128" height="73"/>
     </elements>
 </model>

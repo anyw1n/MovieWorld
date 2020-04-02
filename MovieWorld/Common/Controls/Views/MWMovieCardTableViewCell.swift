@@ -38,6 +38,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
+        label.numberOfLines = 0
         label.textColor = UIColor(named: "textColor")
         return label
     }()
@@ -117,7 +118,19 @@ class MWMovieCardTableViewCell: UITableViewCell {
     func setup(_ movie: Movieable) {
         movie.showImage(size: .w92, in: self.posterImageView)
         self.titleLabel.text = movie.title
-        self.subtitleLabel.text = "\(movie.releaseYear)"
+        
+        if let movie = movie as? MWMovie, let details = movie.details,
+            !(details.productionCountries.isEmpty) {
+            self.subtitleLabel.text =
+            "\(movie.releaseYear), \(details.productionCountryNames.joined(separator: ", "))"
+        } else if let movie = movie as? MWShow, let details = movie.details,
+            !(details.originCountries.isEmpty) {
+            self.subtitleLabel.text =
+            "\(movie.releaseYear), \(details.originCountryNames.joined(separator: ", "))"
+        } else {
+            self.subtitleLabel.text = "\(movie.releaseYear)"
+        }
+        
         self.genreLabel.text = movie.genres.joined(separator: ", ")
         self.ratingLabel.text = "IMDB -, KP -"
     }

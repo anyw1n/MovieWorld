@@ -36,4 +36,32 @@ class MWMovie: Movieable {
         }
         return genres
     }
+    
+    var details: MWMovieDetails?
+    
+    //MARK: - init
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.title = (try? container.decode(String.self, forKey: .title))
+        self.id = (try? container.decode(Int.self, forKey: .id))
+        self.releaseDate = (try? container.decode(String.self, forKey: .releaseDate))
+        self.genreIDs = (try? container.decode([Int].self, forKey: .genreIDs))
+        self.posterPath = (try? container.decode(String.self, forKey: .posterPath))
+        self.requestDetails()
+    }
+    
+    //MARK: - functions
+    
+    func requestDetails() {
+        guard let id = self.id, self.details == nil else { return }
+        
+        let url = URLPaths.movieDetails + String(id)
+        MWN.sh.request(url: url,
+                       successHandler: { [weak self] (response: MWMovieDetails) in
+                        self?.details = response
+        }) { (error) in
+            error.printInConsole()
+        }
+    }
 }

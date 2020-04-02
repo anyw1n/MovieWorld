@@ -15,6 +15,10 @@
 		50114335241D362F00EE31AE /* MWSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50114334241D362F00EE31AE /* MWSection.swift */; };
 		50131807241540D5008CFAEB /* MWRetryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50131806241540D5008CFAEB /* MWRetryTableViewCell.swift */; };
 		501585BF241BD61500A12B94 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 501585C1241BD61500A12B94 /* Localizable.strings */; };
+		50188B162435FFC300CAC18F /* MWCountry+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50188B142435FFC300CAC18F /* MWCountry+CoreDataClass.swift */; };
+		50188B172435FFC300CAC18F /* MWCountry+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50188B152435FFC300CAC18F /* MWCountry+CoreDataProperties.swift */; };
+		50188B192436063400CAC18F /* MWMovieDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50188B182436063400CAC18F /* MWMovieDetails.swift */; };
+		50188B1B2436065200CAC18F /* MWShowDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50188B1A2436065200CAC18F /* MWShowDetails.swift */; };
 		5019069F240BB039008D1009 /* String+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019069E240BB039008D1009 /* String+Ex.swift */; };
 		501906A3240BB1A8008D1009 /* MWNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501906A2240BB1A8008D1009 /* MWNetwork.swift */; };
 		501CFF1D241A653D002991D4 /* MWConfiguration+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501CFF17241A653D002991D4 /* MWConfiguration+CoreDataClass.swift */; };
@@ -60,6 +64,10 @@
 		50131806241540D5008CFAEB /* MWRetryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWRetryTableViewCell.swift; sourceTree = "<group>"; };
 		501585C0241BD61500A12B94 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		501585C3241BD66C00A12B94 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		50188B142435FFC300CAC18F /* MWCountry+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MWCountry+CoreDataClass.swift"; sourceTree = "<group>"; };
+		50188B152435FFC300CAC18F /* MWCountry+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MWCountry+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		50188B182436063400CAC18F /* MWMovieDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieDetails.swift; sourceTree = "<group>"; };
+		50188B1A2436065200CAC18F /* MWShowDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWShowDetails.swift; sourceTree = "<group>"; };
 		5019069E240BB039008D1009 /* String+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ex.swift"; sourceTree = "<group>"; };
 		501906A2240BB1A8008D1009 /* MWNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWNetwork.swift; sourceTree = "<group>"; };
 		501CFF17241A653D002991D4 /* MWConfiguration+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MWConfiguration+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -130,6 +138,8 @@
 		500E1191241A5E950098A18E /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				50188B142435FFC300CAC18F /* MWCountry+CoreDataClass.swift */,
+				50188B152435FFC300CAC18F /* MWCountry+CoreDataProperties.swift */,
 				501CFF17241A653D002991D4 /* MWConfiguration+CoreDataClass.swift */,
 				501CFF18241A653D002991D4 /* MWConfiguration+CoreDataProperties.swift */,
 				501CFF19241A653D002991D4 /* MWGenre+CoreDataClass.swift */,
@@ -255,6 +265,8 @@
 				50CAB43224057B47005AB8AF /* MWMovie.swift */,
 				501E215C242FAAEB00A3F290 /* MWMovieRequestResult.swift */,
 				502BF5DA2433583100737AF0 /* MWShow.swift */,
+				50188B182436063400CAC18F /* MWMovieDetails.swift */,
+				50188B1A2436065200CAC18F /* MWShowDetails.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -512,6 +524,7 @@
 				50E10E78240168B000F774F9 /* MWSearchViewController.swift in Sources */,
 				50F700EA23F7AEE00029A997 /* MWViewController.swift in Sources */,
 				501906A3240BB1A8008D1009 /* MWNetwork.swift in Sources */,
+				50188B162435FFC300CAC18F /* MWCountry+CoreDataClass.swift in Sources */,
 				502BF5DB2433583100737AF0 /* MWShow.swift in Sources */,
 				500E1194241A5EDC0098A18E /* CoreDataModel.xcdatamodeld in Sources */,
 				50E10E722401684100F774F9 /* MWMainTabBarController.swift in Sources */,
@@ -522,7 +535,9 @@
 				50131807241540D5008CFAEB /* MWRetryTableViewCell.swift in Sources */,
 				50272DCB2414E7C1009BD61B /* Sizes.swift in Sources */,
 				5019069F240BB039008D1009 /* String+Ex.swift in Sources */,
+				50188B172435FFC300CAC18F /* MWCountry+CoreDataProperties.swift in Sources */,
 				501CFF1F241A653D002991D4 /* MWGenre+CoreDataClass.swift in Sources */,
+				50188B192436063400CAC18F /* MWMovieDetails.swift in Sources */,
 				501CFF1E241A653D002991D4 /* MWConfiguration+CoreDataProperties.swift in Sources */,
 				501F1AD92430E5DB00D34E5E /* MWTagCollectionViewLayout.swift in Sources */,
 				50114333241D343500EE31AE /* MWMovieListViewController.swift in Sources */,
@@ -541,6 +556,7 @@
 				50E10E742401688800F774F9 /* MWMainViewController.swift in Sources */,
 				50CAB43324057B47005AB8AF /* MWMovie.swift in Sources */,
 				50CAB43524058128005AB8AF /* MWTableViewHeader.swift in Sources */,
+				50188B1B2436065200CAC18F /* MWShowDetails.swift in Sources */,
 				50E10E7B2401860D00F774F9 /* MWTitleArrowCell.swift in Sources */,
 				501E7771241E290900B37345 /* MWTagCollectionViewCell.swift in Sources */,
 			);
