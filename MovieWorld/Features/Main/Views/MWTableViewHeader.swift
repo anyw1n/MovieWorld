@@ -10,15 +10,15 @@ import UIKit
 
 class MWTableViewHeader: UITableViewHeaderFooterView {
     
-    //MARK: - variables
+    // MARK: - variables
     
-    static let reuseID = "titleButtonHeaderView"
+    static let reuseId = "titleButtonHeaderView"
     
     private let titleInsets = UIEdgeInsets(top: 24, left: 16, bottom: 12, right: 0)
     private let buttonInsets = UIEdgeInsets(top: 28, left: 0, bottom: 0, right: 7)
     private let buttonSize = CGSize(width: 52, height: 24)
     
-    //MARK: - gui variables
+    // MARK: - gui variables
     
     private(set) lazy var titleLabel: UILabel = {
         let title = UILabel()
@@ -30,7 +30,7 @@ class MWTableViewHeader: UITableViewHeaderFooterView {
     private(set) lazy var rightButton =
         MWRoundedButton(text: "All".localized(), image: UIImage(named: "nextIcon"))
     
-    //MARK: - init
+    // MARK: - init
     
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
@@ -45,7 +45,7 @@ class MWTableViewHeader: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - constraints
+    // MARK: - constraints
     
     private func makeConstraints() {
         self.titleLabel.snp.makeConstraints { (make) in

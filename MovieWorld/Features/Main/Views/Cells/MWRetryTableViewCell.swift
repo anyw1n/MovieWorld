@@ -10,13 +10,13 @@ import UIKit
 
 class MWRetryTableViewCell: UITableViewCell {
     
-    //MARK: - variables
+    // MARK: - variables
     
-    static let reuseID = "retryTableViewCell"
+    static let reuseId = "retryTableViewCell"
     let buttonSize = CGSize(width: 150, height: 40)
     var retryTapped: (() -> Void)?
 
-    //MARK: - gui variables
+    // MARK: - gui variables
     
     private lazy var retryButton: UIButton = {
         let button = MWRoundedButton(text: "Retry".localized(),
@@ -28,7 +28,7 @@ class MWRetryTableViewCell: UITableViewCell {
         return button
     }()
 
-    //MARK: - init
+    // MARK: - init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -42,7 +42,7 @@ class MWRetryTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - constraints
+    // MARK: - constraints
     
     private func makeConstraints() {
         self.retryButton.snp.makeConstraints { (make) in
@@ -51,7 +51,7 @@ class MWRetryTableViewCell: UITableViewCell {
         }
     }
     
-    //MARK: - functions
+    // MARK: - functions
     
     private func addSubviews() {
         self.contentView.addSubview(self.retryButton)

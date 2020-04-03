@@ -10,11 +10,11 @@ import UIKit
 
 class MWTitleArrowCell: UITableViewCell {
     
-    //MARK: - variables
+    // MARK: - variables
     
-    static let reuseID = "titleArrowCell"
+    static let reuseId = "titleArrowCell"
     
-    //MARK: - gui variables
+    // MARK: - gui variables
     
     private(set) lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -30,7 +30,7 @@ class MWTitleArrowCell: UITableViewCell {
         return image
     }()
 
-    //MARK: - init
+    // MARK: - init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -44,7 +44,7 @@ class MWTitleArrowCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - constraints
+    // MARK: - constraints
     
     private func makeConstraints() {
         self.titleLabel.snp.updateConstraints { (make) in

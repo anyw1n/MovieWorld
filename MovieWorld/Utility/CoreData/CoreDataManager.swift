@@ -21,7 +21,7 @@ class CoreDataManager {
     
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "CoreDataModel")
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        container.loadPersistentStores(completionHandler: { (_, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
@@ -42,7 +42,7 @@ class CoreDataManager {
                                                predicate: NSPredicate? = nil) -> NSFetchRequest<T> {
         let request = NSFetchRequest<T>(entityName: entityName)
         request.sortDescriptors = []
-        keysForSort?.forEach() { key in
+        keysForSort?.forEach { key in
             request.sortDescriptors?.append(NSSortDescriptor(key: key, ascending: true))
         }
         request.predicate = predicate

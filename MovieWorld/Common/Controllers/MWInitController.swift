@@ -10,14 +10,14 @@ import UIKit
 
 class MWInitController: MWViewController {
     
-    //MARK: - variables
+    // MARK: - variables
     
     private let stackViewInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
     private let spinnerInsets = UIEdgeInsets(top: 0, left: 0, bottom: 76, right: 0)
     private let spinnerSize = CGSize(width: 35, height: 35)
     private let dispatchGroup = DispatchGroup()
     
-    //MARK: - gui variables
+    // MARK: - gui variables
     
     private lazy var textLabel: UILabel = {
         let label = UILabel()
@@ -52,7 +52,7 @@ class MWInitController: MWViewController {
         return view
     }()
     
-    //MARK: - init
+    // MARK: - init
     
     override func initController() {
         super.initController()
@@ -72,7 +72,7 @@ class MWInitController: MWViewController {
         }
     }
     
-    //MARK: - constraints
+    // MARK: - constraints
     
     private func makeConstraints() {
         self.stackView.snp.makeConstraints { (make) in
@@ -86,7 +86,7 @@ class MWInitController: MWViewController {
         }
     }
     
-    //MARK: - functions
+    // MARK: - functions
     
     private func loadGenres(category: MWCategory) {
         self.dispatchGroup.enter()
@@ -100,18 +100,18 @@ class MWInitController: MWViewController {
         }
         
         MWN.sh.request(url: url ?? "",
-                       successHandler: { [weak self] (response: [MWGenre]) in
-                        response.forEach { $0.category = category.rawValue }
-                        MWS.sh.genres[category] = response
+                       successHandler: { [weak self] (response: [String: [MWGenre]]) in
+                        response["genres"]?.forEach { $0.category = category.rawValue }
+                        MWS.sh.genres[category] = response["genres"]
                         self?.dispatchGroup.leave()
-        }) { [weak self]  (error) in
+        }, errorHandler: { [weak self]  (error) in
             error.printInConsole()
             let predicate =
                 NSPredicate(format: "category = %@", category.rawValue)
             MWS.sh.genres[category] =
                 CDM.sh.loadData(entityName: MWGenre.entityName, predicate: predicate)
             self?.dispatchGroup.leave()
-        }
+        })
     }
     
     private func loadConfiguration() {
@@ -121,11 +121,11 @@ class MWInitController: MWViewController {
                        successHandler: { [weak self] (response: MWConfiguration) in
                         MWS.sh.configuration = response
                         self?.dispatchGroup.leave()
-        }) { [weak self]  (error) in
+        }, errorHandler: { [weak self]  (error) in
             error.printInConsole()
             MWS.sh.configuration = CDM.sh.loadData(entityName: MWConfiguration.entityName)?.first
             self?.dispatchGroup.leave()
-        }
+        })
     }
     
     private func loadCountries() {
@@ -135,10 +135,10 @@ class MWInitController: MWViewController {
                        successHandler: { [weak self] (response: [MWCountry]) in
                         MWS.sh.countries = response
                         self?.dispatchGroup.leave()
-        }) { [weak self]  (error) in
+        }, errorHandler: { [weak self]  (error) in
             error.printInConsole()
             MWS.sh.countries = CDM.sh.loadData(entityName: MWCountry.entityName)
             self?.dispatchGroup.leave()
-        }
+        })
     }
 }

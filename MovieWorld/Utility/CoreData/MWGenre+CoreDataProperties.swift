@@ -10,7 +10,6 @@
 import Foundation
 import CoreData
 
-
 extension MWGenre {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<MWGenre> {

@@ -10,7 +10,7 @@ import UIKit
 
 class MWMainViewController: MWViewController {
     
-    //MARK: - variables
+    // MARK: - variables
     
     private let dispatchGroup = DispatchGroup()
     private lazy var sections: [MWSection] = {
@@ -41,18 +41,18 @@ class MWMainViewController: MWViewController {
                           genreIds: [16])]
     }()
     
-    //MARK: - gui variables
+    // MARK: - gui variables
     
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: CGRect(), style: .grouped)
         view.delegate = self
         view.dataSource = self
         view.register(MWCollectionTableViewCell.self,
-                      forCellReuseIdentifier: MWCollectionTableViewCell.reuseID)
+                      forCellReuseIdentifier: MWCollectionTableViewCell.reuseId)
         view.register(MWRetryTableViewCell.self,
-                      forCellReuseIdentifier: MWRetryTableViewCell.reuseID)
+                      forCellReuseIdentifier: MWRetryTableViewCell.reuseId)
         view.register(MWTableViewHeader.self,
-                      forHeaderFooterViewReuseIdentifier: MWTableViewHeader.reuseID)
+                      forHeaderFooterViewReuseIdentifier: MWTableViewHeader.reuseId)
         view.separatorStyle = .none
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
@@ -67,7 +67,7 @@ class MWMainViewController: MWViewController {
         return refresh
     }()
     
-    //MARK: - init
+    // MARK: - init
     
     override func initController() {
         super.initController()
@@ -81,7 +81,7 @@ class MWMainViewController: MWViewController {
         }
     }
     
-    //MARK: - constraints
+    // MARK: - constraints
     
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
@@ -89,7 +89,7 @@ class MWMainViewController: MWViewController {
         }
     }
     
-    //MARK: - functions
+    // MARK: - functions
 
     @objc private func refreshTableView() {
         self.tableView.isHidden = true
@@ -121,10 +121,10 @@ class MWMainViewController: MWViewController {
                         self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
                                                    with: .automatic)
                         self?.dispatchGroup.leave()
-                }) { [weak self] error in
+                }, errorHandler: { [weak self] error in
                     error.printInConsole()
                     self?.dispatchGroup.leave()
-                }
+                })
             case .tv:
                 MWN.sh.request(
                     url: section.url,
@@ -134,10 +134,10 @@ class MWMainViewController: MWViewController {
                         self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
                                                    with: .automatic)
                         self?.dispatchGroup.leave()
-                }) { [weak self] error in
+                }, errorHandler: { [weak self] error in
                     error.printInConsole()
                     self?.dispatchGroup.leave()
-                }
+                })
             }
         } else {
             self.sections.forEach { self.loadMovies(into: $0) }
@@ -146,7 +146,7 @@ class MWMainViewController: MWViewController {
     }
 }
 
-//MARK: - UITableViewDelegate, UITableViewDataSource
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -155,7 +155,7 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return self.tableView.dequeueReusableHeaderFooterView(withIdentifier: MWTableViewHeader.reuseID)
+        return self.tableView.dequeueReusableHeaderFooterView(withIdentifier: MWTableViewHeader.reuseId)
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -186,7 +186,7 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.sections[indexPath.section].movies.count != 0 {
             let cell = self.tableView
-                .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseID,
+                .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseId,
                                      for: indexPath)
                 as? MWCollectionTableViewCell ?? MWCollectionTableViewCell()
             cell.movies = self.sections[indexPath.section].movies
@@ -194,7 +194,7 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
             return cell
         } else {
             let cell = self.tableView
-                .dequeueReusableCell(withIdentifier: MWRetryTableViewCell.reuseID,
+                .dequeueReusableCell(withIdentifier: MWRetryTableViewCell.reuseId,
                                      for: indexPath)
                 as? MWRetryTableViewCell ?? MWRetryTableViewCell()
             cell.retryTapped = { [weak self] in

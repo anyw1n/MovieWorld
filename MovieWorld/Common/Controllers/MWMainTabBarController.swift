@@ -10,7 +10,7 @@ import UIKit
 
 class MWMainTabBarController: UITabBarController {
 
-    //MARK: - gui variables
+    // MARK: - gui variables
     
     private let mainController: MWMainViewController = {
         let controller = MWMainViewController()
@@ -36,7 +36,7 @@ class MWMainTabBarController: UITabBarController {
         return controller
     }()
     
-    //MARK: - init
+    // MARK: - init
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -10,15 +10,15 @@ import UIKit
 
 class MWMovieCardTableViewCell: UITableViewCell {
     
-    //MARK: - variables
+    // MARK: - variables
     
-    static let reuseID = "movieCardTableViewCell"
+    static let reuseId = "movieCardTableViewCell"
     private let imageInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 0)
     private let textInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16)
     private let textOffset = 16
     private let imageSize = CGSize(width: 70, height: 100)
     
-    //MARK: - gui variables
+    // MARK: - gui variables
     
     private(set) lazy var posterImageView: UIImageView = {
         let view = UIImageView()
@@ -59,7 +59,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
         return label
     }()
 
-    //MARK: - init
+    // MARK: - init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -74,7 +74,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - constraints
+    // MARK: - constraints
     
     private func makeConstraints() {
         self.posterImageView.snp.updateConstraints { (make) in
@@ -105,7 +105,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
         }
     }
     
-    //MARK: - functions
+    // MARK: - functions
 
     override func updateConstraints() {
         self.makeConstraints()

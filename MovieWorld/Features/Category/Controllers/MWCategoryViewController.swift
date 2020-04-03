@@ -10,24 +10,24 @@ import UIKit
 
 class MWCategoryViewController: MWViewController {
     
-    //MARK: - variables
+    // MARK: - variables
     
     var categories: [String] = Array(repeating: "Top 250", count: 25)
     
-    //MARK: - gui variables
+    // MARK: - gui variables
     
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: CGRect.zero, style: .grouped)
         view.delegate = self
         view.dataSource = self
-        view.register(MWTitleArrowCell.self, forCellReuseIdentifier: MWTitleArrowCell.reuseID)
+        view.register(MWTitleArrowCell.self, forCellReuseIdentifier: MWTitleArrowCell.reuseId)
         view.separatorStyle = .none
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
         return view
     }()
     
-    //MARK: - init
+    // MARK: - init
 
     override func initController() {
         super.initController()
@@ -37,7 +37,7 @@ class MWCategoryViewController: MWViewController {
         self.makeConstraints()
     }
     
-    //MARK: - constraints
+    // MARK: - constraints
     
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
@@ -46,7 +46,7 @@ class MWCategoryViewController: MWViewController {
     }
 }
 
-//MARK: - UITableViewDelegate, UITableViewDataSource
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
     
@@ -77,7 +77,7 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: MWTitleArrowCell.reuseID,
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: MWTitleArrowCell.reuseId,
                                                       for: indexPath)
             as? MWTitleArrowCell ?? MWTitleArrowCell()
         cell.titleLabel.text = self.categories[indexPath.section]

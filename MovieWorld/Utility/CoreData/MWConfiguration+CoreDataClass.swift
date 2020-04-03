@@ -14,7 +14,11 @@ import CoreData
 public class MWConfiguration: NSManagedObject, Decodable {
     
     private enum CodingKeys: String, CodingKey {
-        case baseURL = "base_url", secureBaseURL = "secure_base_url"
+        case images
+    }
+    
+    private enum ImageCodingKeys: String, CodingKey {
+        case baseUrl = "base_url", secureBaseUrl = "secure_base_url"
     }
     
     static let entityName = "MWConfiguration"
@@ -23,7 +27,9 @@ public class MWConfiguration: NSManagedObject, Decodable {
         self.init(context: CoreDataManager.sh.persistentContainer.viewContext)
         
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.baseURL = (try? container.decode(String.self, forKey: .baseURL))
-        self.secureBaseURL = (try? container.decode(String.self, forKey: .secureBaseURL))
+        let imageContainer =
+            try container.nestedContainer(keyedBy: ImageCodingKeys.self, forKey: .images)
+        self.baseUrl = (try? imageContainer.decode(String.self, forKey: .baseUrl))
+        self.secureBaseUrl = (try? imageContainer.decode(String.self, forKey: .secureBaseUrl))
     }
 }

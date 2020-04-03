@@ -10,12 +10,12 @@ import UIKit
 
 class MWMovieCardCollectionViewCell: UICollectionViewCell {
     
-    //MARK: - variables
+    // MARK: - variables
     
-    static let reuseID = "movieCardCollectionViewCell"
+    static let reuseId = "movieCardCollectionViewCell"
     private let imageSize = CGSize(width: 130, height: 185)
     
-    //MARK: - gui variables
+    // MARK: - gui variables
     
     private(set) lazy var imageView: UIImageView = {
         let view = UIImageView()
@@ -39,7 +39,7 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    //MARK: - init
+    // MARK: - init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -52,7 +52,7 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - constraints
+    // MARK: - constraints
     
     private func makeConstraints() {
         self.imageView.snp.updateConstraints { (make) in
@@ -69,7 +69,7 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    //MARK: - functions
+    // MARK: - functions
     
     private func addSubviews() {
         self.contentView.addSubview(self.imageView)

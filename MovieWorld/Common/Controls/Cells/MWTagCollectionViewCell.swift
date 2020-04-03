@@ -10,16 +10,16 @@ import UIKit
 
 class MWTagCollectionViewCell: UICollectionViewCell {
     
-    //MARK: - variables
+    // MARK: - variables
     
-    static let reuseID = "tagCollectionViewCell"
+    static let reuseId = "tagCollectionViewCell"
     override var isSelected: Bool {
         didSet {
             self.contentView.alpha = self.isSelected ? 1 : 0.5
         }
     }
     
-    //MARK: - gui variables
+    // MARK: - gui variables
 
     private(set) lazy var button: MWRoundedButton = {
         let button = MWRoundedButton()
@@ -28,7 +28,7 @@ class MWTagCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    //MARK: - init
+    // MARK: - init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -42,7 +42,7 @@ class MWTagCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    //MARK: - constraints
+    // MARK: - constraints
     
     private func makeConstraints() {
         self.button.snp.updateConstraints { (make) in

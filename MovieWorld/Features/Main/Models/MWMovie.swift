@@ -11,15 +11,15 @@ import UIKit
 class MWMovie: Movieable {
     
     private enum CodingKeys: String, CodingKey {
-        case title, id, genreIDs = "genre_ids", releaseDate = "release_date",
+        case title, id, genreIds = "genre_ids", releaseDate = "release_date",
         posterPath = "poster_path"
     }
     
-    //MARK: - variables
+    // MARK: - variables
 
     let title: String?
     let id: Int?
-    let genreIDs: [Int]?
+    let genreIds: [Int]?
     let releaseDate: String?
     let posterPath: String?
 
@@ -28,7 +28,7 @@ class MWMovie: Movieable {
     }
     var genres: [String] {
         var genres: [String] = []
-        self.genreIDs?.forEach {
+        self.genreIds?.forEach {
             genres.append(MWS.sh.getGenreBy(id: $0)?.name ?? "No genre".localized())
         }
         if genres.isEmpty {
@@ -40,19 +40,19 @@ class MWMovie: Movieable {
     var details: MWMovieDetails?
     var detailsLoaded: (() -> Void)?
 
-    //MARK: - init
+    // MARK: - init
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.title = (try? container.decode(String.self, forKey: .title))
         self.id = (try? container.decode(Int.self, forKey: .id))
         self.releaseDate = (try? container.decode(String.self, forKey: .releaseDate))
-        self.genreIDs = (try? container.decode([Int].self, forKey: .genreIDs))
+        self.genreIds = (try? container.decode([Int].self, forKey: .genreIds))
         self.posterPath = (try? container.decode(String.self, forKey: .posterPath))
         self.requestDetails()
     }
     
-    //MARK: - functions
+    // MARK: - functions
     
     func requestDetails() {
         guard let id = self.id, self.details == nil else { return }
@@ -62,8 +62,8 @@ class MWMovie: Movieable {
                        successHandler: { [weak self] (response: MWMovieDetails) in
                         self?.details = response
                         self?.detailsLoaded?()
-        }) { (error) in
+            }, errorHandler: { (error) in
             error.printInConsole()
-        }
+        })
     }
 }

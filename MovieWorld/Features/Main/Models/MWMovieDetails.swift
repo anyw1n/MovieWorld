@@ -14,7 +14,7 @@ class MWMovieDetails: Decodable {
         case productionCountries = "production_countries"
     }
     
-    //MARK: - variables
+    // MARK: - variables
 
     let productionCountries: [MWCountry]
     

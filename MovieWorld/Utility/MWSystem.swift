@@ -17,7 +17,7 @@ enum MWCategory: String, CaseIterable {
 
 class MWSystem {
     
-    //MARK: - variables
+    // MARK: - variables
     
     static let sh = MWSystem()
     
@@ -25,11 +25,11 @@ class MWSystem {
     var genres: MWCategories = [:]
     var countries: [MWCountry]?
     
-    //MARK: - init
+    // MARK: - init
     
     private init() {}
     
-    //MARK: - functions
+    // MARK: - functions
     
     func getGenreBy(id: Int) -> MWGenre? {
         for genres in self.genres.values {

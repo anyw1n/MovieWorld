@@ -10,7 +10,7 @@ import UIKit
 
 class MWTagCollectionViewLayout: UICollectionViewLayout {
     
-    //MARK: - variables
+    // MARK: - variables
     
     weak var delegate: MWTagCollectionViewLayoutDelegate?
     
@@ -34,7 +34,7 @@ class MWTagCollectionViewLayout: UICollectionViewLayout {
         return CGSize(width: self.contentWidth, height: self.contentHeight)
     }
     
-    //MARK: - functions
+    // MARK: - functions
     
     override func prepare() {
         guard cache.isEmpty, let collectionView = self.collectionView else { return }
@@ -85,7 +85,7 @@ class MWTagCollectionViewLayout: UICollectionViewLayout {
     }
 }
 
-//MARK: - MWTagCollectionViewLayoutDelegate
+// MARK: - MWTagCollectionViewLayoutDelegate
 
 protocol MWTagCollectionViewLayoutDelegate: AnyObject {
     func collectionView(_ collectionView: UICollectionView,

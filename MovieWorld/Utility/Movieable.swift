@@ -13,7 +13,7 @@ protocol Movieable: Decodable {
     
     var title: String? { get }
     var id: Int? { get }
-    var genreIDs: [Int]? { get }
+    var genreIds: [Int]? { get }
     var releaseDate: String? { get }
     var posterPath: String? { get }
     
@@ -27,12 +27,12 @@ protocol Movieable: Decodable {
 extension Movieable {
     func showImage(size: Sizes, in imageView: UIImageView) {
         guard let posterPath = self.posterPath,
-            let baseURL = MWS.sh.configuration?.secureBaseURL else {
+            let baseUrl = MWS.sh.configuration?.secureBaseUrl else {
                 imageView.image = UIImage(named: "noImage")
                 return
         }
         
-        let url = URL(string: baseURL + size.rawValue + posterPath)
+        let url = URL(string: baseUrl + size.rawValue + posterPath)
         var options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
                                               .transition(.fade(1)),
                                               .cacheOriginalImage]

@@ -12,7 +12,7 @@ typealias MWI = MWInterface
 
 class MWInterface {
     
-    //MARK: - variables
+    // MARK: - variables
     
     static let sh = MWInterface()
     
@@ -20,11 +20,11 @@ class MWInterface {
 
     weak var window: UIWindow?
     
-    //MARK: - init
+    // MARK: - init
     
     private init() {}
     
-    //MARK: - functions
+    // MARK: - functions
     
     func setup(window: UIWindow?) {
         

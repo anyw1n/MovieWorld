@@ -14,7 +14,7 @@ class MWShowDetails: Decodable {
         case originCountryCodes = "origin_country"
     }
     
-    //MARK: - variables
+    // MARK: - variables
     
     let originCountryCodes: [String]
     
