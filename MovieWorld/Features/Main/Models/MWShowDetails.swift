@@ -11,12 +11,15 @@ import Foundation
 class MWShowDetails: Decodable {
     
     private enum CodingKeys: String, CodingKey {
-        case originCountryCodes = "origin_country"
+        case originCountryCodes = "origin_country", lastAirDate = "last_air_date"
     }
     
     // MARK: - variables
     
     let originCountryCodes: [String]
+    let lastAirDate: String
+    
+    var lastAirYear: String { String(self.lastAirDate.split(separator: "-").first ?? "") }
     
     var originCountries: [MWCountry] {
         var countries: [MWCountry] = []

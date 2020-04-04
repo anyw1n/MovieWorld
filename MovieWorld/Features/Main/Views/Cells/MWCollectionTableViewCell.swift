@@ -90,6 +90,13 @@ extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewD
         let movie = self.movies?[indexPath.row]
         cell.titleLabel.text = movie?.title
         cell.subtitleLabel.text = "\(movie?.releaseYear ?? ""), \(movie?.genres.first ?? "")"
+        if let movie = movie as? MWShow, movie.details == nil {
+            movie.detailsLoaded = {
+                cell.subtitleLabel.text =
+                "\(movie.releaseYear), \(movie.genres.first ?? "")"
+                cell.setNeedsUpdateConstraints()
+            }
+        }
         movie?.showImage(size: .w154, in: cell.imageView)
         return cell
     }
@@ -98,5 +105,6 @@ extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewD
                         didEndDisplaying cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         (cell as? MWMovieCardCollectionViewCell)?.imageView.kf.cancelDownloadTask()
+        self.movies?[indexPath.row].detailsLoaded = nil
     }
 }

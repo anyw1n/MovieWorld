@@ -39,7 +39,12 @@ class MWShow: Movieable {
     
     var title: String? { self.name }
     var releaseDate: String? { self.firstAirDate }
-    var releaseYear: String { self.firstAirYear }
+    var releaseYear: String {
+        if let details = self.details, self.firstAirYear != details.lastAirYear {
+            return "\(self.firstAirYear) - \(details.lastAirYear)"
+        }
+        return self.firstAirYear
+    }
     
     var details: MWShowDetails?
     var detailsLoaded: (() -> Void)?
