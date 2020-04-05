@@ -202,7 +202,7 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
                                  for: indexPath)
             as? MWMovieCardTableViewCell ?? MWMovieCardTableViewCell()
         guard let movies = self.section?.movies else { return cell }
-        cell.setup(movies[indexPath.row])
+        cell.layout.setup(movies[indexPath.row])
 
         if indexPath.row == movies.count - 5 {
             self.loadMovies()
@@ -210,8 +210,14 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let controller = MWMovieDetailsViewController()
+        controller.movie = self.section?.movies[indexPath.row]
+        MWI.sh.push(controller)
+    }
+    
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        (cell as? MWMovieCardTableViewCell)?.posterImageView.kf.cancelDownloadTask()
+        (cell as? MWMovieCardTableViewCell)?.layout.posterImageView.kf.cancelDownloadTask()
         guard let section = self.section, !section.movies.isEmpty else { return }
         section.movies[indexPath.row].detailsLoaded = nil
     }

@@ -100,6 +100,12 @@ extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewD
         movie?.showImage(size: .w154, in: cell.imageView)
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let controller = MWMovieDetailsViewController()
+        controller.movie = self.movies?[indexPath.row]
+        MWI.sh.push(controller)
+    }
 
     func collectionView(_ collectionView: UICollectionView,
                         didEndDisplaying cell: UICollectionViewCell,
