@@ -15,7 +15,7 @@ extension String {
     }
     
     func localized(args: CVarArg...) -> String {
-        return String(format: self.localized(), args)
+        return String(format: self.localized(), arguments: args)
     }
     
     func capitalizedFirstLetter() -> String {

@@ -22,3 +22,6 @@
 "Error! Can't parse: %@" = "Ошибка! Не получилось распарсить: %@";
 "Error! Incorrect api key: %@" = "Ошибка! Неверный api key: %@";
 "Unknown error! %@" = "Неизвестная ошибка! %@";
+"Description" = "Описание";
+"%d minutes" = "%d минут";
+"Cast" = "Актёры";

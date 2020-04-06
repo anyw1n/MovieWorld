@@ -35,9 +35,15 @@ class MWMovieCardTableViewCell: UITableViewCell {
     
     // MARK: - constraints
     
+    override func updateConstraints() {
+        self.makeConstraints()
+        super.updateConstraints()
+    }
+    
     private func makeConstraints() {
         self.layout.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        self.layout.makeConstraints()
     }
 }

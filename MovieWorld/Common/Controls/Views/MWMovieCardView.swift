@@ -59,19 +59,11 @@ class MWMovieCardView: UIView {
     }()
 
     // MARK: - init
-
-    convenience init(movie: Movieable?) {
-        self.init(frame: CGRect())
-        if let movie = movie {
-            self.setup(movie)
-        }
-    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
         self.addSubviews()
-        self.makeConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -80,7 +72,7 @@ class MWMovieCardView: UIView {
     
     // MARK: - constraints
     
-    private func makeConstraints() {
+    func makeConstraints() {
         self.posterImageView.snp.updateConstraints { (make) in
             make.top.left.equalToSuperview().inset(self.imageInsets)
             make.bottom.lessThanOrEqualToSuperview().inset(self.imageInsets)
@@ -110,11 +102,6 @@ class MWMovieCardView: UIView {
     }
     
     // MARK: - functions
-    
-    override func updateConstraints() {
-        self.makeConstraints()
-        super.updateConstraints()
-    }
     
     func setup(_ movie: Movieable) {
         movie.showImage(size: .w92, in: self.posterImageView)
