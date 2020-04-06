@@ -139,13 +139,13 @@ class MWMovieCardView: UIView {
     
     private func setSubtitle(movie: Movieable) {
         if let movie = movie as? MWMovie, let details = movie.details,
-            !(details.productionCountries.isEmpty) {
+            !(details.countryNames.isEmpty) {
             self.subtitleLabel.text =
-            "\(movie.releaseYear), \(details.productionCountryNames.joined(separator: ", "))"
+            "\(movie.releaseYear), \(details.countryNames.joined(separator: ", "))"
         } else if let movie = movie as? MWShow, let details = movie.details,
-            !(details.originCountries.isEmpty) {
+            !(details.countryNames.isEmpty) {
             self.subtitleLabel.text =
-            "\(movie.releaseYear), \(details.originCountryNames.joined(separator: ", "))"
+            "\(movie.releaseYear), \(details.countryNames.joined(separator: ", "))"
         } else {
             self.subtitleLabel.text = "\(movie.releaseYear)"
         }

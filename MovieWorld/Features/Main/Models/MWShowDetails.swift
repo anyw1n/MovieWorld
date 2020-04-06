@@ -8,19 +8,23 @@
 
 import Foundation
 
-class MWShowDetails: Decodable {
+class MWShowDetails: Detailable {
     
     private enum CodingKeys: String, CodingKey {
-        case originCountryCodes = "origin_country", lastAirDate = "last_air_date"
+        case originCountryCodes = "origin_country", lastAirDate = "last_air_date",
+        episodeRuntime = "episode_run_time", credits
     }
     
     // MARK: - variables
     
     let originCountryCodes: [String]
     let lastAirDate: String
+    let episodeRuntime: [Int]
+    var credits: MWMovieCredits?
     
     var lastAirYear: String { String(self.lastAirDate.split(separator: "-").first ?? "") }
-    
+    var runtime: Int? { self.episodeRuntime.first }
+
     var originCountries: [MWCountry] {
         var countries: [MWCountry] = []
         self.originCountryCodes.forEach { (code) in
@@ -31,7 +35,7 @@ class MWShowDetails: Decodable {
         return countries
     }
     
-    var originCountryNames: [String] {
+    var countryNames: [String] {
         var names: [String] = []
         self.originCountries.forEach { names.append($0.name ?? "") }
         return names

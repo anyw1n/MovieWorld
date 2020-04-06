@@ -12,23 +12,24 @@ class MWMovie: Movieable {
     
     private enum CodingKeys: String, CodingKey {
         case title, id, genreIds = "genre_ids", releaseDate = "release_date",
-        posterPath = "poster_path"
+        posterPath = "poster_path", overview
     }
     
     // MARK: - variables
 
-    let title: String?
-    let id: Int?
-    let genreIds: [Int]?
-    let releaseDate: String?
+    let title: String
+    let id: Int
+    let genreIds: [Int]
+    let releaseDate: String
     let posterPath: String?
+    let overview: String
 
     var releaseYear: String {
-        return String(self.releaseDate?.split(separator: "-").first ?? "")
+        return String(self.releaseDate.split(separator: "-").first ?? "")
     }
     var genres: [String] {
         var genres: [String] = []
-        self.genreIds?.forEach {
+        self.genreIds.forEach {
             genres.append(MWS.sh.getGenreBy(id: $0)?.name ?? "No genre".localized())
         }
         if genres.isEmpty {
@@ -37,25 +38,40 @@ class MWMovie: Movieable {
         return genres
     }
     
-    var details: MWMovieDetails?
+    var details: Detailable?
     var detailsLoaded: (() -> Void)?
 
     // MARK: - init
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.title = (try? container.decode(String.self, forKey: .title))
-        self.id = (try? container.decode(Int.self, forKey: .id))
-        self.releaseDate = (try? container.decode(String.self, forKey: .releaseDate))
-        self.genreIds = (try? container.decode([Int].self, forKey: .genreIds))
+        self.title = (try? container.decode(String.self, forKey: .title)) ?? ""
+        self.id = (try? container.decode(Int.self, forKey: .id)) ?? -1
+        self.releaseDate = (try? container.decode(String.self, forKey: .releaseDate)) ?? ""
+        self.genreIds = (try? container.decode([Int].self, forKey: .genreIds)) ?? []
         self.posterPath = (try? container.decode(String.self, forKey: .posterPath))
+        self.overview = (try? container.decode(String.self, forKey: .overview)) ?? ""
         self.requestDetails()
     }
     
     // MARK: - functions
     
-    func requestDetails() {
-        guard let id = self.id, self.details == nil else { return }
+    func requestAdditional(_ appends: AppendToResponse..., completionHandler: (() -> Void)?) {
+        var appendNames: [String] = []
+        appends.forEach { appendNames.append($0.rawValue) }
+        let url = URLPaths.movieDetails + String(self.id)
+        MWN.sh.request(url: url,
+                       queryParameters: ["append_to_response": appendNames.joined(separator: ",")],
+                       successHandler: { [weak self] (response: MWMovieDetails) in
+                        self?.details = response
+                        completionHandler?()
+            }, errorHandler: { (error) in
+                error.printInConsole()
+        })
+    }
+    
+    private func requestDetails() {
+        guard self.details == nil else { return }
         
         let url = URLPaths.movieDetails + String(id)
         MWN.sh.request(url: url,
@@ -63,7 +79,7 @@ class MWMovie: Movieable {
                         self?.details = response
                         self?.detailsLoaded?()
             }, errorHandler: { (error) in
-            error.printInConsole()
+                error.printInConsole()
         })
     }
 }

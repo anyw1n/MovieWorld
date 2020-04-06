@@ -8,17 +8,19 @@
 
 import Foundation
 
-class MWMovieDetails: Decodable {
-        
+class MWMovieDetails: Detailable {
+    
     private enum CodingKeys: String, CodingKey {
-        case productionCountries = "production_countries"
+        case productionCountries = "production_countries", runtime, credits
     }
     
     // MARK: - variables
 
     let productionCountries: [MWCountry]
+    let runtime: Int?
+    var credits: MWMovieCredits?
     
-    var productionCountryNames: [String] {
+    var countryNames: [String] {
         var names: [String] = []
         self.productionCountries.forEach { names.append($0.name ?? "") }
         return names
