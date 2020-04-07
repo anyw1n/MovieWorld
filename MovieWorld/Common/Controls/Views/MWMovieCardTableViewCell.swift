@@ -44,6 +44,6 @@ class MWMovieCardTableViewCell: UITableViewCell {
         self.layout.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        self.layout.makeConstraints()
+        self.layout.makeInternalConstraints()
     }
 }

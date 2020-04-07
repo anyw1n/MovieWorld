@@ -13,7 +13,8 @@ class MWMovieDetailsViewController: MWViewController {
     // MARK: - variables
     
     private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-    private let collectionViewItemSize = CGSize(width: 72, height: 124)
+    private let castCollectionViewItemSize = CGSize(width: 72, height: 124)
+    private let castCollectionViewHeaderButtonSize = CGSize(width: 52, height: 24)
     private let dispatchGroup = DispatchGroup()
     var movie: Movieable? {
         didSet {
@@ -35,8 +36,7 @@ class MWMovieDetailsViewController: MWViewController {
         view.addSubview(self.movieCardView)
         view.addSubview(self.moviePlayer)
         view.addSubview(self.descriptionView)
-        view.addSubview(self.collectionViewHeader)
-        view.addSubview(self.collectionView)
+        view.addSubview(self.castView)
         return view
     }()
     
@@ -74,16 +74,53 @@ class MWMovieDetailsViewController: MWViewController {
         return label
     }()
     
-    private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
+    private lazy var castView: UIView = {
+        let view = UIView()
+        view.addSubview(self.castCollectionViewHeader)
+        view.addSubview(self.castCollectionView)
+        return view
+    }()
+    
+    private lazy var castCollectionViewHeader: UIView = {
+        let view = UIView()
+        view.addSubview(self.castCollectionViewHeaderTitleLabel)
+        view.addSubview(self.castCollectionViewHeaderButton)
+        return view
+    }()
+    
+    private lazy var castCollectionViewHeaderTitleLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Cast".localized()
+        label.font = UIFont.boldSystemFont(ofSize: 17)
+        label.textColor = UIColor(named: "textColor")
+        return label
+    }()
+    
+    private lazy var castCollectionViewHeaderButton: MWRoundedButton =
+        MWRoundedButton(text: "All".localized(), image: UIImage(named: "nextIcon"))
+    
+    private lazy var castCollectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = self.collectionViewItemSize
+        layout.itemSize = self.castCollectionViewItemSize
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 16
         layout.sectionInset = self.contentInsets
         return layout
     }()
     
-    private lazy var collectionViewHeader: UIView = {
+    private lazy var castCollectionView: UICollectionView = {
+        let view = UICollectionView(frame: CGRect(),
+                                    collectionViewLayout: self.castCollectionViewFlowLayout)
+        view.dataSource = self
+        view.delegate = self
+        view.register(MWActorCollectionViewCell.self,
+                      forCellWithReuseIdentifier: MWActorCollectionViewCell.reuseId)
+        view.showsVerticalScrollIndicator = false
+        view.showsHorizontalScrollIndicator = false
+        view.backgroundColor = .white
+        return view
+    }()
+    
         let view = UIView()
         view.addSubview(self.collectionViewHeaderTitleLabel)
         view.addSubview(self.collectionViewHeaderButton)
@@ -126,14 +163,14 @@ class MWMovieDetailsViewController: MWViewController {
         
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
             self.setup()
-            self.makeConstraints()
+            self.makeAllConstraints()
             self.scrollView.isHidden = false
         }
     }
     
     // MARK: - constraints
     
-    private func makeConstraints() {
+    private func makeAllConstraints() {
         self.scrollView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
@@ -141,7 +178,7 @@ class MWMovieDetailsViewController: MWViewController {
             make.top.equalToSuperview().offset(16)
             make.left.right.equalTo(self.view)
         }
-        self.movieCardView.makeConstraints()
+        self.movieCardView.makeInternalConstraints()
         self.moviePlayer.snp.makeConstraints { (make) in
             make.top.equalTo(self.movieCardView.snp.bottom).offset(18)
             make.left.right.equalTo(self.view).inset(self.contentInsets)
@@ -151,6 +188,15 @@ class MWMovieDetailsViewController: MWViewController {
             make.top.equalTo(self.moviePlayer.snp.bottom).offset(24)
             make.left.right.equalTo(self.view).inset(self.contentInsets)
         }
+        self.makeInternalDescriptionViewConstraints()
+        self.castView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.descriptionView.snp.bottom).offset(24)
+            make.left.right.equalTo(self.view)
+        }
+        self.makeInternalCastViewConstraints()
+    }
+    
+    private func makeInternalDescriptionViewConstraints() {
         self.descriptionTitleLabel.snp.makeConstraints { (make) in
             make.left.top.right.equalToSuperview()
         }
@@ -163,25 +209,32 @@ class MWMovieDetailsViewController: MWViewController {
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        self.collectionViewHeader.snp.makeConstraints { (make) in
-            make.top.equalTo(self.descriptionView.snp.bottom).offset(24)
-            make.left.right.equalTo(self.view).inset(self.contentInsets)
-        }
-        self.collectionViewHeaderTitleLabel.snp.makeConstraints { (make) in
-            make.left.top.equalToSuperview()
-            make.right.lessThanOrEqualTo(self.collectionViewHeaderButton).offset(-16)
-            make.bottom.lessThanOrEqualToSuperview().offset(-16)
-        }
-        self.collectionViewHeaderButton.snp.makeConstraints { (make) in
+    }
+    
+    private func makeInternalCastViewConstraints() {
+        self.castCollectionViewHeader.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
-            make.right.equalToSuperview().offset(-10)
-            make.bottom.lessThanOrEqualToSuperview()
-            make.size.greaterThanOrEqualTo(CGSize(width: 52, height: 24))
+            make.left.equalToSuperview().inset(self.contentInsets)
+            make.right.equalToSuperview().inset(26)
         }
-        self.collectionView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.collectionViewHeader.snp.bottom)
-            make.left.right.equalTo(self.view)
-            make.height.equalTo(self.collectionViewItemSize.height)
+        self.castCollectionViewHeaderTitleLabel.snp.makeConstraints { (make) in
+            make.left.top.equalToSuperview()
+            make.right.lessThanOrEqualTo(self.castCollectionViewHeaderButton).inset(16)
+            make.bottom.equalToSuperview().inset(16)
+        }
+        self.castCollectionViewHeaderButton.snp.makeConstraints { (make) in
+            make.top.equalToSuperview()
+            make.right.equalToSuperview()
+            make.bottom.lessThanOrEqualToSuperview()
+            make.size.equalTo(self.castCollectionViewHeaderButtonSize)
+        }
+        self.castCollectionView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.castCollectionViewHeader.snp.bottom)
+            make.left.right.equalToSuperview()
+            make.height.equalTo(self.castCollectionViewItemSize.height)
+            make.bottom.equalToSuperview()
+        }
+    }
             make.bottom.equalToSuperview()
         }
     }
@@ -193,9 +246,9 @@ class MWMovieDetailsViewController: MWViewController {
         
         self.movieCardView.setup(movie)
 
-        self.descriptionSubtitleLabel.text = "%d minutes".localized(args: details.runtime ?? 0)
+        self.descriptionSubtitleLabel.text = "X minutes".localized(args: details.runtime ?? 0)
         self.descriptionTextLabel.text = movie.overview
-        self.collectionView.reloadData()
+        self.castCollectionView.reloadData()
     }
 }
 

@@ -72,7 +72,7 @@ class MWMovieCardView: UIView {
     
     // MARK: - constraints
     
-    func makeConstraints() {
+    func makeInternalConstraints() {
         self.posterImageView.snp.updateConstraints { (make) in
             make.top.left.equalToSuperview().inset(self.imageInsets)
             make.bottom.lessThanOrEqualToSuperview().inset(self.imageInsets)

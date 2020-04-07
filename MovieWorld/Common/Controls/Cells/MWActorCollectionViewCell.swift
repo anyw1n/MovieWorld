@@ -58,7 +58,8 @@ class MWActorCollectionViewCell: UICollectionViewCell {
     
     private func makeConstraints() {
         self.imageView.snp.updateConstraints { (make) in
-            make.left.right.top.equalToSuperview()
+            make.left.top.equalToSuperview()
+            make.right.lessThanOrEqualToSuperview()
             make.size.equalTo(self.imageSize)
         }
         self.titleLabel.snp.updateConstraints { (make) in
@@ -67,7 +68,8 @@ class MWActorCollectionViewCell: UICollectionViewCell {
         }
         self.subtitleLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.titleLabel.snp.bottom)
-            make.left.right.bottom.equalToSuperview()
+            make.left.right.equalToSuperview()
+            make.bottom.lessThanOrEqualToSuperview()
         }
     }
     
