@@ -11,7 +11,11 @@ import Foundation
 class MWMovieDetails: Detailable {
     
     private enum CodingKeys: String, CodingKey {
-        case productionCountries = "production_countries", runtime, credits
+        case productionCountries = "production_countries", runtime, credits, videos
+    }
+    
+    private enum VideoCodingKeys: String, CodingKey {
+        case results
     }
     
     // MARK: - variables
@@ -19,10 +23,26 @@ class MWMovieDetails: Detailable {
     let productionCountries: [MWCountry]
     let runtime: Int?
     var credits: MWMovieCredits?
+    var videos: [MWMovieVideo]?
     
     var countryNames: [String] {
         var names: [String] = []
         self.productionCountries.forEach { names.append($0.name ?? "") }
         return names
+    }
+    
+    // MARK: - init
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.productionCountries =
+            (try? container.decode([MWCountry].self, forKey: .productionCountries)) ?? []
+        self.runtime = try? container.decode(Int.self, forKey: .runtime)
+        self.credits = try? container.decode(MWMovieCredits.self, forKey: .credits)
+        if container.contains(.videos) {
+            let videoContainer =
+                try container.nestedContainer(keyedBy: VideoCodingKeys.self, forKey: .videos)
+            self.videos = try? videoContainer.decode([MWMovieVideo].self, forKey: .results)
+        }
     }
 }

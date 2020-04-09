@@ -19,7 +19,7 @@ class MWMovieDetailsViewController: MWViewController {
     var movie: Movieable? {
         didSet {
             self.dispatchGroup.enter()
-            self.movie?.requestAdditional(.credits, .images, .videos) { [weak self] in
+            self.movie?.requestDetails([.credits, .images, .videos]) { [weak self] in
                 self?.dispatchGroup.leave()
             }
         }
@@ -121,36 +121,6 @@ class MWMovieDetailsViewController: MWViewController {
         return view
     }()
     
-        let view = UIView()
-        view.addSubview(self.collectionViewHeaderTitleLabel)
-        view.addSubview(self.collectionViewHeaderButton)
-        return view
-    }()
-    
-    private lazy var collectionViewHeaderTitleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Cast".localized()
-        label.font = UIFont.boldSystemFont(ofSize: 17)
-        label.textColor = UIColor(named: "textColor")
-        return label
-    }()
-    
-    private lazy var collectionViewHeaderButton: MWRoundedButton =
-        MWRoundedButton(text: "All".localized(), image: UIImage(named: "nextIcon"))
-    
-    private lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: CGRect(),
-                                    collectionViewLayout: self.collectionViewFlowLayout)
-        view.dataSource = self
-        view.delegate = self
-        view.register(MWActorCollectionViewCell.self,
-                      forCellWithReuseIdentifier: MWActorCollectionViewCell.reuseId)
-        view.showsVerticalScrollIndicator = false
-        view.showsHorizontalScrollIndicator = false
-        view.backgroundColor = .white
-        return view
-    }()
-    
     // MARK: - init
     
     override func initController() {
@@ -235,9 +205,6 @@ class MWMovieDetailsViewController: MWViewController {
             make.bottom.equalToSuperview()
         }
     }
-            make.bottom.equalToSuperview()
-        }
-    }
     
     // MARK: - functions
     
@@ -261,7 +228,7 @@ extension MWMovieDetailsViewController: UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = self.collectionView
+        let cell = collectionView
             .dequeueReusableCell(withReuseIdentifier: MWActorCollectionViewCell.reuseId,
                                  for: indexPath)
             as? MWActorCollectionViewCell ?? MWActorCollectionViewCell()

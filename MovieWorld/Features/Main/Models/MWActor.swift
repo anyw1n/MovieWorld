@@ -9,7 +9,7 @@
 import UIKit
 import Kingfisher
 
-class MWActor: Decodable {
+struct MWActor: Decodable {
     
     private enum CodingKeys: String, CodingKey {
         case character, name, profilePath = "profile_path"

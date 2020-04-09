@@ -13,4 +13,5 @@ protocol Detailable: Decodable {
     var runtime: Int? { get }
     var countryNames: [String] { get }
     var credits: MWMovieCredits? { get set }
+    var videos: [MWMovieVideo]? { get set }
 }

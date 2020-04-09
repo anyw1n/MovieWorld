@@ -28,7 +28,7 @@ protocol Movieable: Decodable {
     var detailsLoaded: (() -> Void)? { get set }
     
     func showImage(size: Sizes, in imageView: UIImageView)
-    func requestAdditional(_ appends: AppendToResponse..., completionHandler: (() -> Void)?)
+    func requestDetails(_ appends: [AppendToResponse]?, completionHandler: (() -> Void)?)
 }
 
 extension Movieable {

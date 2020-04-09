@@ -56,28 +56,17 @@ class MWMovie: Movieable {
     
     // MARK: - functions
     
-    func requestAdditional(_ appends: AppendToResponse..., completionHandler: (() -> Void)?) {
+    func requestDetails(_ appends: [AppendToResponse]? = nil,
+                        completionHandler: (() -> Void)? = nil) {
         var appendNames: [String] = []
-        appends.forEach { appendNames.append($0.rawValue) }
+        appends?.forEach { appendNames.append($0.rawValue) }
         let url = URLPaths.movieDetails + String(self.id)
         MWN.sh.request(url: url,
                        queryParameters: ["append_to_response": appendNames.joined(separator: ",")],
                        successHandler: { [weak self] (response: MWMovieDetails) in
                         self?.details = response
-                        completionHandler?()
-            }, errorHandler: { (error) in
-                error.printInConsole()
-        })
-    }
-    
-    private func requestDetails() {
-        guard self.details == nil else { return }
-        
-        let url = URLPaths.movieDetails + String(id)
-        MWN.sh.request(url: url,
-                       successHandler: { [weak self] (response: MWMovieDetails) in
-                        self?.details = response
                         self?.detailsLoaded?()
+                        completionHandler?()
             }, errorHandler: { (error) in
                 error.printInConsole()
         })

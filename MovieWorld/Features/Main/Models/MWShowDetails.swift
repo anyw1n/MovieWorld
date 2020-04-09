@@ -12,7 +12,11 @@ class MWShowDetails: Detailable {
     
     private enum CodingKeys: String, CodingKey {
         case originCountryCodes = "origin_country", lastAirDate = "last_air_date",
-        episodeRuntime = "episode_run_time", credits
+        episodeRuntime = "episode_run_time", credits, videos
+    }
+    
+    private enum VideoCodingKeys: String, CodingKey {
+        case results
     }
     
     // MARK: - variables
@@ -21,6 +25,7 @@ class MWShowDetails: Detailable {
     let lastAirDate: String
     let episodeRuntime: [Int]
     var credits: MWMovieCredits?
+    var videos: [MWMovieVideo]?
     
     var lastAirYear: String { String(self.lastAirDate.split(separator: "-").first ?? "") }
     var runtime: Int? { self.episodeRuntime.first }
@@ -41,4 +46,19 @@ class MWShowDetails: Detailable {
         return names
     }
     
+    // MARK: - init
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.originCountryCodes =
+            (try? container.decode([String].self, forKey: .originCountryCodes)) ?? []
+        self.lastAirDate = (try? container.decode(String.self, forKey: .lastAirDate)) ?? ""
+        self.episodeRuntime = (try? container.decode([Int].self, forKey: .episodeRuntime)) ?? []
+        self.credits = try? container.decode(MWMovieCredits.self, forKey: .credits)
+        if container.contains(.videos) {
+            let videoContainer =
+                try container.nestedContainer(keyedBy: VideoCodingKeys.self, forKey: .videos)
+            self.videos = try? videoContainer.decode([MWMovieVideo].self, forKey: .results)
+        }
+    }
 }
