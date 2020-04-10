@@ -40,13 +40,9 @@ extension Movieable {
         }
         
         let url = URL(string: baseUrl + size.rawValue + posterPath)
-        var options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
+        let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
                                               .transition(.fade(1)),
                                               .cacheOriginalImage]
-        if imageView.bounds.size != CGSize.zero {
-            let processor = DownsamplingImageProcessor(size: imageView.bounds.size)
-            options.append(.processor(processor))
-        }
         
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(with: url,

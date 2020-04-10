@@ -87,17 +87,9 @@ extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewD
                                  for: indexPath)
             as? MWMovieCardCollectionViewCell ?? MWMovieCardCollectionViewCell()
         
-        let movie = self.movies?[indexPath.row]
-        cell.titleLabel.text = movie?.title
-        cell.subtitleLabel.text = "\(movie?.releaseYear ?? ""), \(movie?.genres.first ?? "")"
-        if let movie = movie as? MWShow, movie.details == nil {
-            movie.detailsLoaded = {
-                cell.subtitleLabel.text =
-                "\(movie.releaseYear), \(movie.genres.first ?? "")"
-                cell.setNeedsUpdateConstraints()
-            }
+        if let movie = self.movies?[indexPath.row] {
+            cell.setup(movie)
         }
-        movie?.showImage(size: .w154, in: cell.imageView)
         return cell
     }
     

@@ -25,14 +25,14 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    private(set) lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textColor = UIColor(named: "textColor")
         return label
     }()
     
-    private(set) lazy var subtitleLabel: UILabel = {
+    private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor(named: "textColor")
@@ -46,6 +46,7 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
         
         self.contentView.backgroundColor = .white
         self.addSubviews()
+        self.makeConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -71,10 +72,22 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
     
     // MARK: - functions
     
+    func setup(_ movie: Movieable) {
+        self.titleLabel.text = movie.title
+        self.subtitleLabel.text = "\(movie.releaseYear), \(movie.genres.first ?? "")"
+        if let movie = movie as? MWShow, movie.details == nil {
+            movie.detailsLoaded = {
+                self.subtitleLabel.text =
+                "\(movie.releaseYear), \(movie.genres.first ?? "")"
+                self.setNeedsUpdateConstraints()
+            }
+        }
+        movie.showImage(size: .w154, in: self.imageView)
+    }
+    
     private func addSubviews() {
         self.contentView.addSubview(self.imageView)
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.subtitleLabel)
-        self.makeConstraints()
     }
 }

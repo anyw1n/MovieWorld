@@ -22,6 +22,7 @@ class MWMovieCardView: UIView {
     private(set) lazy var posterImageView: UIImageView = {
         let view = UIImageView()
         view.layer.cornerRadius = 5
+        view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
         return view
     }()

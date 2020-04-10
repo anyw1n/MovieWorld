@@ -29,13 +29,9 @@ struct MWActor: Decodable {
         }
         
         let url = URL(string: baseUrl + size.rawValue + profilePath)
-        var options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
+        let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
                                               .transition(.fade(1)),
                                               .cacheOriginalImage]
-        if imageView.bounds.size != CGSize.zero {
-            let processor = DownsamplingImageProcessor(size: imageView.bounds.size)
-            options.append(.processor(processor))
-        }
         
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(with: url,
