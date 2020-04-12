@@ -11,7 +11,7 @@ import Foundation
 class MWMovieDetails: Detailable {
     
     private enum CodingKeys: String, CodingKey {
-        case productionCountries = "production_countries", runtime, credits, videos
+        case productionCountries = "production_countries", runtime, credits, videos, images
     }
     
     private enum VideoCodingKeys: String, CodingKey {
@@ -24,7 +24,8 @@ class MWMovieDetails: Detailable {
     let runtime: Int?
     var credits: MWMovieCredits?
     var videos: [MWMovieVideo]?
-    
+    var images: MWImages?
+
     var countryNames: [String] {
         var names: [String] = []
         self.productionCountries.forEach { names.append($0.name ?? "") }
@@ -39,6 +40,7 @@ class MWMovieDetails: Detailable {
             (try? container.decode([MWCountry].self, forKey: .productionCountries)) ?? []
         self.runtime = try? container.decode(Int.self, forKey: .runtime)
         self.credits = try? container.decode(MWMovieCredits.self, forKey: .credits)
+        self.images = try? container.decode(MWImages.self, forKey: .images)
         if container.contains(.videos) {
             let videoContainer =
                 try container.nestedContainer(keyedBy: VideoCodingKeys.self, forKey: .videos)

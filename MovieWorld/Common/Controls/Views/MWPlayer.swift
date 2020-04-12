@@ -14,7 +14,7 @@ class MWPlayer: UIView {
     // MARK: - variables
     
     private let playImageSize = CGSize(width: 52, height: 52)
-    private let defaultPlayerParameters: [String: Any] =
+    var defaultPlayerParameters: [String: Any] =
         ["hl": Locale.current.languageCode ?? "en",
          "controls": 2,
          "iv_load_policy": 3,

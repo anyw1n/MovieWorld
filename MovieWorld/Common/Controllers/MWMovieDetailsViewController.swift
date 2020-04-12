@@ -32,6 +32,8 @@ class MWMovieDetailsViewController: MWViewController {
     private let descriptionView: MWDescriptionView = MWDescriptionView()
     
     private let castView: MWCastView = MWCastView()
+    
+    private let galleryView: MWGalleryView = MWGalleryView()
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -41,6 +43,7 @@ class MWMovieDetailsViewController: MWViewController {
         view.addSubview(self.moviePlayerView)
         view.addSubview(self.descriptionView)
         view.addSubview(self.castView)
+        view.addSubview(self.galleryView)
         return view
     }()
     
@@ -85,21 +88,36 @@ class MWMovieDetailsViewController: MWViewController {
         self.castView.snp.makeConstraints { (make) in
             make.top.equalTo(self.descriptionView.snp.bottom).offset(24)
             make.left.right.equalTo(self.view)
-            make.bottom.equalToSuperview()
         }
         self.castView.makeInternalConstraints()
+        self.galleryView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.castView.snp.bottom).offset(24)
+            make.left.right.equalTo(self.view)
+            make.bottom.equalToSuperview().offset(-10)
+        }
+        self.galleryView.makeInternalConstraints()
     }
     
     // MARK: - functions
     
     private func setup() {
-        guard let movie = self.movie, let cast = movie.details?.credits?.cast else { return }
+        guard let movie = self.movie, let details = movie.details else { return }
         
         self.movieCardView.setup(movie)
-        if let youtubeVideo = movie.details?.videos?.first(where: { $0.site == "YouTube" }) {
+        
+        if let youtubeVideo = details.videos?.first(where: { $0.site == "YouTube" }) {
             self.moviePlayerView.setup(video: youtubeVideo)
         }
+        
         self.descriptionView.setup(movie)
-        self.castView.setup(cast: cast)
+        
+        if let cast = details.credits?.cast {
+            self.castView.setup(cast: cast)
+        }
+        
+        if let images = details.images, let videos = details.videos {
+            let items: [Mediable] = videos + images.backdrops + images.posters
+            self.galleryView.setup(items: items)
+        }
     }
 }

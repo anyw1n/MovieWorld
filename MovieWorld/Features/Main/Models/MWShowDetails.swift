@@ -12,7 +12,7 @@ class MWShowDetails: Detailable {
     
     private enum CodingKeys: String, CodingKey {
         case originCountryCodes = "origin_country", lastAirDate = "last_air_date",
-        episodeRuntime = "episode_run_time", credits, videos
+        episodeRuntime = "episode_run_time", credits, videos, images
     }
     
     private enum VideoCodingKeys: String, CodingKey {
@@ -26,7 +26,8 @@ class MWShowDetails: Detailable {
     let episodeRuntime: [Int]
     var credits: MWMovieCredits?
     var videos: [MWMovieVideo]?
-    
+    var images: MWImages?
+
     var lastAirYear: String { String(self.lastAirDate.split(separator: "-").first ?? "") }
     var runtime: Int? { self.episodeRuntime.first }
 
@@ -55,6 +56,7 @@ class MWShowDetails: Detailable {
         self.lastAirDate = (try? container.decode(String.self, forKey: .lastAirDate)) ?? ""
         self.episodeRuntime = (try? container.decode([Int].self, forKey: .episodeRuntime)) ?? []
         self.credits = try? container.decode(MWMovieCredits.self, forKey: .credits)
+        self.images = try? container.decode(MWImages.self, forKey: .images)
         if container.contains(.videos) {
             let videoContainer =
                 try container.nestedContainer(keyedBy: VideoCodingKeys.self, forKey: .videos)

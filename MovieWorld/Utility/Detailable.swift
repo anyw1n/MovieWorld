@@ -14,4 +14,10 @@ protocol Detailable: Decodable {
     var countryNames: [String] { get }
     var credits: MWMovieCredits? { get set }
     var videos: [MWMovieVideo]? { get set }
+    var images: MWImages? { get set }
+}
+
+struct MWImages: Decodable {
+    let backdrops: [MWMovieImage]
+    let posters: [MWMovieImage]
 }

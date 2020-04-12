@@ -9,7 +9,7 @@
 import Foundation
 import Kingfisher
 
-struct MWMovieVideo: Decodable {
+struct MWMovieVideo: Mediable {
     
     // MARK: - variables
     
