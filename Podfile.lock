@@ -5,14 +5,14 @@ PODS:
   - Kingfisher/Core (5.13.3)
   - SnapKit (5.0.1)
   - SwiftLint (0.39.2)
-  - YoutubeKit (0.5.0)
+  - YoutubePlayerView (1.2.1)
 
 DEPENDENCIES:
   - Alamofire (~> 5.0)
   - Kingfisher (~> 5.0)
   - SnapKit (~> 5.0.0)
   - SwiftLint
-  - YoutubeKit
+  - YoutubePlayerView
 
 SPEC REPOS:
   trunk:
@@ -20,15 +20,15 @@ SPEC REPOS:
     - Kingfisher
     - SnapKit
     - SwiftLint
-    - YoutubeKit
+    - YoutubePlayerView
 
 SPEC CHECKSUMS:
   Alamofire: 9d5c5f602928e512395b30950c5984eca840093c
   Kingfisher: d2b3d6a7200c93b34de9afcdf25c8dd9282ec277
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SwiftLint: 22ccbbe3b8008684be5955693bab135e0ed6a447
-  YoutubeKit: 9f66eba839211158f2aac7ad3833593bd56fa8f9
+  YoutubePlayerView: 3870fc10f2db3f54156697757f44d304203bdc7e
 
-PODFILE CHECKSUM: c74375b032bfcf55ff59d9200338a699e3832546
+PODFILE CHECKSUM: c2fbca6a9e93638fbd663a42ae4f9843fbbdce89
 
 COCOAPODS: 1.8.4

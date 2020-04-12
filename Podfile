@@ -8,7 +8,7 @@ target 'MovieWorld' do
   pod 'Alamofire', '~> 5.0'
   pod 'Kingfisher', '~> 5.0'
   pod 'SwiftLint'
-  pod 'YoutubeKit'
+  pod 'YoutubePlayerView'
   # Pods for MovieWorld
 
 end

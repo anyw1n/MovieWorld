@@ -96,7 +96,9 @@ class MWMovieDetailsViewController: MWViewController {
         guard let movie = self.movie, let cast = movie.details?.credits?.cast else { return }
         
         self.movieCardView.setup(movie)
-        
+        if let youtubeVideo = movie.details?.videos?.first(where: { $0.site == "YouTube" }) {
+            self.moviePlayerView.setup(video: youtubeVideo)
+        }
         self.descriptionView.setup(movie)
         self.castView.setup(cast: cast)
     }
