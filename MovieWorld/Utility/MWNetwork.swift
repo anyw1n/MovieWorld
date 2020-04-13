@@ -32,10 +32,10 @@ class MWNetwork {
                                errorHandler: @escaping (MWNetError) -> Void) {
         let url = self.baseUrl + path + "?api_key=" + self.apiKey
         var parameters: Parameters = queryParameters ?? [:]
-        if let languageCode = Locale.current.languageCode {
+        if let languageCode = Locale.current.languageCode, parameters["language"] == nil {
             parameters["language"] = languageCode
         }
-        if let regionCode = Locale.current.regionCode {
+        if let regionCode = Locale.current.regionCode, parameters["region"] == nil {
             parameters["region"] = regionCode
         }
         

@@ -29,7 +29,6 @@ struct MWMovieVideo: Mediable {
                                                   .transition(.fade(1)),
                                                   .cacheOriginalImage]
 
-            imageView.kf.indicatorType = .activity
             imageView.kf.setImage(with: url,
                                   options: options)
         }

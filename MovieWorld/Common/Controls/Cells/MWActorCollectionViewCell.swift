@@ -77,7 +77,7 @@ class MWActorCollectionViewCell: UICollectionViewCell {
     
     func setup(actor: MWActor) {
         actor.showProfileImage(size: .w92, in: self.imageView)
-        self.titleLabel.text = actor.name
-        self.subtitleLabel.text = actor.character
+        self.titleLabel.text = String(actor.name.split(separator: " ").first ?? "")
+        self.subtitleLabel.text = actor.name.split(separator: " ").dropFirst().joined()
     }
 }
