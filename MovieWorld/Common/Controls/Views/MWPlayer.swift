@@ -89,7 +89,7 @@ class MWPlayer: UIView {
     
     func setup(_ video: MWMovieVideo) {
         self.videoId = video.key
-        video.showThumbnail(in: self.thumbnail)
+        video.showThumbnail(size: .high, in: self.thumbnail)
     }
     
     func play() {

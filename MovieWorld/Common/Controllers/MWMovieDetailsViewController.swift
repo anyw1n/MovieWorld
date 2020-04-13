@@ -115,7 +115,8 @@ class MWMovieDetailsViewController: MWViewController {
             self.castView.setup(cast: cast)
         }
         
-        if let images = details.images, let videos = details.videos {
+        if let images = details.images,
+            let videos = details.videos?.filter({ $0.site == "YouTube" }) {
             let items: [Mediable] = videos + images.backdrops + images.posters
             self.galleryView.setup(items: items)
         }

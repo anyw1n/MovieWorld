@@ -28,7 +28,6 @@ class MWGalleryView: UIView {
     
     private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = self.collectionViewItemSize
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 8
         layout.sectionInset = self.contentInsets
@@ -86,7 +85,7 @@ class MWGalleryView: UIView {
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 
-extension MWGalleryView: UICollectionViewDelegate, UICollectionViewDataSource {
+extension MWGalleryView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -108,5 +107,16 @@ extension MWGalleryView: UICollectionViewDelegate, UICollectionViewDataSource {
                         didEndDisplaying cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         (cell as? MWMediaCollectionViewCell)?.imageView.kf.cancelDownloadTask()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard let item = self.items?[indexPath.row] else { return self.collectionViewItemSize }
+        var size = self.collectionViewItemSize
+        if let item = item as? MWMovieImage {
+            size.width = item.calculateWidth(height: size.height)
+        }
+        return size
     }
 }
