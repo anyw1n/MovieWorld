@@ -14,6 +14,15 @@ class MWGalleryView: UIView {
     
     private let collectionViewItemSize = CGSize(width: 180, height: 87)
     private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    var viewForFullscreen: UIView? {
+        didSet {
+            guard let view = self.viewForFullscreen else { return }
+            view.addSubview(self.fullscreenImageView)
+            self.fullscreenImageView.snp.makeConstraints { (make) in
+                make.edges.equalTo(view)
+            }
+        }
+    }
     var items: [Mediable]?
     
     // MARK: - gui variables
@@ -44,6 +53,18 @@ class MWGalleryView: UIView {
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .white
+        return view
+    }()
+    
+    private lazy var fullscreenImageView: UIImageView = {
+        let view = UIImageView()
+        view.isHidden = true
+        view.alpha = 0
+        view.contentMode = .scaleAspectFit
+        view.backgroundColor = UIColor(named: "textColor")?.withAlphaComponent(0.8)
+        view.isUserInteractionEnabled = true
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self,
+                                                         action: #selector(self.disableFullscreen)))
         return view
     }()
     
@@ -80,6 +101,16 @@ class MWGalleryView: UIView {
     func setup(items: [Mediable]) {
         self.items = items
         self.collectionView.reloadData()
+    }
+    
+    @objc private func disableFullscreen() {
+        UIView.animate(withDuration: 0.3,
+                       animations: {
+                        self.fullscreenImageView.alpha = 0
+        }, completion: { (_) in
+            self.fullscreenImageView.isHidden = true
+            self.fullscreenImageView.image = nil
+        })
     }
 }
 
@@ -118,5 +149,17 @@ extension MWGalleryView: UICollectionViewDelegate, UICollectionViewDataSource, U
             size.width = item.calculateWidth(height: size.height)
         }
         return size
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = self.items?[indexPath.row] as? MWMovieImage,
+            let viewForFullscreen = self.viewForFullscreen else { return }
+        
+        viewForFullscreen.bringSubviewToFront(self.fullscreenImageView)
+        item.showImage(size: .w1280, in: self.fullscreenImageView)
+        self.fullscreenImageView.isHidden = false
+        UIView.animate(withDuration: 0.3) {
+            self.fullscreenImageView.alpha = 1
+        }
     }
 }

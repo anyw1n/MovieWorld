@@ -33,7 +33,11 @@ class MWMovieDetailsViewController: MWViewController {
     
     private let castView: MWCastView = MWCastView()
     
-    private let galleryView: MWGalleryView = MWGalleryView()
+    private lazy var galleryView: MWGalleryView = {
+        let view = MWGalleryView()
+        view.viewForFullscreen = self.view
+        return view
+    }()
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()

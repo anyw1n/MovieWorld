@@ -74,7 +74,7 @@ class MWMediaCollectionViewCell: UICollectionViewCell {
         } else if let image = item as? MWMovieImage {
             self.imageView.isHidden = false
             self.playerView.isHidden = true
-            image.showImage(size: .w92, in: self.imageView)
+            image.showImage(size: .w185, in: self.imageView)
         }
     }
 }
