@@ -391,7 +391,6 @@
 		506EC4192401604E0020240A /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				50C713C523F96DC20043F2D1 /* MWMovieCardTableViewCell.swift */,
 				501746C4243A146D005950D0 /* MWMovieCardView.swift */,
 				50230CED244034F3001E2607 /* MWDescriptionView.swift */,
 				50230CEF2440376A001E2607 /* MWCastView.swift */,
@@ -426,6 +425,7 @@
 				501E7770241E290900B37345 /* MWTagCollectionViewCell.swift */,
 				5022B4D9243B6D1400087FD6 /* MWActorCollectionViewCell.swift */,
 				5080F7212443117F00CBF379 /* MWMediaCollectionViewCell.swift */,
+				50C713C523F96DC20043F2D1 /* MWMovieCardTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";

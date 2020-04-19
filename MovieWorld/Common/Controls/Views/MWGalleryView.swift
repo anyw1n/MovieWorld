@@ -138,6 +138,7 @@ extension MWGalleryView: UICollectionViewDelegate, UICollectionViewDataSource, U
                         didEndDisplaying cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         (cell as? MWMediaCollectionViewCell)?.imageView.kf.cancelDownloadTask()
+        (cell as? MWMediaCollectionViewCell)?.playerView.thumbnail.kf.cancelDownloadTask()
     }
     
     func collectionView(_ collectionView: UICollectionView,

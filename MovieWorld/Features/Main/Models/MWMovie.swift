@@ -61,9 +61,13 @@ class MWMovie: Movieable {
         var appendNames: [String] = []
         appends?.forEach { appendNames.append($0.rawValue) }
         let url = URLPaths.movieDetails + String(self.id)
+        var imageLanguages = ["null"]
+        if let language = Locale.current.languageCode {
+            imageLanguages.append(language)
+        }
         MWN.sh.request(url: url,
                        queryParameters: ["append_to_response": appendNames.joined(separator: ","),
-                                         "include_image_language": "en"],
+                                         "include_image_language": imageLanguages.joined(separator: ",")],
                        successHandler: { [weak self] (response: MWMovieDetails) in
                         self?.details = response
                         self?.detailsLoaded?()

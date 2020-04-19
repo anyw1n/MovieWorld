@@ -27,7 +27,7 @@ class MWPlayer: UIView {
     
     // MARK: - gui variables
     
-    private lazy var thumbnail: UIImageView = {
+    private(set) lazy var thumbnail: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.addSubview(self.imageOverlay)

@@ -17,7 +17,7 @@ class MWMediaCollectionViewCell: UICollectionViewCell {
     
     // MARK: - gui variables
     
-    private lazy var playerView: MWPlayer = {
+    private(set) lazy var playerView: MWPlayer = {
         let player = MWPlayer()
         player.defaultPlayerParameters["playsinline"] = 0
         player.defaultPlayerParameters["controls"] = 0
@@ -68,6 +68,8 @@ class MWMediaCollectionViewCell: UICollectionViewCell {
             self.imageView.isHidden = true
             self.playerView.setup(video)
             self.playerView.playTapped = { [weak self] in
+                self?.playerView.thumbnail.isHidden = false
+                self?.playerView.player.isHidden = true
                 self?.playerView.play()
                 return true
             }
