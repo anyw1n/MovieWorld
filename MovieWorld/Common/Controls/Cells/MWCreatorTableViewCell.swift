@@ -1,0 +1,48 @@
+//
+//  MWCreatorTableViewCell.swift
+//  MovieWorld
+//
+//  Created by Alexey Zhizhensky on 4/22/20.
+//  Copyright © 2020 Alexey Zhizhensky. All rights reserved.
+//
+
+import UIKit
+
+class MWCreatorTableViewCell: UITableViewCell {
+    
+    // MARK: - variables
+    
+    static let reuseId = "creatorTableViewCell"
+    private let insets = UIEdgeInsets(top: 11, left: 16, bottom: 27, right: 0)
+    
+    // MARK: - gui variables
+    
+    private lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 17)
+        label.textColor = UIColor(named: "textColor")
+        return label
+    }()
+    
+    // MARK: - init
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        self.contentView.addSubview(self.titleLabel)
+        self.titleLabel.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview().inset(self.insets)
+            make.right.lessThanOrEqualToSuperview()
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - functions
+    
+    func setup(creator: MWCreator) {
+        self.titleLabel.text = creator.name
+    }
+}

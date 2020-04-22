@@ -34,7 +34,7 @@ class MWCastView: UIView {
         return label
     }()
     
-    private lazy var collectionViewHeaderButton: MWRoundedButton =
+    private(set) lazy var collectionViewHeaderButton: MWRoundedButton =
         MWRoundedButton(text: "All".localized(), image: UIImage(named: "nextIcon"))
     
     private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {

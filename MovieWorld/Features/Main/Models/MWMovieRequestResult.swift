@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MWMovieRequestResult<T: Movieable>: Decodable {
+struct MWMovieRequestResult<T: Movieable>: Decodable {
     
     private enum CodingKeys: String, CodingKey {
         case page, results, totalResults = "total_results", totalPages = "total_pages"
@@ -19,7 +19,7 @@ class MWMovieRequestResult<T: Movieable>: Decodable {
     let totalResults: Int?
     let totalPages: Int?
     
-    required init(from decoder: Decoder) throws {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.page = (try? container.decode(Int.self, forKey: .page))
         self.results = (try? container.decode([T].self, forKey: .results))

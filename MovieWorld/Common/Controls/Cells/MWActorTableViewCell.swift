@@ -1,23 +1,25 @@
 //
-//  MWActorCollectionViewCell.swift
+//  MWActorTableViewCell.swift
 //  MovieWorld
 //
-//  Created by Alexey Zhizhensky on 4/6/20.
+//  Created by Alexey Zhizhensky on 4/22/20.
 //  Copyright © 2020 Alexey Zhizhensky. All rights reserved.
 //
 
 import UIKit
 
-class MWActorCollectionViewCell: UICollectionViewCell {
+class MWActorTableViewCell: UITableViewCell {
     
     // MARK: - variables
     
-    static let reuseId = "actorCollectionViewCell"
-    private let imageSize = CGSize(width: 72, height: 72)
+    static let reuseId = "actorTableViewCell"
+    private let imageSize = CGSize(width: 70, height: 70)
+    private let imageInsets = UIEdgeInsets(top: 10, left: 16, bottom: 13, right: 0)
+    private let offset = 16
     
     // MARK: - gui variables
     
-    private(set) lazy var imageView: UIImageView = {
+    private(set) lazy var profileImageView: UIImageView = {
         let view = UIImageView()
         view.layer.cornerRadius = 5
         view.clipsToBounds = true
@@ -41,10 +43,10 @@ class MWActorCollectionViewCell: UICollectionViewCell {
     
     // MARK: - init
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-
-        self.contentView.addSubview(self.imageView)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        self.contentView.addSubview(self.profileImageView)
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.subtitleLabel)
         self.makeConstraints()
@@ -57,26 +59,26 @@ class MWActorCollectionViewCell: UICollectionViewCell {
     // MARK: - constraints
     
     private func makeConstraints() {
-        self.imageView.snp.updateConstraints { (make) in
-            make.left.top.equalToSuperview()
-            make.right.lessThanOrEqualToSuperview()
+        self.profileImageView.snp.updateConstraints { (make) in
+            make.left.top.bottom.equalToSuperview().inset(self.imageInsets)
             make.size.equalTo(self.imageSize)
         }
         self.titleLabel.snp.updateConstraints { (make) in
-            make.top.equalTo(self.imageView.snp.bottom).offset(12)
-            make.left.right.equalToSuperview()
+            make.top.equalToSuperview().inset(self.imageInsets)
+            make.left.equalTo(self.profileImageView.snp.right).offset(self.offset)
+            make.right.lessThanOrEqualToSuperview()
         }
         self.subtitleLabel.snp.updateConstraints { (make) in
-            make.top.equalTo(self.titleLabel.snp.bottom)
-            make.left.right.equalToSuperview()
-            make.bottom.lessThanOrEqualToSuperview()
+            make.top.equalTo(self.titleLabel.snp.bottom).offset(3)
+            make.left.equalTo(self.profileImageView.snp.right).offset(self.offset)
+            make.right.lessThanOrEqualToSuperview()
         }
     }
     
     // MARK: - functions
     
     func setup(actor: MWActor) {
-        actor.showProfileImage(size: .w92, in: self.imageView)
+        actor.showProfileImage(size: .w92, in: self.profileImageView)
         self.titleLabel.text = String(actor.name.split(separator: " ").first ?? "")
         self.subtitleLabel.text =
             actor.name.split(separator: " ").dropFirst().joined(separator: " ")

@@ -12,7 +12,7 @@ protocol Detailable: Decodable {
     
     var runtime: Int? { get }
     var countryNames: [String] { get }
-    var credits: MWMovieCredits? { get set }
+    var credits: MWCredits? { get set }
     var videos: [MWMovieVideo]? { get set }
     var images: MWImages? { get set }
 }

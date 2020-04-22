@@ -21,6 +21,8 @@ struct MWActor: Decodable {
     let name: String
     let profilePath: String?
     
+    // MARK: - functions
+    
     func showProfileImage(size: Sizes, in imageView: UIImageView) {
         guard let profilePath = self.profilePath,
             let baseUrl = MWS.sh.configuration?.secureBaseUrl else {

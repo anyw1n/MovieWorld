@@ -31,7 +31,13 @@ class MWMovieDetailsViewController: MWViewController {
     
     private let descriptionView: MWDescriptionView = MWDescriptionView()
     
-    private let castView: MWCastView = MWCastView()
+    private lazy var castView: MWCastView = {
+        let view = MWCastView()
+        view.collectionViewHeaderButton.addTarget(self,
+                                                  action: #selector(self.allCastButtonTapped),
+                                                  for: .touchUpInside)
+        return view
+    }()
     
     private lazy var galleryView: MWGalleryView = {
         let view = MWGalleryView()
@@ -56,8 +62,6 @@ class MWMovieDetailsViewController: MWViewController {
     override func initController() {
         super.initController()
         
-        self.navigationItem.largeTitleDisplayMode = .never
-        
         self.view.addSubview(self.scrollView)
         self.scrollView.isHidden = true
         
@@ -66,6 +70,16 @@ class MWMovieDetailsViewController: MWViewController {
             self.makeAllConstraints()
             self.scrollView.isHidden = false
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationItem.largeTitleDisplayMode = .never
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationItem.largeTitleDisplayMode = .always
     }
     
     // MARK: - constraints
@@ -103,6 +117,12 @@ class MWMovieDetailsViewController: MWViewController {
     }
     
     // MARK: - functions
+    
+    @objc private func allCastButtonTapped() {
+        let controller = MWCastViewController()
+        controller.credits = self.movie?.details?.credits
+        MWI.sh.push(controller)
+    }
     
     private func setup() {
         guard let movie = self.movie, let details = movie.details else { return }

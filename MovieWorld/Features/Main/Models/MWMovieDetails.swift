@@ -22,7 +22,7 @@ class MWMovieDetails: Detailable {
 
     let productionCountries: [MWCountry]
     let runtime: Int?
-    var credits: MWMovieCredits?
+    var credits: MWCredits?
     var videos: [MWMovieVideo]?
     var images: MWImages?
 
@@ -39,7 +39,7 @@ class MWMovieDetails: Detailable {
         self.productionCountries =
             (try? container.decode([MWCountry].self, forKey: .productionCountries)) ?? []
         self.runtime = try? container.decode(Int.self, forKey: .runtime)
-        self.credits = try? container.decode(MWMovieCredits.self, forKey: .credits)
+        self.credits = try? container.decode(MWCredits.self, forKey: .credits)
         self.images = try? container.decode(MWImages.self, forKey: .images)
         if container.contains(.videos) {
             let videoContainer =
