@@ -43,14 +43,23 @@ class MWActor: Decodable {
                               options: options)
     }
     
-    func requestDetails() {
+    func requestDetails(_ appends: [ActorAppendToResponse]? = nil,
+                        completionHandler: (() -> Void)? = nil) {
+        var appendNames: [String] = []
+        appends?.forEach { appendNames.append($0.rawValue) }
         let url = URLPaths.person + String(self.id)
         MWN.sh.request(url: url,
+                       queryParameters: ["append_to_response": appendNames.joined(separator: ",")],
                        successHandler: { [weak self] (response: MWActorDetails) in
                         self?.details = response
                         self?.detailsLoaded?()
+                        completionHandler?()
             }, errorHandler: { (error) in
                 error.printInConsole()
         })
     }
+}
+
+enum ActorAppendToResponse: String {
+    case movieCredits = "movie_credits", tvCredits = "tv_credits"
 }

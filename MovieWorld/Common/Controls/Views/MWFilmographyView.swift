@@ -1,21 +1,21 @@
 //
-//  MWCastView.swift
+//  MWFilmographyView.swift
 //  MovieWorld
 //
-//  Created by Alexey Zhizhensky on 4/10/20.
+//  Created by Alexey Zhizhensky on 4/23/20.
 //  Copyright © 2020 Alexey Zhizhensky. All rights reserved.
 //
 
 import UIKit
 
-class MWCastView: UIView {
+class MWFilmographyView: UIView {
 
     // MARK: - variables
     
     private let sectionInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 26)
-    private let collectionViewItemSize = CGSize(width: 72, height: 124)
+    private let collectionViewItemSize = CGSize(width: 130, height: 237)
     private let collectionViewHeaderButtonSize = CGSize(width: 52, height: 24)
-    var cast: [MWActor]?
+    var movies: [Movieable]?
     
     // MARK: - gui variables
     
@@ -28,7 +28,7 @@ class MWCastView: UIView {
     
     private lazy var collectionViewHeaderTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Cast".localized()
+        label.text = "Filmography".localized()
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textColor = UIColor(named: "textColor")
         return label
@@ -41,7 +41,7 @@ class MWCastView: UIView {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = self.collectionViewItemSize
         layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 16
+        layout.minimumInteritemSpacing = 8
         layout.sectionInset = self.sectionInset
         return layout
     }()
@@ -51,8 +51,8 @@ class MWCastView: UIView {
                                     collectionViewLayout: self.collectionViewFlowLayout)
         view.dataSource = self
         view.delegate = self
-        view.register(MWActorCollectionViewCell.self,
-                      forCellWithReuseIdentifier: MWActorCollectionViewCell.reuseId)
+        view.register(MWMovieCardCollectionViewCell.self,
+                      forCellWithReuseIdentifier: MWMovieCardCollectionViewCell.reuseId)
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false
         view.backgroundColor = .white
@@ -74,7 +74,7 @@ class MWCastView: UIView {
     
     // MARK: - constraints
     
-    func makeInternalConstraints() {
+    func makeConstraints() {
         self.collectionViewHeader.snp.makeConstraints { (make) in
             make.top.equalToSuperview()
             make.left.right.equalToSuperview().inset(self.sectionInset)
@@ -100,43 +100,45 @@ class MWCastView: UIView {
     
     // MARK: - functions
     
-    func setup(cast: [MWActor]) {
-        self.cast = cast
+    func setup(actor: MWActor) {
+        guard let movies = actor.details?.movieCredits?.cast,
+            let tv = actor.details?.tvCredits?.cast else { return }
+        self.movies = movies + tv
         self.collectionView.reloadData()
     }
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 
-extension MWCastView: UICollectionViewDelegate, UICollectionViewDataSource {
+extension MWFilmographyView: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        guard let cast = self.cast else { return 0 }
-        return cast.count >= 10 ? 10 : cast.count
+        guard let movies = self.movies else { return 0 }
+        return movies.count >= 10 ? 10 : movies.count
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView
-            .dequeueReusableCell(withReuseIdentifier: MWActorCollectionViewCell.reuseId,
+            .dequeueReusableCell(withReuseIdentifier: MWMovieCardCollectionViewCell.reuseId,
                                  for: indexPath)
-            as? MWActorCollectionViewCell ?? MWActorCollectionViewCell()
-        guard let actor = self.cast?[indexPath.row] else { return cell }
+            as? MWMovieCardCollectionViewCell ?? MWMovieCardCollectionViewCell()
+        guard let movie = self.movies?[indexPath.row] else { return cell }
         
-        cell.setup(actor: actor)
+        cell.setup(movie)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let actor = self.cast?[indexPath.row] else { return }
-        let controller = MWActorDetailsViewController()
-        controller.actor = actor
+        guard let movie = self.movies?[indexPath.row] else { return }
+        let controller = MWMovieDetailsViewController()
+        controller.movie = movie
         MWI.sh.push(controller)
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         didEndDisplaying cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
-        (cell as? MWActorCollectionViewCell)?.imageView.kf.cancelDownloadTask()
+        (cell as? MWMovieCardCollectionViewCell)?.imageView.kf.cancelDownloadTask()
     }
 }

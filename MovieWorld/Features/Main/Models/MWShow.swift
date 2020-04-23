@@ -66,7 +66,7 @@ class MWShow: Movieable {
     
     // MARK: - functions
     
-    func requestDetails(_ appends: [AppendToResponse]? = nil,
+    func requestDetails(_ appends: [MovieAppendToResponse]? = nil,
                         completionHandler: (() -> Void)? = nil) {
         var appendNames: [String] = []
         appends?.forEach { appendNames.append($0.rawValue) }

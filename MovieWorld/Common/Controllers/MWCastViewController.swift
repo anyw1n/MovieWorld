@@ -124,6 +124,13 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard indexPath.section == 0, let actor = self.credits?.cast[indexPath.row] else { return }
+        let controller = MWActorDetailsViewController()
+        controller.actor = actor
+        MWI.sh.push(controller)
+    }
+    
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard indexPath.section == 0 else { return }
         self.credits?.cast[indexPath.row].detailsLoaded = nil

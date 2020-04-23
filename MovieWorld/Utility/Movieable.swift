@@ -9,7 +9,7 @@
 import UIKit
 import Kingfisher
 
-enum AppendToResponse: String {
+enum MovieAppendToResponse: String {
     case credits, images, videos
 }
 
@@ -28,7 +28,7 @@ protocol Movieable: Decodable {
     var detailsLoaded: (() -> Void)? { get set }
     
     func showImage(size: Sizes, in imageView: UIImageView)
-    func requestDetails(_ appends: [AppendToResponse]?, completionHandler: (() -> Void)?)
+    func requestDetails(_ appends: [MovieAppendToResponse]?, completionHandler: (() -> Void)?)
 }
 
 extension Movieable {
