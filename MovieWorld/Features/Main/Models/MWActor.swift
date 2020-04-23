@@ -9,10 +9,10 @@
 import UIKit
 import Kingfisher
 
-struct MWActor: Decodable {
+class MWActor: Decodable {
     
     private enum CodingKeys: String, CodingKey {
-        case character, name, profilePath = "profile_path"
+        case character, name, profilePath = "profile_path", id
     }
     
     // MARK: - variables
@@ -20,6 +20,9 @@ struct MWActor: Decodable {
     let character: String
     let name: String
     let profilePath: String?
+    let id: Int
+    var details: MWActorDetails?
+    var detailsLoaded: (() -> Void)?
     
     // MARK: - functions
     
@@ -38,5 +41,16 @@ struct MWActor: Decodable {
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(with: url,
                               options: options)
+    }
+    
+    func requestDetails() {
+        let url = URLPaths.person + String(self.id)
+        MWN.sh.request(url: url,
+                       successHandler: { [weak self] (response: MWActorDetails) in
+                        self?.details = response
+                        self?.detailsLoaded?()
+            }, errorHandler: { (error) in
+                error.printInConsole()
+        })
     }
 }

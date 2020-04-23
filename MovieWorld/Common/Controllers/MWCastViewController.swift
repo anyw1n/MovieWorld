@@ -12,7 +12,12 @@ class MWCastViewController: MWViewController {
 
     // MARK: - variables
     
-    var credits: MWCredits?
+    var credits: MWCredits? {
+        didSet {
+            guard let credits = self.credits else { return }
+            credits.cast.forEach { $0.requestDetails() }
+        }
+    }
     
     // MARK: - gui variables
     
@@ -117,5 +122,10 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
             cell.setup(creator: credits.creators[indexPath.section - 1].creators[indexPath.row])
             return cell
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard indexPath.section == 0 else { return }
+        self.credits?.cast[indexPath.row].detailsLoaded = nil
     }
 }

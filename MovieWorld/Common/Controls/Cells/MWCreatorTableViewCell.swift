@@ -29,6 +29,7 @@ class MWCreatorTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        self.selectionStyle = .none
         self.contentView.addSubview(self.titleLabel)
         self.titleLabel.snp.makeConstraints { (make) in
             make.edges.equalToSuperview().inset(self.insets)
