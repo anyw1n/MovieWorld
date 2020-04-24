@@ -108,7 +108,14 @@ class MWActorDetailsViewController: MWViewController {
                                         controller.movie = items[indexPath.row]
                                         MWI.sh.push(controller)
             },
-                                       allButtonTapped: nil)
+                                       allButtonTapped: {
+                                        let controller = MWMovieListViewController()
+                                        controller.section =
+                                            MWSection(name: "Filmography".localized(),
+                                                      movies: items,
+                                                      isStaticSection: true)
+                                        MWI.sh.push(controller)
+            })
         }
         
         var title = "Actor"

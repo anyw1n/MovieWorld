@@ -13,8 +13,9 @@ class MWSection: NSCopying {
     // MARK: - variables
     
     let name: String
-    let url: String
-    let category: MWCategory
+    let url: String?
+    let category: MWCategory?
+    let isStaticSection: Bool
     var genreIds: Set<Int64>?
     var movies: [Movieable]
     var pagesLoaded: Int = 0
@@ -35,17 +36,19 @@ class MWSection: NSCopying {
     // MARK: - init
     
     init(name: String,
-         url: String,
-         category: MWCategory,
+         url: String? = nil,
+         category: MWCategory? = nil,
          parameters: [String: Any] = [:],
          genreIds: Set<Int64>? = nil,
-         movies: [Movieable] = []) {
+         movies: [Movieable] = [],
+         isStaticSection: Bool = false) {
         self.name = name
         self.url = url
         self.category = category
         self._requestParameters = parameters
         self.genreIds = genreIds
         self.movies = movies
+        self.isStaticSection = isStaticSection
     }
     
     // MARK: - functions
@@ -56,7 +59,8 @@ class MWSection: NSCopying {
                              category: self.category,
                              parameters: self._requestParameters,
                              genreIds: self.genreIds,
-                             movies: self.movies)
+                             movies: self.movies,
+                             isStaticSection: self.isStaticSection)
         copy.pagesLoaded = self.pagesLoaded
         copy.totalPages = self.totalPages
         copy.totalResults = self.totalResults
@@ -64,6 +68,7 @@ class MWSection: NSCopying {
     }
     
     func loadResults<T: Movieable>(from requestResult: MWMovieRequestResult<T>) {
+        guard !self.isStaticSection else { return }
         self.pagesLoaded = requestResult.page ?? 0
         self.movies.append(contentsOf: requestResult.results ?? [])
         self.totalResults = requestResult.totalResults ?? 0
@@ -71,6 +76,7 @@ class MWSection: NSCopying {
     }
     
     func clearResults() {
+        guard !self.isStaticSection else { return }
         self.pagesLoaded = 0
         self.movies = []
         self.totalResults = -1

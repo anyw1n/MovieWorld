@@ -24,6 +24,11 @@ class MWSystem {
     var configuration: MWConfiguration?
     var genres: MWCategories = [:]
     var countries: [MWCountry]?
+    var allGenres: [MWGenre] {
+        var genres: [MWGenre] = []
+        self.genres.forEach { genres.append(contentsOf: $0.value) }
+        return genres
+    }
     
     // MARK: - init
     

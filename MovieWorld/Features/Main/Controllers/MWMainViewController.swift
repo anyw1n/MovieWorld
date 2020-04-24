@@ -108,39 +108,39 @@ class MWMainViewController: MWViewController {
     private func loadMovies(into section: MWSection? = nil) {
         self.dispatchGroup.enter()
         
-        if let section = section {
-            let index = self.sections.firstIndex { $0.name == section.name } ?? -1
-            switch section.category {
-            case .movie:
-                MWN.sh.request(
-                    url: section.url,
-                    queryParameters: section.requestParameters,
-                    successHandler: { [weak self] (response: MWMovieRequestResult<MWMovie>) in
-                        section.loadResults(from: response)
-                        self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
-                                                   with: .automatic)
-                        self?.dispatchGroup.leave()
-                }, errorHandler: { [weak self] error in
-                    error.printInConsole()
-                    self?.dispatchGroup.leave()
-                })
-            case .tv:
-                MWN.sh.request(
-                    url: section.url,
-                    queryParameters: section.requestParameters,
-                    successHandler: { [weak self] (response: MWMovieRequestResult<MWShow>) in
-                        section.loadResults(from: response)
-                        self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
-                                                   with: .automatic)
-                        self?.dispatchGroup.leave()
-                }, errorHandler: { [weak self] error in
-                    error.printInConsole()
-                    self?.dispatchGroup.leave()
-                })
-            }
-        } else {
+        guard let section = section, let url = section.url, let category = section.category else {
             self.sections.forEach { self.loadMovies(into: $0) }
             self.dispatchGroup.leave()
+            return
+        }
+        let index = self.sections.firstIndex { $0.name == section.name } ?? -1
+        switch category {
+        case .movie:
+            MWN.sh.request(
+                url: url,
+                queryParameters: section.requestParameters,
+                successHandler: { [weak self] (response: MWMovieRequestResult<MWMovie>) in
+                    section.loadResults(from: response)
+                    self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
+                                               with: .automatic)
+                    self?.dispatchGroup.leave()
+                }, errorHandler: { [weak self] error in
+                    error.printInConsole()
+                    self?.dispatchGroup.leave()
+            })
+        case .tv:
+            MWN.sh.request(
+                url: url,
+                queryParameters: section.requestParameters,
+                successHandler: { [weak self] (response: MWMovieRequestResult<MWShow>) in
+                    section.loadResults(from: response)
+                    self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
+                                               with: .automatic)
+                    self?.dispatchGroup.leave()
+                }, errorHandler: { [weak self] error in
+                    error.printInConsole()
+                    self?.dispatchGroup.leave()
+            })
         }
     }
 }

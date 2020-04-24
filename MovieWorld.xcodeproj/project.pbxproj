@@ -23,6 +23,7 @@
 		50188B1B2436065200CAC18F /* MWShowDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50188B1A2436065200CAC18F /* MWShowDetails.swift */; };
 		5019069F240BB039008D1009 /* String+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019069E240BB039008D1009 /* String+Ex.swift */; };
 		501906A3240BB1A8008D1009 /* MWNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501906A2240BB1A8008D1009 /* MWNetwork.swift */; };
+		501951712452FD2400933025 /* MWTagsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501951702452FD2400933025 /* MWTagsCollectionView.swift */; };
 		5019523924519E8A00A35EAC /* MWActorDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019523824519E8A00A35EAC /* MWActorDetailsViewController.swift */; };
 		501BE5292450997900423879 /* MWCastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501BE5282450997900423879 /* MWCastViewController.swift */; };
 		501BE52B24509D3700423879 /* MWCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501BE52A24509D3700423879 /* MWCreator.swift */; };
@@ -103,6 +104,7 @@
 		50188B1A2436065200CAC18F /* MWShowDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWShowDetails.swift; sourceTree = "<group>"; };
 		5019069E240BB039008D1009 /* String+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ex.swift"; sourceTree = "<group>"; };
 		501906A2240BB1A8008D1009 /* MWNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWNetwork.swift; sourceTree = "<group>"; };
+		501951702452FD2400933025 /* MWTagsCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWTagsCollectionView.swift; sourceTree = "<group>"; };
 		5019523824519E8A00A35EAC /* MWActorDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWActorDetailsViewController.swift; sourceTree = "<group>"; };
 		501BE5282450997900423879 /* MWCastViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCastViewController.swift; sourceTree = "<group>"; };
 		501BE52A24509D3700423879 /* MWCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCreator.swift; sourceTree = "<group>"; };
@@ -418,6 +420,7 @@
 				5023B0472443072100C4964C /* MWGalleryView.swift */,
 				5021CF472450B60D005D81AC /* MWTitleTableViewHeader.swift */,
 				50290073245183CD00B98CC4 /* MWActorCardView.swift */,
+				501951702452FD2400933025 /* MWTagsCollectionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -704,6 +707,7 @@
 				50230CF224403C3D001E2607 /* MWMoviePlayerView.swift in Sources */,
 				50C713C623F96DC20043F2D1 /* MWMovieCardTableViewCell.swift in Sources */,
 				500E1196241A5F340098A18E /* CoreDataManager.swift in Sources */,
+				501951712452FD2400933025 /* MWTagsCollectionView.swift in Sources */,
 				5019523924519E8A00A35EAC /* MWActorDetailsViewController.swift in Sources */,
 				5023B04A24430AFF00C4964C /* Mediable.swift in Sources */,
 				50CAB43124057946005AB8AF /* MWRoundedButton.swift in Sources */,
