@@ -8,11 +8,12 @@
 
 import UIKit
 
-class MWMediaCollectionViewCell: UICollectionViewCell {
+class MWMediaCollectionViewCell: MWCollectionViewCell {
     
     // MARK: - variables
     
-    static let reuseId = "mediaCollectionViewCell"
+    override class var reuseId: String { "mediaCollectionViewCell" }
+    override class var itemSize: CGSize { CGSize(width: 180, height: 87) }
     var isWidthCalculated: Bool = false
     
     // MARK: - gui variables
@@ -27,21 +28,12 @@ class MWMediaCollectionViewCell: UICollectionViewCell {
         return player
     }()
     
-    private(set) lazy var imageView: UIImageView = {
-        let view = UIImageView()
-        view.layer.cornerRadius = 5
-        view.clipsToBounds = true
-        view.isHidden = true
-        return view
-    }()
-    
     // MARK: - init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         self.addSubview(self.playerView)
-        self.addSubview(self.imageView)
         self.makeConstraints()
     }
     
@@ -62,7 +54,7 @@ class MWMediaCollectionViewCell: UICollectionViewCell {
     
     // MARK: - functions
     
-    func setup(_ item: Mediable) {
+    override func setup<T>(_ item: T) {
         if let video = item as? MWMovieVideo {
             self.playerView.isHidden = false
             self.imageView.isHidden = true

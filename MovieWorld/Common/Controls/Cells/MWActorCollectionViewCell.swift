@@ -8,22 +8,15 @@
 
 import UIKit
 
-class MWActorCollectionViewCell: UICollectionViewCell {
+class MWActorCollectionViewCell: MWCollectionViewCell {
     
     // MARK: - variables
     
-    static let reuseId = "actorCollectionViewCell"
     private let imageSize = CGSize(width: 72, height: 72)
+    override class var reuseId: String { "actorCollectionViewCell" }
+    override class var itemSize: CGSize { CGSize(width: 72, height: 124) }
     
     // MARK: - gui variables
-    
-    private(set) lazy var imageView: UIImageView = {
-        let view = UIImageView()
-        view.layer.cornerRadius = 5
-        view.clipsToBounds = true
-        view.contentMode = .scaleAspectFill
-        return view
-    }()
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -44,7 +37,6 @@ class MWActorCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.contentView.addSubview(self.imageView)
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.subtitleLabel)
         self.makeConstraints()
@@ -67,15 +59,17 @@ class MWActorCollectionViewCell: UICollectionViewCell {
             make.left.right.equalToSuperview()
         }
         self.subtitleLabel.snp.updateConstraints { (make) in
-            make.top.equalTo(self.titleLabel.snp.bottom)
+            make.top.lessThanOrEqualTo(self.titleLabel.snp.bottom)
             make.left.right.equalToSuperview()
-            make.bottom.lessThanOrEqualToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
     
     // MARK: - functions
     
-    func setup(actor: MWActor) {
+    override func setup<T>(_ item: T) {
+        guard let actor = item as? MWActor else { return }
+        
         actor.showProfileImage(size: .w92, in: self.imageView)
         self.titleLabel.text = String(actor.name.split(separator: " ").first ?? "")
         self.subtitleLabel.text =

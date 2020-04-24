@@ -13,7 +13,7 @@ class MWActorCardView: UIView {
     // MARK: - variables
     
     private let imageSize = CGSize(width: 70, height: 70)
-    private let imageInsets = UIEdgeInsets(top: 10, left: 16, bottom: 13, right: 0)
+    private let imageInsets = UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 0)
     private let offset = 16
     
     // MARK: - gui variables
@@ -69,7 +69,7 @@ class MWActorCardView: UIView {
     func makeConstraints() {
         self.profileImageView.snp.makeConstraints { (make) in
             make.left.top.equalToSuperview().inset(self.imageInsets)
-            make.bottom.lessThanOrEqualToSuperview().inset(self.imageInsets)
+            make.bottom.lessThanOrEqualToSuperview()
             make.size.equalTo(self.imageSize)
         }
         self.titleLabel.snp.makeConstraints { (make) in

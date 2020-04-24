@@ -13,7 +13,8 @@ class MWCreatorTableViewCell: UITableViewCell {
     // MARK: - variables
     
     static let reuseId = "creatorTableViewCell"
-    private let insets = UIEdgeInsets(top: 11, left: 16, bottom: 27, right: 0)
+    static let height: CGFloat = 44
+    private let insets = UIEdgeInsets(top: 11, left: 16, bottom: 0, right: 0)
     
     // MARK: - gui variables
     
@@ -32,8 +33,8 @@ class MWCreatorTableViewCell: UITableViewCell {
         self.selectionStyle = .none
         self.contentView.addSubview(self.titleLabel)
         self.titleLabel.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview().inset(self.insets)
-            make.right.lessThanOrEqualToSuperview()
+            make.left.top.equalToSuperview().inset(self.insets)
+            make.right.bottom.lessThanOrEqualToSuperview()
         }
     }
     

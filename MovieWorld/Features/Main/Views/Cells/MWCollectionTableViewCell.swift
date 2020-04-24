@@ -14,33 +14,15 @@ class MWCollectionTableViewCell: UITableViewCell {
     
     static let reuseId = "collectionViewTableViewCell"
     
-    private let itemSize = CGSize(width: 130, height: 237)
-    private let sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 7)
-    
-    var movies: [Movieable]?
-    
     // MARK: - gui variables
     
-    private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = self.itemSize
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 8
-        layout.sectionInset = self.sectionInsets
-        return layout
-    }()
-    
-    private(set) lazy var collectionView: UICollectionView = {
-        let view = UICollectionView(frame: CGRect(),
-                                    collectionViewLayout: self.collectionViewFlowLayout)
-        view.dataSource = self
-        view.delegate = self
-        view.register(MWMovieCardCollectionViewCell.self,
-                      forCellWithReuseIdentifier: MWMovieCardCollectionViewCell.reuseId)
-        view.showsVerticalScrollIndicator = false
-        view.showsHorizontalScrollIndicator = false
-        view.backgroundColor = .white
-        return view
+    private(set) lazy var collectionView: MWCollectionViewWithHeader<Movieable,
+        MWMovieCardCollectionViewCell> = {
+            let view = MWCollectionViewWithHeader<Movieable, MWMovieCardCollectionViewCell>()
+            view.titleLabel.font = .boldSystemFont(ofSize: 24)
+            view.sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 7)
+            view.maximumItems = 20
+            return view
     }()
     
     // MARK: - init
@@ -50,59 +32,14 @@ class MWCollectionTableViewCell: UITableViewCell {
         
         self.backgroundColor = .white
         self.selectionStyle = .none
-        self.addSubviews()
+        self.contentView.addSubview(self.collectionView)
+        self.collectionView.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        self.collectionView.makeConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: - constraints
-    
-    private func makeConstraints() {
-        self.collectionView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
-    }
-    
-    // MARK: - functions
-    
-    private func addSubviews() {
-        self.contentView.addSubview(self.collectionView)
-        self.makeConstraints()
-    }
-}
-
-// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-
-extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.movies?.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = self.collectionView
-            .dequeueReusableCell(withReuseIdentifier: MWMovieCardCollectionViewCell.reuseId,
-                                 for: indexPath)
-            as? MWMovieCardCollectionViewCell ?? MWMovieCardCollectionViewCell()
-        
-        if let movie = self.movies?[indexPath.row] {
-            cell.setup(movie)
-        }
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let controller = MWMovieDetailsViewController()
-        controller.movie = self.movies?[indexPath.row]
-        MWI.sh.push(controller)
-    }
-
-    func collectionView(_ collectionView: UICollectionView,
-                        didEndDisplaying cell: UICollectionViewCell,
-                        forItemAt indexPath: IndexPath) {
-        (cell as? MWMovieCardCollectionViewCell)?.imageView.kf.cancelDownloadTask()
-        self.movies?[indexPath.row].detailsLoaded = nil
     }
 }

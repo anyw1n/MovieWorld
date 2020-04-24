@@ -14,7 +14,6 @@ class MWActorDetailsViewController: MWViewController {
     
     private let dispatchGroup = DispatchGroup()
     private let offset = 16
-    private let biographyInsets = UIEdgeInsets(top: 0, left: 16, bottom: 10, right: 16)
     var actor: MWActor? {
         didSet {
             self.dispatchGroup.enter()
@@ -28,30 +27,9 @@ class MWActorDetailsViewController: MWViewController {
 
     private let actorCardView: MWActorCardView = MWActorCardView()
     
-    private let filmographyView: MWFilmographyView = MWFilmographyView()
+    private let filmographyView = MWCollectionViewWithHeader<Movieable, MWMovieCardCollectionViewCell>()
     
-    private lazy var biographyView: UIView = {
-        let view = UIView()
-        view.addSubview(self.titleBiographyLabel)
-        view.addSubview(self.textBiographyLabel)
-        return view
-    }()
-    
-    private lazy var titleBiographyLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 17)
-        label.textColor = UIColor(named: "textColor")
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    private lazy var textBiographyLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17)
-        label.textColor = UIColor(named: "textColor")
-        label.numberOfLines = 0
-        return label
-    }()
+    private let biographyView: MWDescriptionView = MWDescriptionView(additionalInfoEnabled: false)
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -100,25 +78,16 @@ class MWActorDetailsViewController: MWViewController {
         }
         self.actorCardView.makeConstraints()
         self.filmographyView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.actorCardView.snp.bottom).offset(24)
+            make.top.equalTo(self.actorCardView.snp.bottom)
             make.left.right.equalTo(self.view)
         }
         self.filmographyView.makeConstraints()
         self.biographyView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.filmographyView.snp.bottom).offset(24)
+            make.top.equalTo(self.filmographyView.snp.bottom)
             make.left.right.equalTo(self.view)
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-10)
         }
-        self.titleBiographyLabel.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.left.equalToSuperview().offset(self.offset)
-            make.right.lessThanOrEqualToSuperview().offset(-self.offset)
-        }
-        self.textBiographyLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.titleBiographyLabel.snp.bottom).offset(self.offset)
-            make.left.right.equalTo(self.view).inset(self.biographyInsets)
-            make.bottom.equalToSuperview().inset(self.biographyInsets)
-        }
+        self.biographyView.makeConstraints()
     }
     
     // MARK: - functions
@@ -127,12 +96,25 @@ class MWActorDetailsViewController: MWViewController {
         guard let actor = self.actor else { return }
         
         self.actorCardView.setup(actor: actor)
-        self.filmographyView.setup(actor: actor)
-        if let jobs = actor.details?.jobs {
-            self.titleBiographyLabel.text = "Actor, \(jobs.joined(separator: ", "))"
-        } else {
-            self.titleBiographyLabel.text = "Actor"
+        
+        if let movies = actor.details?.movieCredits?.cast,
+            let tv = actor.details?.tvCredits?.cast {
+            let items: [Movieable] = movies + tv
+            self.filmographyView.setup(title: "Filmography".localized(),
+                                       items: items,
+                                       itemSpacing: 8,
+                                       cellTapped: { (indexPath) in
+                                        let controller = MWMovieDetailsViewController()
+                                        controller.movie = items[indexPath.row]
+                                        MWI.sh.push(controller)
+            },
+                                       allButtonTapped: nil)
         }
-        self.textBiographyLabel.text = actor.details?.biography
+        
+        var title = "Actor"
+        if let jobs = actor.details?.jobs {
+            title.append(", \(jobs.joined(separator: ", "))")
+        }
+        self.biographyView.setup(title: title, text: actor.details?.biography)
     }
 }

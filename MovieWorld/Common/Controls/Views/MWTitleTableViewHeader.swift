@@ -13,7 +13,8 @@ class MWTitleTableViewHeader: UITableViewHeaderFooterView {
     // MARK: - variables
     
     static let reuseId = "titleTableViewHeader"
-    private let titleInsets = UIEdgeInsets(top: 24, left: 16, bottom: 16, right: 0)
+    static let height: CGFloat = 62
+    private let titleInsets = UIEdgeInsets(top: 24, left: 16, bottom: 0, right: 0)
     
     // MARK: - gui variables
     

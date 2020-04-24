@@ -8,22 +8,15 @@
 
 import UIKit
 
-class MWMovieCardCollectionViewCell: UICollectionViewCell {
+class MWMovieCardCollectionViewCell: MWCollectionViewCell {
     
     // MARK: - variables
-    
-    static let reuseId = "movieCardCollectionViewCell"
+
     private let imageSize = CGSize(width: 130, height: 185)
-    
+    override class var reuseId: String { "movieCardCollectionViewCell" }
+    override class var itemSize: CGSize { CGSize(width: 130, height: 237) }
+
     // MARK: - gui variables
-    
-    private(set) lazy var imageView: UIImageView = {
-        let view = UIImageView()
-        view.layer.cornerRadius = 5
-        view.clipsToBounds = true
-        view.contentMode = .scaleAspectFill
-        return view
-    }()
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -45,7 +38,8 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
         super.init(frame: frame)
         
         self.contentView.backgroundColor = .white
-        self.addSubviews()
+        self.contentView.addSubview(self.titleLabel)
+        self.contentView.addSubview(self.subtitleLabel)
         self.makeConstraints()
     }
     
@@ -57,22 +51,27 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
     
     private func makeConstraints() {
         self.imageView.snp.updateConstraints { (make) in
-            make.top.left.right.equalToSuperview()
+            make.top.left.equalToSuperview()
+            make.right.lessThanOrEqualToSuperview()
             make.size.equalTo(self.imageSize)
         }
         self.titleLabel.snp.updateConstraints { (make) in
             make.top.greaterThanOrEqualTo(self.imageView.snp.bottom).offset(12)
-            make.left.right.equalToSuperview()
+            make.left.equalToSuperview()
+            make.right.lessThanOrEqualToSuperview()
         }
         self.subtitleLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.titleLabel.snp.bottom).offset(4)
-            make.left.right.bottom.equalToSuperview()
+            make.left.bottom.equalToSuperview()
+            make.right.lessThanOrEqualToSuperview()
         }
     }
     
     // MARK: - functions
     
-    func setup(_ movie: Movieable) {
+    override func setup<T>(_ item: T) {
+        guard let movie = item as? Movieable else { return }
+        
         self.titleLabel.text = movie.title
         self.subtitleLabel.text = "\(movie.releaseYear), \(movie.genres.first ?? "")"
         if let movie = movie as? MWShow, movie.details == nil {
@@ -83,11 +82,5 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
             }
         }
         movie.showImage(size: .w154, in: self.imageView)
-    }
-    
-    private func addSubviews() {
-        self.contentView.addSubview(self.imageView)
-        self.contentView.addSubview(self.titleLabel)
-        self.contentView.addSubview(self.subtitleLabel)
     }
 }

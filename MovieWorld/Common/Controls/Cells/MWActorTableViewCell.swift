@@ -13,6 +13,7 @@ class MWActorTableViewCell: UITableViewCell {
     // MARK: - variables
     
     static let reuseId = "actorTableViewCell"
+    static let height: CGFloat = 90
     
     // MARK: - gui variables
     

@@ -12,12 +12,18 @@ class MWCastViewController: MWViewController {
 
     // MARK: - variables
     
+    private let contentInsets = UIEdgeInsets(top: 16, left: 0, bottom: 10, right: 0)
     var credits: MWCredits? {
         didSet {
             guard let credits = self.credits else { return }
             credits.cast.forEach { $0.requestDetails() }
+            
+            self.creators.append(("Director".localized(), credits.getCreators(with: "Director")))
+            self.creators.append(("Scenario".localized(), credits.getCreators(with: "Screenplay")))
+            self.creators.append(("Producers".localized(), credits.getCreators(with: "Producer")))
         }
     }
+    var creators: [(name: String, creators: [MWCreator])] = []
     
     // MARK: - gui variables
     
@@ -34,6 +40,8 @@ class MWCastViewController: MWViewController {
         view.separatorStyle = .none
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
+        view.contentInset = self.contentInsets
+        view.backgroundColor = .white
         return view
     }()
     
@@ -71,7 +79,7 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
         case 0:
             return credits.cast.count
         default:
-            return credits.creators[section - 1].creators.count
+            return self.creators[section - 1].creators.count
         }
     }
     
@@ -87,8 +95,8 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    willDisplayHeaderView view: UIView,
                    forSection section: Int) {
-        guard let view = view as? MWTitleTableViewHeader, let credits = self.credits else { return }
-        view.titleLabel.text = credits.creators[section - 1].name
+        guard let view = view as? MWTitleTableViewHeader else { return }
+        view.titleLabel.text = self.creators[section - 1].name
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -96,7 +104,7 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
         case 0:
             return CGFloat.leastNonzeroMagnitude
         default:
-            return 62
+            return MWTitleTableViewHeader.height
         }
     }
     
@@ -119,7 +127,7 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
                 .dequeueReusableCell(withIdentifier: MWCreatorTableViewCell.reuseId, for: indexPath)
             as? MWCreatorTableViewCell ?? MWCreatorTableViewCell()
             
-            cell.setup(creator: credits.creators[indexPath.section - 1].creators[indexPath.row])
+            cell.setup(creator: self.creators[indexPath.section - 1].creators[indexPath.row])
             return cell
         }
     }
@@ -134,5 +142,19 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         guard indexPath.section == 0 else { return }
         self.credits?.cast[indexPath.row].detailsLoaded = nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let cast = self.credits?.cast else { return 100 }
+        
+        switch indexPath.section {
+        case 0:
+            if indexPath.row == cast.count - 1 { return MWActorTableViewCell.height }
+            return MWActorTableViewCell.height + 3
+        default:
+            let creators = self.creators[indexPath.section - 1].creators
+            if indexPath.row == creators.count - 1 { return MWCreatorTableViewCell.height }
+            return MWCreatorTableViewCell.height + 16
+        }
     }
 }

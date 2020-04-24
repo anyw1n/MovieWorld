@@ -44,15 +44,13 @@ class MWMainViewController: MWViewController {
     // MARK: - gui variables
     
     private lazy var tableView: UITableView = {
-        let view = UITableView(frame: CGRect(), style: .grouped)
+        let view = UITableView()
         view.delegate = self
         view.dataSource = self
         view.register(MWCollectionTableViewCell.self,
                       forCellReuseIdentifier: MWCollectionTableViewCell.reuseId)
         view.register(MWRetryTableViewCell.self,
                       forCellReuseIdentifier: MWRetryTableViewCell.reuseId)
-        view.register(MWTableViewHeader.self,
-                      forHeaderFooterViewReuseIdentifier: MWTableViewHeader.reuseId)
         view.separatorStyle = .none
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
@@ -85,7 +83,8 @@ class MWMainViewController: MWViewController {
     
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.left.top.right.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-16)
         }
     }
     
@@ -149,48 +148,31 @@ class MWMainViewController: MWViewController {
 // MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return self.sections.count
-    }
-    
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return self.tableView.dequeueReusableHeaderFooterView(withIdentifier: MWTableViewHeader.reuseId)
-    }
-    
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView()
-    }
-    
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        guard let view = view as? MWTableViewHeader else { return }
-        view.titleLabel.text = self.sections[section].name
-        view.rightButton.addTarget(self,
-                                   action: #selector(self.allButtonTapped),
-                                   for: .touchUpInside)
-        view.rightButton.tag = section
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 68
-    }
-
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return CGFloat.leastNonzeroMagnitude
-    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return self.sections.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.sections[indexPath.section].movies.count != 0 {
+        if self.sections[indexPath.row].movies.count != 0 {
             let cell = self.tableView
                 .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseId,
                                      for: indexPath)
                 as? MWCollectionTableViewCell ?? MWCollectionTableViewCell()
-            cell.movies = self.sections[indexPath.section].movies
-            cell.collectionView.reloadData()
+            
+            let section = self.sections[indexPath.row]
+            cell.collectionView.setup(title: section.name,
+                                      items: section.movies,
+                                      itemSpacing: 8,
+                                      cellTapped: { (indexPath) in
+                                        let controller = MWMovieDetailsViewController()
+                                        controller.movie = section.movies[indexPath.row]
+                                        MWI.sh.push(controller)
+            }, allButtonTapped: {
+                let controller = MWMovieListViewController()
+                controller.section = section
+                MWI.sh.push(controller)
+            })
             return cell
         } else {
             let cell = self.tableView
@@ -202,9 +184,5 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
             }
             return cell
         }
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 237
     }
 }

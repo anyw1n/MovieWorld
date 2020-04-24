@@ -13,18 +13,20 @@ class MWDescriptionView: UIView {
     // MARK: - variables
     
     private let offset = 16
+    private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    private var additionalInfoEnabled: Bool = false
     
     // MARK: - gui variables
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Description".localized()
+        label.numberOfLines = 0
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textColor = UIColor(named: "textColor")
         return label
     }()
     
-    private lazy var definitionLabel: UILabel = {
+    private(set) lazy var definitionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15)
         label.textColor = UIColor(named: "textColor")
@@ -50,12 +52,14 @@ class MWDescriptionView: UIView {
 
     // MARK: - init
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
+    init(additionalInfoEnabled: Bool) {
+        super.init(frame: CGRect())
+        self.additionalInfoEnabled = additionalInfoEnabled
         self.addSubview(self.titleLabel)
-        self.addSubview(self.definitionLabel)
-        self.addSubview(self.subtitleLabel)
+        if additionalInfoEnabled {
+            self.addSubview(self.definitionLabel)
+            self.addSubview(self.subtitleLabel)
+        }
         self.addSubview(self.textLabel)
     }
     
@@ -65,36 +69,44 @@ class MWDescriptionView: UIView {
     
     // MARK: - constraints
     
-    func makeInternalConstraints() {
+    func makeConstraints() {
         self.titleLabel.snp.makeConstraints { (make) in
-            make.left.top.right.equalToSuperview()
-        }
-        self.definitionLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.titleLabel.snp.bottom).offset(self.offset)
-            make.left.equalToSuperview()
-        }
-        self.subtitleLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.titleLabel.snp.bottom).offset(self.offset)
-            make.left.equalTo(self.definitionLabel.snp.right).offset(self.offset)
+            make.top.equalToSuperview().offset(24)
+            make.left.equalToSuperview().inset(self.contentInsets)
             make.right.lessThanOrEqualToSuperview()
         }
+        if self.additionalInfoEnabled {
+            self.definitionLabel.snp.makeConstraints { (make) in
+                make.top.equalTo(self.titleLabel.snp.bottom).offset(self.offset)
+                make.left.equalToSuperview().inset(self.contentInsets)
+            }
+            self.subtitleLabel.snp.makeConstraints { (make) in
+                make.top.equalTo(self.titleLabel.snp.bottom).offset(self.offset)
+                make.left.equalTo(self.definitionLabel.snp.right).offset(self.offset)
+                make.right.lessThanOrEqualToSuperview()
+            }
+            self.textLabel.snp.makeConstraints { (make) in
+                make.top.equalTo(self.subtitleLabel.snp.bottom).offset(8)
+            }
+        } else {
+            self.textLabel.snp.makeConstraints { (make) in
+                make.top.equalTo(self.titleLabel.snp.bottom).offset(self.offset)
+            }
+        }
         self.textLabel.snp.makeConstraints { (make) in
-            make.top.equalTo(self.subtitleLabel.snp.bottom).offset(8)
-            make.left.right.equalToSuperview()
+            make.left.right.equalToSuperview().inset(self.contentInsets)
             make.bottom.equalToSuperview()
         }
     }
     
     // MARK: - functions
     
-    func setup(_ movie: Movieable) {
-        if let videoId = movie.details?.videos?.first(where: { $0.site == "YouTube" })?.key {
-            YTApi.sh.request(
-            videoId: videoId) { [weak self] (response: YoutubeDataVideoContentDetails) in
-                self?.definitionLabel.text = response.contentDetails.definition.uppercased()
-            }
+    func setup(title: String?, definition: String? = nil, subtitle: String? = nil, text: String?) {
+        self.titleLabel.text = title
+        if self.additionalInfoEnabled {
+            self.definitionLabel.text = definition
+            self.subtitleLabel.text = subtitle
         }
-        self.subtitleLabel.text = "X minutes".localized(args: movie.details?.runtime ?? 0)
-        self.textLabel.text = movie.overview
+        self.textLabel.text = text
     }
 }

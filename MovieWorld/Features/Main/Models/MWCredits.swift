@@ -14,17 +14,10 @@ struct MWCredits: Decodable {
     
     let cast: [MWActor]
     let crew: [MWCreator]
-    var creators: [(name: String, creators: [MWCreator])] {
-        var creators: [(String, [MWCreator])] = []
-        creators.append(("Director".localized(), self.getCreators(with: "Director")))
-        creators.append(("Scenario".localized(), self.getCreators(with: "Screenplay")))
-        creators.append(("Producers".localized(), self.getCreators(with: "Producer")))
-        return creators
-    }
     
     // MARK: - functions
     
-    private func getCreators(with job: String) -> [MWCreator] {
+    func getCreators(with job: String) -> [MWCreator] {
         return self.crew.filter { $0.job == job }
     }
 }

@@ -12,7 +12,6 @@ class MWGalleryView: UIView {
     
     // MARK: - variables
     
-    private let collectionViewItemSize = CGSize(width: 180, height: 87)
     private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     var viewForFullscreen: UIView? {
         didSet {
@@ -83,7 +82,7 @@ class MWGalleryView: UIView {
     
     // MARK: - constraints
     
-    func makeInternalConstraints() {
+    func makeConstraints() {
         self.collectionViewTitleLabel.snp.makeConstraints { (make) in
             make.left.top.equalToSuperview().inset(self.contentInsets)
             make.right.lessThanOrEqualToSuperview().inset(self.contentInsets)
@@ -91,7 +90,7 @@ class MWGalleryView: UIView {
         self.collectionView.snp.makeConstraints { (make) in
             make.top.equalTo(self.collectionViewTitleLabel.snp.bottom).offset(16)
             make.left.right.equalToSuperview()
-            make.height.equalTo(self.collectionViewItemSize.height)
+            make.height.equalTo(MWMediaCollectionViewCell.itemSize.height)
             make.bottom.equalToSuperview()
         }
     }
@@ -144,8 +143,8 @@ extension MWGalleryView: UICollectionViewDelegate, UICollectionViewDataSource, U
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let item = self.items?[indexPath.row] else { return self.collectionViewItemSize }
-        var size = self.collectionViewItemSize
+        guard let item = self.items?[indexPath.row] else { return MWMediaCollectionViewCell.itemSize }
+        var size = MWMediaCollectionViewCell.itemSize
         if let item = item as? MWMovieImage {
             size.width = item.calculateWidth(height: size.height)
         }
