@@ -18,13 +18,9 @@ class MWMovieListViewController: MWViewController {
             self.tagCollectionView.setup(section: section) { [weak self] in
                 self?.refreshTableView()
             }
-            if section.isStaticSection {
-                self.staticMovies = section.movies
-            }
         }
     }
     private var isRequestBusy: Bool = false
-    private var staticMovies: [Movieable]?
     
     // MARK: - gui variables
     
@@ -75,23 +71,9 @@ class MWMovieListViewController: MWViewController {
     // MARK: - functions
     
     private func loadMovies() {
-        guard let section = self.section else { return }
-        
-        if section.isStaticSection,
-            let originalMovies = self.staticMovies,
-            let genreIds = section.genreIds {
-            
-            section.movies = originalMovies.filter { (movie) -> Bool in
-                for id in genreIds {
-                    if !movie.genreIds.contains(Int(id)) { return false }
-                }
-                return true
-            }
-            self.tableView.reloadData()
-            return
-        }
-        
         guard !self.isRequestBusy,
+            let section = self.section,
+            !section.isStaticSection,
             section.pagesLoaded != section.totalPages,
             let category = section.category else { return }
         self.isRequestBusy = true
@@ -129,9 +111,22 @@ class MWMovieListViewController: MWViewController {
     }
     
     @objc private func refreshTableView() {
-        self.section?.clearResults()
+        guard let section = self.section else { return }
+        section.clearResults()
         self.tableView.reloadData()
-        self.loadMovies()
+        
+        if section.isStaticSection,
+            let originalMovies = section.originalMovies,
+            let genreIds = section.genreIds {
+            section.movies = originalMovies.filter { (movie) -> Bool in
+                for id in genreIds {
+                    if !movie.genreIds.contains(Int(id)) { return false }
+                }
+                return true
+            }
+            self.tableView.reloadData()
+        } else { self.loadMovies() }
+        
         self.refreshControl.endRefreshing()
     }
 }

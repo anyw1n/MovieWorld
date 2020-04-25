@@ -26,7 +26,14 @@ class MWSystem {
     var countries: [MWCountry]?
     var allGenres: [MWGenre] {
         var genres: [MWGenre] = []
-        self.genres.forEach { genres.append(contentsOf: $0.value) }
+        for category in MWCategory.allCases {
+            guard let values = self.genres[category] else { continue }
+            for genre in values {
+                if !genres.contains(where: { $0.id == genre.id && $0.name == genre.name }) {
+                    genres.append(genre)
+                }
+            }
+        }
         return genres
     }
     

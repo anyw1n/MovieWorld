@@ -21,6 +21,7 @@ class MWSection: NSCopying {
     var pagesLoaded: Int = 0
     var totalPages: Int = -1
     var totalResults: Int = -1
+    var originalMovies: [Movieable]? { self._originalMovies }
     var requestParameters: [String: Any] {
         get {
             var parameters = self._requestParameters
@@ -32,6 +33,7 @@ class MWSection: NSCopying {
         }
     }
     private var _requestParameters: [String: Any]
+    private var _originalMovies: [Movieable]?
     
     // MARK: - init
     
@@ -49,6 +51,9 @@ class MWSection: NSCopying {
         self.genreIds = genreIds
         self.movies = movies
         self.isStaticSection = isStaticSection
+        if isStaticSection {
+            self._originalMovies = movies
+        }
     }
     
     // MARK: - functions
@@ -68,7 +73,6 @@ class MWSection: NSCopying {
     }
     
     func loadResults<T: Movieable>(from requestResult: MWMovieRequestResult<T>) {
-        guard !self.isStaticSection else { return }
         self.pagesLoaded = requestResult.page ?? 0
         self.movies.append(contentsOf: requestResult.results ?? [])
         self.totalResults = requestResult.totalResults ?? 0
@@ -76,7 +80,6 @@ class MWSection: NSCopying {
     }
     
     func clearResults() {
-        guard !self.isStaticSection else { return }
         self.pagesLoaded = 0
         self.movies = []
         self.totalResults = -1
