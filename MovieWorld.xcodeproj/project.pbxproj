@@ -13,7 +13,6 @@
 		500E1196241A5F340098A18E /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500E1195241A5F340098A18E /* CoreDataManager.swift */; };
 		50114333241D343500EE31AE /* MWMovieListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50114332241D343500EE31AE /* MWMovieListViewController.swift */; };
 		50114335241D362F00EE31AE /* MWSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50114334241D362F00EE31AE /* MWSection.swift */; };
-		50131807241540D5008CFAEB /* MWRetryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50131806241540D5008CFAEB /* MWRetryTableViewCell.swift */; };
 		501585BF241BD61500A12B94 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 501585C1241BD61500A12B94 /* Localizable.strings */; };
 		501746C5243A146D005950D0 /* MWMovieCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501746C4243A146D005950D0 /* MWMovieCardView.swift */; };
 		50182B8A2440B9FE00FC5D7F /* MWPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50182B892440B9FE00FC5D7F /* MWPlayer.swift */; };
@@ -93,7 +92,6 @@
 		500E1195241A5F340098A18E /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		50114332241D343500EE31AE /* MWMovieListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieListViewController.swift; sourceTree = "<group>"; };
 		50114334241D362F00EE31AE /* MWSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSection.swift; sourceTree = "<group>"; };
-		50131806241540D5008CFAEB /* MWRetryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWRetryTableViewCell.swift; sourceTree = "<group>"; };
 		501585C0241BD61500A12B94 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		501585C3241BD66C00A12B94 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		501746C4243A146D005950D0 /* MWMovieCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieCardView.swift; sourceTree = "<group>"; };
@@ -430,7 +428,6 @@
 			children = (
 				507F690C240B85C600564DEC /* MWMovieCardCollectionViewCell.swift */,
 				507F690E240B892E00564DEC /* MWCollectionTableViewCell.swift */,
-				50131806241540D5008CFAEB /* MWRetryTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -679,7 +676,6 @@
 				502295152442FB2D009D7E70 /* YoutubeDataVideoWithContentDetails.swift in Sources */,
 				501EF775243C70810084E81C /* MWMovieVideo.swift in Sources */,
 				50E10E762401689A00F774F9 /* MWCategoryViewController.swift in Sources */,
-				50131807241540D5008CFAEB /* MWRetryTableViewCell.swift in Sources */,
 				50272DCB2414E7C1009BD61B /* Sizes.swift in Sources */,
 				5019069F240BB039008D1009 /* String+Ex.swift in Sources */,
 				50188B172435FFC300CAC18F /* MWCountry+CoreDataProperties.swift in Sources */,

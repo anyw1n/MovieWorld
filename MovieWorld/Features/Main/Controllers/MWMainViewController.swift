@@ -49,8 +49,6 @@ class MWMainViewController: MWViewController {
         view.dataSource = self
         view.register(MWCollectionTableViewCell.self,
                       forCellReuseIdentifier: MWCollectionTableViewCell.reuseId)
-        view.register(MWRetryTableViewCell.self,
-                      forCellReuseIdentifier: MWRetryTableViewCell.reuseId)
         view.separatorStyle = .none
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
@@ -121,7 +119,7 @@ class MWMainViewController: MWViewController {
                 queryParameters: section.requestParameters,
                 successHandler: { [weak self] (response: MWMovieRequestResult<MWMovie>) in
                     section.loadResults(from: response)
-                    self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
+                    self?.tableView.reloadRows(at: [IndexPath(row: index, section: 0)],
                                                with: .automatic)
                     self?.dispatchGroup.leave()
                 }, errorHandler: { [weak self] error in
@@ -134,7 +132,7 @@ class MWMainViewController: MWViewController {
                 queryParameters: section.requestParameters,
                 successHandler: { [weak self] (response: MWMovieRequestResult<MWShow>) in
                     section.loadResults(from: response)
-                    self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
+                    self?.tableView.reloadRows(at: [IndexPath(row: index, section: 0)],
                                                with: .automatic)
                     self?.dispatchGroup.leave()
                 }, errorHandler: { [weak self] error in
@@ -152,37 +150,17 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.sections.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.sections[indexPath.row].movies.count != 0 {
-            let cell = self.tableView
-                .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseId,
-                                     for: indexPath)
-                as? MWCollectionTableViewCell ?? MWCollectionTableViewCell()
-            
-            let section = self.sections[indexPath.row]
-            cell.collectionView.setup(title: section.name,
-                                      items: section.movies,
-                                      itemSpacing: 8,
-                                      cellTapped: { (indexPath) in
-                                        let controller = MWMovieDetailsViewController()
-                                        controller.movie = section.movies[indexPath.row]
-                                        MWI.sh.push(controller)
-            }, allButtonTapped: {
-                let controller = MWMovieListViewController()
-                controller.section = section
-                MWI.sh.push(controller)
-            })
-            return cell
-        } else {
-            let cell = self.tableView
-                .dequeueReusableCell(withIdentifier: MWRetryTableViewCell.reuseId,
-                                     for: indexPath)
-                as? MWRetryTableViewCell ?? MWRetryTableViewCell()
-            cell.retryTapped = { [weak self] in
-                self?.loadMovies(into: self?.sections[indexPath.section])
-            }
-            return cell
+        let cell = self.tableView
+            .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseId,
+                                 for: indexPath)
+            as? MWCollectionTableViewCell ?? MWCollectionTableViewCell()
+        
+        cell.setup(section: self.sections[indexPath.row]) { [weak self] in
+            self?.loadMovies(into: self?.sections[indexPath.row])
         }
+        
+        return cell
     }
 }

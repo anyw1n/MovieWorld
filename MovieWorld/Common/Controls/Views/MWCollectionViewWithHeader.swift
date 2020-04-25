@@ -14,7 +14,8 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     // MARK: - variables
     
     private let insets = UIEdgeInsets(top: 24, left: 0, bottom: 15, right: 0)
-    private let buttonSize = CGSize(width: 52, height: 24)
+    private let allButtonSize = CGSize(width: 52, height: 24)
+    private let retryButtonSize = CGSize(width: 150, height: 40)
     var items: [T]?
     var maximumItems: Int = 10
     var sectionInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 7) {
@@ -24,13 +25,14 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     }
     var allButtonTapped: (() -> Void)?
     var cellTapped: ((IndexPath) -> Void)?
+    var retryButtonTapped: (() -> Void)?
 
     // MARK: - gui variables
     
     private lazy var headerView: UIView = {
         let view = UIView()
         view.addSubview(self.titleLabel)
-        view.addSubview(self.button)
+        view.addSubview(self.allButton)
         return view
     }()
     
@@ -41,7 +43,7 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         return label
     }()
     
-    private lazy var button: MWRoundedButton = {
+    private lazy var allButton: MWRoundedButton = {
         let button = MWRoundedButton(text: "All".localized(), image: UIImage(named: "nextIcon"))
         button.addTarget(self, action: #selector(self.allButtonDidTap), for: .touchUpInside)
         return button
@@ -68,6 +70,17 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         return view
     }()
     
+    private lazy var retryButton: UIButton = {
+        let button = MWRoundedButton(text: "Retry".localized(),
+                                     image: UIImage(named: "refreshIcon"))
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.addTarget(self, action: #selector(self.retryButtonDidTap), for: .touchUpInside)
+        button.isHidden = true
+        return button
+    }()
+    
     // MARK: - init
     
     override init(frame: CGRect) {
@@ -75,6 +88,7 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         
         self.addSubview(self.headerView)
         self.addSubview(self.collectionView)
+        self.addSubview(self.retryButton)
     }
     
     required init?(coder: NSCoder) {
@@ -90,19 +104,23 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         self.titleLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().inset(self.insets)
             make.left.equalToSuperview().inset(self.sectionInsets)
-            make.right.lessThanOrEqualTo(self.button.snp.left).inset(16)
+            make.right.lessThanOrEqualTo(self.allButton.snp.left).inset(16)
             make.bottom.lessThanOrEqualToSuperview()
         }
-        self.button.snp.makeConstraints { (make) in
+        self.allButton.snp.makeConstraints { (make) in
             make.top.bottom.equalToSuperview().inset(self.insets)
             make.right.equalToSuperview().inset(self.sectionInsets)
-            make.size.equalTo(self.buttonSize)
+            make.size.equalTo(self.allButtonSize)
         }
         self.collectionView.snp.makeConstraints { (make) in
             make.top.equalTo(self.headerView.snp.bottom)
             make.left.right.equalToSuperview()
             make.height.equalTo(Cell.itemSize.height)
             make.bottom.equalToSuperview()
+        }
+        self.retryButton.snp.makeConstraints { (make) in
+            make.center.equalTo(self.collectionView)
+            make.size.equalTo(self.retryButtonSize)
         }
     }
     
@@ -112,21 +130,35 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
                items: [T],
                itemSpacing: CGFloat,
                cellTapped: ((IndexPath) -> Void)? = nil,
-               allButtonTapped: (() -> Void)? = nil) {
+               allButtonTapped: (() -> Void)? = nil,
+               retryButtonTapped: (() -> Void)? = nil) {
         self.titleLabel.text = title
         self.items = items
         self.collectionViewFlowLayout.minimumInteritemSpacing = itemSpacing
         self.cellTapped = cellTapped
         if allButtonTapped == nil {
-            self.button.isHidden = true
+            self.allButton.isHidden = true
         } else {
             self.allButtonTapped = allButtonTapped
+        }
+        self.retryButtonTapped = retryButtonTapped
+        
+        if items.isEmpty {
+            self.collectionView.isHidden = true
+            self.retryButton.isHidden = false
+        } else {
+            self.collectionView.isHidden = false
+            self.retryButton.isHidden = true
         }
         self.collectionView.reloadData()
     }
     
     @objc private func allButtonDidTap() {
         self.allButtonTapped?()
+    }
+    
+    @objc private func retryButtonDidTap() {
+        self.retryButtonTapped?()
     }
     
     // MARK: - UICollectionViewDelegate, UICollectionViewDataSource

@@ -16,7 +16,7 @@ class MWCollectionTableViewCell: UITableViewCell {
     
     // MARK: - gui variables
     
-    private(set) lazy var collectionView: MWCollectionViewWithHeader<Movieable,
+    private lazy var collectionView: MWCollectionViewWithHeader<Movieable,
         MWMovieCardCollectionViewCell> = {
             let view = MWCollectionViewWithHeader<Movieable, MWMovieCardCollectionViewCell>()
             view.titleLabel.font = .boldSystemFont(ofSize: 24)
@@ -41,5 +41,22 @@ class MWCollectionTableViewCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - functions
+    
+    func setup(section: MWSection, retryButtonTapped: (() -> Void)?) {
+        self.collectionView.setup(title: section.name,
+                                  items: section.movies,
+                                  itemSpacing: 8,
+                                  cellTapped: { (indexPath) in
+                                    let controller = MWMovieDetailsViewController()
+                                    controller.movie = section.movies[indexPath.row]
+                                    MWI.sh.push(controller)
+        }, allButtonTapped: {
+            let controller = MWMovieListViewController()
+            controller.section = section
+            MWI.sh.push(controller)
+        }, retryButtonTapped: retryButtonTapped)
     }
 }
