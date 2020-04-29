@@ -12,7 +12,7 @@ class MWRetryTableViewCell: UITableViewCell {
     
     //MARK: - variables
     
-    static let reuseID = "retryTableViewCell"
+    static let reuseID = "MWRetryTableViewCell"
     let buttonSize = CGSize(width: 150, height: 40)
     var retryTapped: (() -> Void)?
 

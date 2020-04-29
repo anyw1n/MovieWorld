@@ -11,12 +11,16 @@ import Kingfisher
 
 class MWMovie: Decodable {
     
+    //MARK: - enum
+    
     private enum CodingKeys: String, CodingKey {
         case title, id, genreIDs = "genre_ids", releaseDate = "release_date",
         posterPath = "poster_path"
     }
     
     //MARK: - variables
+    
+    //MARK: public stored
 
     var title: String?
     var id: Int?
@@ -24,13 +28,15 @@ class MWMovie: Decodable {
     var releaseDate: String?
     var posterPath: String?
     
+    //MARK: public computed
+    
     var releaseYear: String {
         return String(self.releaseDate?.split(separator: "-").first ?? "")
     }
     var genres: [String] {
         var genres: [String] = []
         self.genreIDs?.forEach {
-            genres.append(MWS.sh.getGenreBy(id: $0, in: .movie)?.name ?? "No genre".localized())
+            genres.append(MWS.sh.getGenreBy(id: $0)?.name ?? "No genre".localized())
         }
         if genres.isEmpty {
             genres.append("No genre".localized())

@@ -12,7 +12,8 @@ class MWTagCollectionViewCell: UICollectionViewCell {
     
     //MARK: - variables
     
-    static let reuseID = "tagCollectionViewCell"
+    static let reuseID = "MWTagCollectionViewCell"
+    
     override var isSelected: Bool {
         didSet {
             self.contentView.alpha = self.isSelected ? 1 : 0.5

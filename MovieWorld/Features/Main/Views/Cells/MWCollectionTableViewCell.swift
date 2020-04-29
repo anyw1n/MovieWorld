@@ -12,12 +12,12 @@ class MWCollectionTableViewCell: UITableViewCell {
     
     //MARK: - variables
     
-    static let reuseID = "collectionViewTableViewCell"
+    static let reuseID = "MWCollectionTableViewCell"
+    
+    var movies: [MWMovie]?
     
     private let itemSize = CGSize(width: 130, height: 237)
     private let sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 7)
-    
-    var movies: [MWMovie]?
     
     //MARK: - gui variables
     
@@ -76,20 +76,21 @@ class MWCollectionTableViewCell: UITableViewCell {
 //MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 
 extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.movies?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = self.collectionView
+        let cell = collectionView
             .dequeueReusableCell(withReuseIdentifier: MWMovieCardCollectionViewCell.reuseID,
                                  for: indexPath)
-            as? MWMovieCardCollectionViewCell ?? MWMovieCardCollectionViewCell()
+        guard let cardCell = cell as? MWMovieCardCollectionViewCell else { return cell }
         
         let movie = self.movies?[indexPath.row]
-        cell.titleLabel.text = movie?.title
-        cell.subtitleLabel.text = "\(movie?.releaseYear ?? ""), \(movie?.genres.first ?? "")"
-        movie?.showImage(size: .w154, in: cell.imageView)
+        cardCell.titleLabel.text = movie?.title
+        cardCell.subtitleLabel.text = "\(movie?.releaseYear ?? ""), \(movie?.genres.first ?? "")"
+        movie?.showImage(size: .w154, in: cardCell.imageView)
         return cell
     }
 

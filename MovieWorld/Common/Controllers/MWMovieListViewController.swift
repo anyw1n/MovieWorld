@@ -12,9 +12,9 @@ class MWMovieListViewController: MWViewController {
     
     //MARK: - variables
     
+    var section: MWSection?
     private let collectionViewInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     private let collectionViewHeight: CGFloat = 92
-    var section: MWSection?
     private var isRequestBusy: Bool = false
     
     //MARK: - gui variables
@@ -125,13 +125,12 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = self.collectionView
-            .dequeueReusableCell(withReuseIdentifier: MWTagCollectionViewCell.reuseID,
-                                 for: indexPath)
-            as? MWTagCollectionViewCell ?? MWTagCollectionViewCell()
+        let cell =
+            collectionView.dequeueReusableCell(withReuseIdentifier: MWTagCollectionViewCell.reuseID,
+                                               for: indexPath)
         guard let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return cell }
         
-        cell.button.setTitle(genre.name, for: .init())
+        (cell as? MWTagCollectionViewCell)?.button.setTitle(genre.name, for: .init())
         if self.section?.genreIds?.contains(genre.id) ?? false {
             cell.isSelected = true
         }
@@ -178,12 +177,12 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView
-            .dequeueReusableCell(withIdentifier: MWMovieCardTableViewCell.reuseID,
-                                 for: indexPath)
-            as? MWMovieCardTableViewCell ?? MWMovieCardTableViewCell()
+        let cell =
+            tableView.dequeueReusableCell(withIdentifier: MWMovieCardTableViewCell.reuseID,
+                                          for: indexPath)
         guard let movies = self.section?.movies else { return cell }
-        cell.setup(movies[indexPath.row])
+        
+        (cell as? MWMovieCardTableViewCell)?.setup(movies[indexPath.row])
 
         if indexPath.row == movies.count - 5 {
             self.loadMovies()

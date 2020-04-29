@@ -12,7 +12,8 @@ class MWTitleArrowCell: UITableViewCell {
     
     //MARK: - variables
     
-    static let reuseID = "titleArrowCell"
+    static let reuseID = "MWTitleArrowCell"
+    private let offset = 11
     
     //MARK: - gui variables
     
@@ -34,7 +35,7 @@ class MWTitleArrowCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.addSubview(self.titleLabel)
+        self.contentView.addSubview(self.titleLabel)
         self.accessoryView = self.arrowImageView
         self.selectionStyle = .none
         self.makeConstraints()
@@ -48,8 +49,10 @@ class MWTitleArrowCell: UITableViewCell {
     
     private func makeConstraints() {
         self.titleLabel.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(11)
-            make.left.right.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(self.offset)
+            make.left.equalToSuperview().offset(16)
+            make.right.lessThanOrEqualToSuperview()
+            make.bottom.equalToSuperview().offset(-self.offset)
         }
     }
 }

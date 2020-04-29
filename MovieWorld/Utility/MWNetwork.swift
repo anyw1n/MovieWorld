@@ -66,29 +66,19 @@ class MWNetwork {
                 } catch {
                     errorHandler(.parsingError(error))
                 }
-                break
             case .failure(let error):
                 if let code = error.responseCode {
                     switch code {
                     case 401:
                         errorHandler(.unauthError(apiKey: self.apiKey))
-                        break
                     case 404:
                         errorHandler(.incorrectUrl(url: url))
-                        break
                     default:
                         errorHandler(.serverError(statusCode: code))
-                        break
                     }
                 } else {
-                    if let underlyingError = error.underlyingError as NSError?,
-                        underlyingError.code == URLError.Code.notConnectedToInternet.rawValue {
-                        errorHandler(.networkError(error))
-                    } else {
-                        errorHandler(.unknown(error: error))
-                    }
+                    errorHandler(.unknown(error: error))
                 }
-                break
             }
         }
     }

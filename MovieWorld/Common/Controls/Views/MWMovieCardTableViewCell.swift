@@ -12,7 +12,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
     
     //MARK: - variables
     
-    static let reuseID = "movieCardTableViewCell"
+    static let reuseID = "MWMovieCardTableViewCell"
     private let imageInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 0)
     private let textInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16)
     private let textOffset = 16

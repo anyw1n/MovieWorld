@@ -75,10 +75,14 @@ class MWInitController: MWViewController {
     
     private func makeConstraints() {
         self.stackView.snp.makeConstraints { (make) in
+            make.top.greaterThanOrEqualToSuperview()
             make.left.right.equalToSuperview().inset(self.stackViewInsets)
             make.centerY.equalToSuperview()
         }
         self.spinner.snp.makeConstraints { (make) in
+            make.top.greaterThanOrEqualTo(self.stackView)
+            make.left.greaterThanOrEqualToSuperview()
+            make.right.lessThanOrEqualToSuperview()
             make.bottom.equalToSuperview().inset(self.spinnerInsets)
             make.centerX.equalToSuperview()
             make.size.equalTo(self.spinnerSize)
@@ -98,32 +102,37 @@ class MWInitController: MWViewController {
             url = URLPaths.tvGenres
         }
         
-        MWN.sh.request(url: url ?? "",
-                       successHandler: { [weak self] (response: [MWGenre]) in
-                        response.forEach { $0.category = category.rawValue }
-                        MWS.sh.genres[category] = response
-                        self?.dispatchGroup.leave()
-        }) { [weak self]  (error) in
-            error.printInConsole()
-            let predicate =
-                NSPredicate(format: "category = %@", category.rawValue)
-            MWS.sh.genres[category] =
-                CDM.sh.loadData(entityName: MWGenre.entityName, predicate: predicate)
-            self?.dispatchGroup.leave()
-        }
+        MWN.sh.request(
+            url: url ?? "",
+            successHandler: { [weak self] (response: [MWGenre]) in
+                response.forEach { $0.category = category.rawValue }
+                MWS.sh.genres[category] = response
+                self?.dispatchGroup.leave()
+            },
+            errorHandler: { [weak self]  (error) in
+                error.printInConsole()
+                let predicate =
+                    NSPredicate(format: "category = %@", category.rawValue)
+                MWS.sh.genres[category] =
+                    CDM.sh.loadData(entityName: MWGenre.entityName, predicate: predicate)
+                self?.dispatchGroup.leave()
+        })
     }
     
     private func loadConfiguration() {
         self.dispatchGroup.enter()
         
-        MWN.sh.request(url: URLPaths.configuration,
-                       successHandler: { [weak self] (response: MWConfiguration) in
-                        MWS.sh.configuration = response
-                        self?.dispatchGroup.leave()
-        }) { [weak self]  (error) in
-            error.printInConsole()
-            MWS.sh.configuration = CDM.sh.loadData(entityName: MWConfiguration.entityName)?.first
-            self?.dispatchGroup.leave()
-        }
+        MWN.sh.request(
+            url: URLPaths.configuration,
+            successHandler: { [weak self] (response: MWConfiguration) in
+                MWS.sh.configuration = response
+                self?.dispatchGroup.leave()
+            },
+            errorHandler: { [weak self]  (error) in
+                error.printInConsole()
+                MWS.sh.configuration =
+                    CDM.sh.loadData(entityName: MWConfiguration.entityName)?.first
+                self?.dispatchGroup.leave()
+        })
     }
 }

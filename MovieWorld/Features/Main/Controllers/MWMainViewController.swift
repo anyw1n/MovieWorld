@@ -47,6 +47,7 @@ class MWMainViewController: MWViewController {
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
         view.refreshControl = self.refreshControl
+        view.alpha = 0
         return view
     }()
     
@@ -64,10 +65,10 @@ class MWMainViewController: MWViewController {
         self.navigationItem.title = "Movie World"
 
         self.loadMovies()
-        
+        self.view.addSubview(self.tableView)
+        self.makeConstraints()
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
-            self.view.addSubview(self.tableView)
-            self.makeConstraints()
+            self.tableView.alpha = 1
         }
     }
     
@@ -99,33 +100,30 @@ class MWMainViewController: MWViewController {
     private func loadMovies(into section: MWSection? = nil) {
         self.dispatchGroup.enter()
         
-        if let section = section {
-            let index = self.sections.firstIndex { $0.name == section.name } ?? -1
-            MWN.sh.request(url: section.url,
-                           queryParameters: section.requestParameters,
-                           successHandler: { [weak self] (response: MWMovieRequestResult) in
-                            section.loadResults(from: response)
-                            self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
-                                                       with: .automatic)
-                            self?.dispatchGroup.leave()
-            }) { [weak self] error in
-                error.printInConsole()
-                self?.dispatchGroup.leave()
-            }
-        } else {
+        guard let section = section else {
             self.sections.forEach { self.loadMovies(into: $0) }
             self.dispatchGroup.leave()
+            return
+        }
+        
+        let index = self.sections.firstIndex { $0.name == section.name } ?? -1
+        MWN.sh.request(url: section.url,
+                       queryParameters: section.requestParameters,
+                       successHandler: { [weak self] (response: MWMovieRequestResult) in
+                        section.loadResults(from: response)
+                        self?.tableView.reloadRows(at: [IndexPath(row: 0, section: index)],
+                                                   with: .automatic)
+                        self?.dispatchGroup.leave()
+        }) { [weak self] error in
+            error.printInConsole()
+            self?.dispatchGroup.leave()
         }
     }
 }
 
-//MARK: - UITableViewDelegate, UITableViewDataSource
+//MARK: - UITableViewDelegate
 
-extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return self.sections.count
-    }
+extension MWMainViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return self.tableView.dequeueReusableHeaderFooterView(withIdentifier: MWTableViewHeader.reuseID)
@@ -152,32 +150,38 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
         return CGFloat.leastNonzeroMagnitude
     }
 
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 237
+    }
+}
+
+//MARK: - UITableViewDataSource
+
+extension MWMainViewController: UITableViewDataSource {
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return self.sections.count
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.sections[indexPath.section].movies.count != 0 {
-            let cell = self.tableView
+            let cell = tableView
                 .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseID,
                                      for: indexPath)
-                as? MWCollectionTableViewCell ?? MWCollectionTableViewCell()
-            cell.movies = self.sections[indexPath.section].movies
-            cell.collectionView.reloadData()
+            (cell as? MWCollectionTableViewCell)?.movies = self.sections[indexPath.section].movies
+            (cell as? MWCollectionTableViewCell)?.collectionView.reloadData()
             return cell
         } else {
-            let cell = self.tableView
-                .dequeueReusableCell(withIdentifier: MWRetryTableViewCell.reuseID,
-                                     for: indexPath)
-                as? MWRetryTableViewCell ?? MWRetryTableViewCell()
-            cell.retryTapped = { [weak self] in
+            let cell = tableView.dequeueReusableCell(withIdentifier: MWRetryTableViewCell.reuseID,
+                                                     for: indexPath)
+            (cell as? MWRetryTableViewCell)?.retryTapped = { [weak self] in
                 self?.loadMovies(into: self?.sections[indexPath.section])
             }
             return cell
         }
-    }
-    
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 237
     }
 }

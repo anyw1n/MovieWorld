@@ -12,7 +12,17 @@ class MWTagCollectionViewLayout: UICollectionViewLayout {
     
     //MARK: - variables
     
+    //MARK: public stored
+    
     weak var delegate: MWTagCollectionViewLayoutDelegate?
+    
+    //MARK: public computed
+    
+    override var collectionViewContentSize: CGSize {
+        return CGSize(width: self.contentWidth, height: self.contentHeight)
+    }
+
+    //MARK: private stored
     
     private let numberOfRows = 2
     private let ySpacing: CGFloat = 8
@@ -20,18 +30,16 @@ class MWTagCollectionViewLayout: UICollectionViewLayout {
     
     private var cache: [UICollectionViewLayoutAttributes] = []
     
+    private var contentWidth: CGFloat = 0
+    
+    //MARK: private computed
+    
     private var contentHeight: CGFloat {
         guard let collectionView = self.collectionView else {
             return 0
         }
         let insets = collectionView.contentInset
         return collectionView.bounds.height - (insets.top + insets.bottom)
-    }
-    
-    private var contentWidth: CGFloat = 0
-    
-    override var collectionViewContentSize: CGSize {
-        return CGSize(width: self.contentWidth, height: self.contentHeight)
     }
     
     //MARK: - functions

@@ -10,14 +10,20 @@ import Foundation
 
 class MWMovieRequestResult: Decodable {
     
+    //MARK: - enum
+    
     private enum CodingKeys: String, CodingKey {
         case page, results, totalResults = "total_results", totalPages = "total_pages"
     }
+    
+    //MARK: - variables
     
     let page: Int?
     let results: [MWMovie]?
     let totalResults: Int?
     let totalPages: Int?
+    
+    //MARK: - init
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

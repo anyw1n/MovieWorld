@@ -49,5 +49,4 @@ class MWMainTabBarController: UITabBarController {
         self.tabBar.tintColor = UIColor(named: "accentColor")
         self.tabBar.unselectedItemTintColor = UIColor(named: "textColor")
     }
-    
 }

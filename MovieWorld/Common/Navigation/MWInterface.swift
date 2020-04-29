@@ -24,17 +24,7 @@ class MWInterface {
     
     private init() {}
     
-    //MARK: - functions
-    
-    func setup(window: UIWindow?) {
-        
-        self.window = window
-
-        self.setupNavigationBarStyle()
-
-        window?.rootViewController = MWInitController()
-        window?.makeKeyAndVisible()
-    }
+    //MARK: - utility
     
     func push(_ vc: UIViewController) {
         (self.tabBarController.selectedViewController as? UINavigationController)?
@@ -44,6 +34,18 @@ class MWInterface {
     func pop() {
         (self.tabBarController.selectedViewController as? UINavigationController)?
             .popViewController(animated: true)
+    }
+    
+    //MARK: - setters
+    
+    func setup(window: UIWindow?) {
+        
+        self.window = window
+
+        self.setupNavigationBarStyle()
+
+        window?.rootViewController = MWInitController()
+        window?.makeKeyAndVisible()
     }
     
     private func setupNavigationBarStyle() {
@@ -61,5 +63,4 @@ class MWInterface {
             standartNavBar.scrollEdgeAppearance = newNavBar
         }
     }
-    
 }

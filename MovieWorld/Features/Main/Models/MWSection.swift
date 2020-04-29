@@ -12,6 +12,8 @@ class MWSection: NSCopying {
     
     // MARK: - variables
     
+    // MARK: public stored
+    
     let name: String
     let url: String
     var genreIds: Set<Int64>?
@@ -19,6 +21,9 @@ class MWSection: NSCopying {
     var pagesLoaded: Int = 0
     var totalPages: Int = -1
     var totalResults: Int = -1
+    
+    // MARK: public computed
+    
     var requestParameters: [String: Any] {
         get {
             var parameters = self._requestParameters
@@ -29,6 +34,9 @@ class MWSection: NSCopying {
             self._requestParameters = newValue
         }
     }
+    
+    // MARK: private stored
+    
     private var _requestParameters: [String: Any]
     
     // MARK: - init
