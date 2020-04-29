@@ -31,17 +31,13 @@ class MWMovieDetailsViewController: MWViewController {
     
     private let descriptionView: MWDescriptionView = MWDescriptionView(additionalInfoEnabled: true)
     
-    private let castView: MWCollectionViewWithHeader<MWActor, MWActorCollectionViewCell> = {
+    private lazy var castView: MWCollectionViewWithHeader<MWActor, MWActorCollectionViewCell> = {
         let view = MWCollectionViewWithHeader<MWActor, MWActorCollectionViewCell>()
         view.sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 26)
         return view
     }()
     
-    private lazy var galleryView: MWGalleryView = {
-        let view = MWGalleryView()
-        view.viewForFullscreen = self.view
-        return view
-    }()
+    private lazy var galleryView: MWGalleryView = MWGalleryView(in: self)
 
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()

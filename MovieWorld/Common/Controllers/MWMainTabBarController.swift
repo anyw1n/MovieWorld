@@ -10,6 +10,10 @@ import UIKit
 
 class MWMainTabBarController: UITabBarController {
 
+    // MARK: - variables
+    
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .portrait }
+    
     // MARK: - gui variables
     
     private let mainController: MWMainViewController = {

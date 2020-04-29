@@ -139,6 +139,7 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         if allButtonTapped == nil {
             self.allButton.isHidden = true
         } else {
+            self.allButton.isHidden = false
             self.allButtonTapped = allButtonTapped
         }
         self.retryButtonTapped = retryButtonTapped

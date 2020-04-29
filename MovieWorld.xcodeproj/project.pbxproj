@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		30F557066B050037D21B3C92 /* Pods_MovieWorld.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 59C6FC7A90A130B102354A99 /* Pods_MovieWorld.framework */; };
+		500253252458339800AABD78 /* MWFullscreenImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500253242458339800AABD78 /* MWFullscreenImageViewController.swift */; };
 		5009CAF623F97AA4003758C8 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5009CAF523F97AA4003758C8 /* Colors.xcassets */; };
 		500E1194241A5EDC0098A18E /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 500E1192241A5EDC0098A18E /* CoreDataModel.xcdatamodeld */; };
 		500E1196241A5F340098A18E /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500E1195241A5F340098A18E /* CoreDataManager.swift */; };
@@ -36,6 +37,7 @@
 		501EF770243C6B040084E81C /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 501EF772243C6B040084E81C /* Localizable.stringsdict */; };
 		501EF775243C70810084E81C /* MWMovieVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501EF774243C70810084E81C /* MWMovieVideo.swift */; };
 		501F1AD92430E5DB00D34E5E /* MWTagCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501F1AD82430E5DB00D34E5E /* MWTagCollectionViewLayout.swift */; };
+		5020D7B124596CC7007453D8 /* UIActivityIndicatorView+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5020D7B024596CC7007453D8 /* UIActivityIndicatorView+Ex.swift */; };
 		50213C4A2414058D007C7D15 /* MWInitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50213C492414058D007C7D15 /* MWInitController.swift */; };
 		5021CF442450A96F005D81AC /* MWActorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5021CF432450A96F005D81AC /* MWActorTableViewCell.swift */; };
 		5021CF462450AFA0005D81AC /* MWCredits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5021CF452450AFA0005D81AC /* MWCredits.swift */; };
@@ -87,6 +89,7 @@
 /* Begin PBXFileReference section */
 		36A3E57DB34D6042BDC136E4 /* Pods-MovieWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.release.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.release.xcconfig"; sourceTree = "<group>"; };
 		3BCBB235D6CABA58FB477A8D /* Pods-MovieWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MovieWorld.debug.xcconfig"; path = "Target Support Files/Pods-MovieWorld/Pods-MovieWorld.debug.xcconfig"; sourceTree = "<group>"; };
+		500253242458339800AABD78 /* MWFullscreenImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWFullscreenImageViewController.swift; sourceTree = "<group>"; };
 		5009CAF523F97AA4003758C8 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		500E1193241A5EDC0098A18E /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		500E1195241A5F340098A18E /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
@@ -117,6 +120,7 @@
 		501EF773243C6B060084E81C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		501EF774243C70810084E81C /* MWMovieVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieVideo.swift; sourceTree = "<group>"; };
 		501F1AD82430E5DB00D34E5E /* MWTagCollectionViewLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWTagCollectionViewLayout.swift; sourceTree = "<group>"; };
+		5020D7B024596CC7007453D8 /* UIActivityIndicatorView+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityIndicatorView+Ex.swift"; sourceTree = "<group>"; };
 		50213C492414058D007C7D15 /* MWInitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWInitController.swift; sourceTree = "<group>"; };
 		5021CF432450A96F005D81AC /* MWActorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWActorTableViewCell.swift; sourceTree = "<group>"; };
 		5021CF452450AFA0005D81AC /* MWCredits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCredits.swift; sourceTree = "<group>"; };
@@ -272,6 +276,7 @@
 				5021D6562438875A00E816AA /* MWMovieDetailsViewController.swift */,
 				501BE5282450997900423879 /* MWCastViewController.swift */,
 				5019523824519E8A00A35EAC /* MWActorDetailsViewController.swift */,
+				500253242458339800AABD78 /* MWFullscreenImageViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -290,6 +295,7 @@
 			isa = PBXGroup;
 			children = (
 				5019069E240BB039008D1009 /* String+Ex.swift */,
+				5020D7B024596CC7007453D8 /* UIActivityIndicatorView+Ex.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -668,11 +674,13 @@
 				500E1194241A5EDC0098A18E /* CoreDataModel.xcdatamodeld in Sources */,
 				5022950B2442F794009D7E70 /* YoutubeDataVideoList.swift in Sources */,
 				50E10E722401684100F774F9 /* MWMainTabBarController.swift in Sources */,
+				500253252458339800AABD78 /* MWFullscreenImageViewController.swift in Sources */,
 				502295112442F7F0009D7E70 /* YoutubeDataVideoWithSnippet.swift in Sources */,
 				507F690F240B892E00564DEC /* MWCollectionTableViewCell.swift in Sources */,
 				50E10E70240165BA00F774F9 /* MWInterface.swift in Sources */,
 				5021CF482450B60D005D81AC /* MWTitleTableViewHeader.swift in Sources */,
 				501E215D242FAAEB00A3F290 /* MWMovieRequestResult.swift in Sources */,
+				5020D7B124596CC7007453D8 /* UIActivityIndicatorView+Ex.swift in Sources */,
 				502295152442FB2D009D7E70 /* YoutubeDataVideoWithContentDetails.swift in Sources */,
 				501EF775243C70810084E81C /* MWMovieVideo.swift in Sources */,
 				50E10E762401689A00F774F9 /* MWCategoryViewController.swift in Sources */,
