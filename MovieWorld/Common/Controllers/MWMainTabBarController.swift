@@ -10,8 +10,8 @@ import UIKit
 
 class MWMainTabBarController: UITabBarController {
 
-    //MARK: - gui variables
-    
+    // MARK: - gui variables
+
     private let mainController: MWMainViewController = {
         let controller = MWMainViewController()
         controller.tabBarItem = UITabBarItem(title: "Main".localized(),
@@ -19,7 +19,7 @@ class MWMainTabBarController: UITabBarController {
                                              selectedImage: UIImage(named: "mainTabBarIcon"))
         return controller
     }()
-    
+
     private let categoryController: MWCategoryViewController = {
         let controller = MWCategoryViewController()
         controller.tabBarItem = UITabBarItem(title: "Category".localized(),
@@ -27,7 +27,7 @@ class MWMainTabBarController: UITabBarController {
                                              selectedImage: UIImage(named: "categoryTabBarIcon"))
         return controller
     }()
-    
+
     private let searchController: MWSearchViewController = {
         let controller = MWSearchViewController()
         controller.tabBarItem = UITabBarItem(title: "Search".localized(),
@@ -35,9 +35,9 @@ class MWMainTabBarController: UITabBarController {
                                              selectedImage: UIImage(named: "searchTabBarIcon"))
         return controller
     }()
-    
-    //MARK: - init
-    
+
+    // MARK: - init
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -45,7 +45,7 @@ class MWMainTabBarController: UITabBarController {
                                                self.categoryController,
                                                self.searchController]
         self.viewControllers = controllers.map { UINavigationController(rootViewController: $0) }
-        
+
         self.tabBar.tintColor = UIColor(named: "accentColor")
         self.tabBar.unselectedItemTintColor = UIColor(named: "textColor")
     }

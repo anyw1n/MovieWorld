@@ -9,15 +9,15 @@
 import Foundation
 
 extension String {
-    
+
     func localized() -> String {
         return NSLocalizedString(self, comment: "")
     }
-    
+
     func localized(args: CVarArg...) -> String {
         return String(format: self.localized(), args)
     }
-    
+
     func capitalizedFirstLetter() -> String {
         return self.prefix(1).uppercased() + self.dropFirst()
     }

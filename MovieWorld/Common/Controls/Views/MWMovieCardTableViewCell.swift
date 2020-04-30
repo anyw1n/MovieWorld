@@ -9,24 +9,24 @@
 import UIKit
 
 class MWMovieCardTableViewCell: UITableViewCell {
-    
-    //MARK: - variables
-    
+
+    // MARK: - variables
+
     static let reuseID = "MWMovieCardTableViewCell"
     private let imageInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 0)
     private let textInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16)
     private let textOffset = 16
     private let imageSize = CGSize(width: 70, height: 100)
-    
-    //MARK: - gui variables
-    
+
+    // MARK: - gui variables
+
     private(set) lazy var posterImageView: UIImageView = {
         let view = UIImageView()
         view.layer.cornerRadius = 5
         view.clipsToBounds = true
         return view
     }()
-    
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 17)
@@ -34,14 +34,14 @@ class MWMovieCardTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor(named: "textColor")
         return label
     }()
-    
+
     private lazy var genreLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
@@ -50,7 +50,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
         label.textColor = UIColor(named: "textColor")
         return label
     }()
-    
+
     private lazy var ratingLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
@@ -58,22 +58,22 @@ class MWMovieCardTableViewCell: UITableViewCell {
         return label
     }()
 
-    //MARK: - init
-    
+    // MARK: - init
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         self.backgroundColor = .white
         self.selectionStyle = .none
         self.addSubviews()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    //MARK: - constraints
-    
+
+    // MARK: - constraints
+
     override func updateConstraints() {
         self.posterImageView.snp.updateConstraints { (make) in
             make.top.left.equalToSuperview().inset(self.imageInsets)
@@ -103,9 +103,9 @@ class MWMovieCardTableViewCell: UITableViewCell {
         }
         super.updateConstraints()
     }
-    
-    //MARK: - functions
-    
+
+    // MARK: - functions
+
     private func addSubviews() {
         self.contentView.addSubview(self.posterImageView)
         self.contentView.addSubview(self.titleLabel)
@@ -113,7 +113,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.genreLabel)
         self.contentView.addSubview(self.ratingLabel)
     }
-    
+
     func setup(_ movie: MWMovie) {
         movie.showImage(size: .w92, in: self.posterImageView)
         self.titleLabel.text = movie.title

@@ -10,7 +10,6 @@
 import Foundation
 import CoreData
 
-
 extension MWGenre {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<MWGenre> {
@@ -20,5 +19,4 @@ extension MWGenre {
     @NSManaged public var id: Int64
     @NSManaged public var name: String?
     @NSManaged public var category: String?
-
 }

@@ -10,7 +10,6 @@
 import Foundation
 import CoreData
 
-
 extension MWConfiguration {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<MWConfiguration> {
@@ -20,5 +19,4 @@ extension MWConfiguration {
     @NSManaged public var baseURL: String?
     @NSManaged public var secureBaseURL: String?
     @NSManaged public var id: Int64
-
 }

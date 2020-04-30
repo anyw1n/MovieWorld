@@ -9,15 +9,15 @@
 import UIKit
 
 class MWMainViewController: MWViewController {
-    
-    //MARK: - variables
-    
+
+    // MARK: - variables
+
     private let dispatchGroup = DispatchGroup()
     private lazy var sections: [MWSection] = {
         let currentDate = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        
+
         return [MWSection(name: "Popular".localized(), url: URLPaths.popularMovies),
                 MWSection(name: "New".localized(),
                           url: URLPaths.discoverMovies,
@@ -30,9 +30,9 @@ class MWMainViewController: MWViewController {
                           genreIds: [16]),
                 MWSection(name: "Upcoming".localized(), url: URLPaths.upcomingMovies)]
     }()
-    
-    //MARK: - gui variables
-    
+
+    // MARK: - gui variables
+
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: CGRect(), style: .grouped)
         view.delegate = self
@@ -50,16 +50,16 @@ class MWMainViewController: MWViewController {
         view.alpha = 0
         return view
     }()
-    
+
     private lazy var refreshControl: UIRefreshControl = {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(self.refreshTableView), for: .valueChanged)
         refresh.tintColor = UIColor(named: "accentColor")
         return refresh
     }()
-    
-    //MARK: - init
-    
+
+    // MARK: - init
+
     override func initController() {
         super.initController()
         self.navigationItem.title = "Movie World"
@@ -71,16 +71,16 @@ class MWMainViewController: MWViewController {
             self.tableView.alpha = 1
         }
     }
-    
-    //MARK: - constraints
-    
+
+    // MARK: - constraints
+
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
     }
-    
-    //MARK: - functions
+
+    // MARK: - functions
 
     @objc private func refreshTableView() {
         self.tableView.isHidden = true
@@ -90,22 +90,22 @@ class MWMainViewController: MWViewController {
         }
         self.refreshControl.endRefreshing()
     }
-    
+
     @objc private func allButtonTapped(sender: UIButton) {
         let controller = MWMovieListViewController()
         controller.section = self.sections[sender.tag].copy() as? MWSection
         MWI.sh.push(controller)
     }
-    
+
     private func loadMovies(into section: MWSection? = nil) {
         self.dispatchGroup.enter()
-        
+
         guard let section = section else {
             self.sections.forEach { self.loadMovies(into: $0) }
             self.dispatchGroup.leave()
             return
         }
-        
+
         let index = self.sections.firstIndex { $0.name == section.name } ?? -1
         MWN.sh.request(url: section.url,
                        queryParameters: section.requestParameters,
@@ -121,18 +121,18 @@ class MWMainViewController: MWViewController {
     }
 }
 
-//MARK: - UITableViewDelegate
+// MARK: - UITableViewDelegate
 
 extension MWMainViewController: UITableViewDelegate {
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return tableView.dequeueReusableHeaderFooterView(withIdentifier: MWTableViewHeader.reuseID)
     }
-    
+
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView()
     }
-    
+
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         guard let view = view as? MWTableViewHeader else { return }
         view.titleLabel.text = self.sections[section].name
@@ -141,7 +141,7 @@ extension MWMainViewController: UITableViewDelegate {
                                    for: .touchUpInside)
         view.rightButton.tag = section
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 68
     }
@@ -155,18 +155,18 @@ extension MWMainViewController: UITableViewDelegate {
     }
 }
 
-//MARK: - UITableViewDataSource
+// MARK: - UITableViewDataSource
 
 extension MWMainViewController: UITableViewDataSource {
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.sections.count
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.sections[indexPath.section].movies.count != 0 {
             let cell =

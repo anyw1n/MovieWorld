@@ -9,18 +9,18 @@
 import UIKit
 
 class MWCollectionTableViewCell: UITableViewCell {
-    
-    //MARK: - variables
-    
+
+    // MARK: - variables
+
     static let reuseID = "MWCollectionTableViewCell"
-    
+
     var movies: [MWMovie]?
-    
+
     private let itemSize = CGSize(width: 130, height: 237)
     private let sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 7)
-    
-    //MARK: - gui variables
-    
+
+    // MARK: - gui variables
+
     private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = self.itemSize
@@ -29,7 +29,7 @@ class MWCollectionTableViewCell: UITableViewCell {
         layout.sectionInset = self.sectionInsets
         return layout
     }()
-    
+
     private(set) lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: CGRect(),
                                     collectionViewLayout: self.collectionViewFlowLayout)
@@ -42,23 +42,23 @@ class MWCollectionTableViewCell: UITableViewCell {
         view.backgroundColor = .white
         return view
     }()
-    
-    //MARK: - init
-    
+
+    // MARK: - init
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         self.backgroundColor = .white
         self.selectionStyle = .none
         self.contentView.addSubview(self.collectionView)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    //MARK: - constraints
-    
+
+    // MARK: - constraints
+
     override func updateConstraints() {
         self.collectionView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -67,20 +67,21 @@ class MWCollectionTableViewCell: UITableViewCell {
     }
 }
 
-//MARK: - UICollectionViewDelegate, UICollectionViewDataSource
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 
 extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewDataSource {
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.movies?.count ?? 0
     }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView
             .dequeueReusableCell(withReuseIdentifier: MWMovieCardCollectionViewCell.reuseID,
                                  for: indexPath)
         guard let cardCell = cell as? MWMovieCardCollectionViewCell else { return cell }
-        
+
         let movie = self.movies?[indexPath.row]
         cardCell.titleLabel.text = movie?.title
         cardCell.subtitleLabel.text = "\(movie?.releaseYear ?? ""), \(movie?.genres.first ?? "")"
@@ -89,7 +90,9 @@ extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewD
         return cardCell
     }
 
-    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+    func collectionView(_ collectionView: UICollectionView,
+                        didEndDisplaying cell: UICollectionViewCell,
+                        forItemAt indexPath: IndexPath) {
         (cell as? MWMovieCardCollectionViewCell)?.imageView.kf.cancelDownloadTask()
     }
 }

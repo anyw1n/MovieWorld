@@ -9,31 +9,31 @@
 import UIKit
 
 class MWTagCollectionViewLayout: UICollectionViewLayout {
-    
-    //MARK: - variables
-    
-    //MARK: public stored
-    
+
+    // MARK: - variables
+
+    // MARK: public stored
+
     weak var delegate: MWTagCollectionViewLayoutDelegate?
-    
-    //MARK: public computed
-    
+
+    // MARK: public computed
+
     override var collectionViewContentSize: CGSize {
         return CGSize(width: self.contentWidth, height: self.contentHeight)
     }
 
-    //MARK: private stored
-    
+    // MARK: private stored
+
     private let numberOfRows = 2
     private let ySpacing: CGFloat = 8
     private let xSpacing: CGFloat = 10
-    
+
     private var cache: [UICollectionViewLayoutAttributes] = []
-    
+
     private var contentWidth: CGFloat = 0
-    
-    //MARK: private computed
-    
+
+    // MARK: private computed
+
     private var contentHeight: CGFloat {
         guard let collectionView = self.collectionView else {
             return 0
@@ -41,12 +41,12 @@ class MWTagCollectionViewLayout: UICollectionViewLayout {
         let insets = collectionView.contentInset
         return collectionView.bounds.height - (insets.top + insets.bottom)
     }
-    
-    //MARK: - functions
-    
+
+    // MARK: - functions
+
     override func prepare() {
         guard cache.isEmpty, let collectionView = self.collectionView else { return }
-        
+
         let rowHeight = (self.contentHeight - self.ySpacing) / CGFloat(self.numberOfRows)
         var yOffset: [CGFloat] = []
         for row in 0..<self.numberOfRows {
@@ -54,32 +54,32 @@ class MWTagCollectionViewLayout: UICollectionViewLayout {
         }
         var row = 0
         var xOffset: [CGFloat] = .init(repeating: 0, count: self.numberOfRows)
-        
+
         let numberOfItems = collectionView.numberOfItems(inSection: 0)
         for item in 0..<numberOfItems {
             let indexPath = IndexPath(item: item, section: 0)
-            
+
             let tagWidth = self.delegate?.collectionView(collectionView,
                                                          widthForTagAtIndexPath: indexPath) ?? 100
             let frame = CGRect(x: xOffset[row],
                                y: yOffset[row],
                                width: tagWidth,
                                height: rowHeight)
-            
+
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
             attributes.frame = frame
             self.cache.append(attributes)
-            
+
             self.contentWidth = max(self.contentWidth, frame.maxX)
             xOffset[row] += tagWidth + (item != numberOfItems - 1 ? self.xSpacing : 0)
-            
+
             row = row < (self.numberOfRows - 1) ? (row + 1) : 0
         }
     }
-    
+
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         var visibleLayoutAttributes: [UICollectionViewLayoutAttributes] = []
-        
+
         for attributes in self.cache {
             if attributes.frame.intersects(rect) {
                 visibleLayoutAttributes.append(attributes)
@@ -87,13 +87,13 @@ class MWTagCollectionViewLayout: UICollectionViewLayout {
         }
         return visibleLayoutAttributes
     }
-    
+
     override func layoutAttributesForItem(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         return self.cache[indexPath.item]
     }
 }
 
-//MARK: - MWTagCollectionViewLayoutDelegate
+// MARK: - MWTagCollectionViewLayoutDelegate
 
 protocol MWTagCollectionViewLayoutDelegate: AnyObject {
     func collectionView(_ collectionView: UICollectionView,

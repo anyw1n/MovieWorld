@@ -9,22 +9,22 @@
 import UIKit
 
 class MWMovieListViewController: MWViewController {
-    
-    //MARK: - variables
-    
+
+    // MARK: - variables
+
     var section: MWSection?
     private let collectionViewInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     private let collectionViewHeight: CGFloat = 92
     private var isRequestBusy: Bool = false
-    
-    //MARK: - gui variables
-    
+
+    // MARK: - gui variables
+
     private lazy var tagCollectionViewLayout: MWTagCollectionViewLayout = {
         let layout = MWTagCollectionViewLayout()
         layout.delegate = self
         return layout
     }()
-    
+
     private lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: CGRect(),
                                     collectionViewLayout: self.tagCollectionViewLayout)
@@ -39,7 +39,7 @@ class MWMovieListViewController: MWViewController {
         view.contentInset = self.collectionViewInsets
         return view
     }()
-    
+
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: CGRect(), style: .grouped)
         view.delegate = self
@@ -52,43 +52,43 @@ class MWMovieListViewController: MWViewController {
         view.refreshControl = self.refreshControl
         return view
     }()
-    
+
     private lazy var refreshControl: UIRefreshControl = {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(self.refreshTableView), for: .valueChanged)
         refresh.tintColor = UIColor(named: "accentColor")
         return refresh
     }()
-    
-    //MARK: - init
-    
+
+    // MARK: - init
+
     override func initController() {
         super.initController()
-        
+
         self.navigationItem.title = section?.name
         self.view.addSubview(self.tableView)
         self.makeConstraints()
-        
+
         if self.section?.pagesLoaded == 0 {
             self.loadMovies()
         }
     }
-    
-    //MARK: - constraints
-    
+
+    // MARK: - constraints
+
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
     }
-    
-    //MARK: - functions
-    
+
+    // MARK: - functions
+
     private func loadMovies() {
         guard !self.isRequestBusy,
             self.section?.pagesLoaded != self.section?.totalPages else { return }
         self.isRequestBusy = true
-        
+
         self.requestMovies(page: (self.section?.pagesLoaded ?? 0) + 1) { [weak self] (response) in
             guard let self = self else { return }
             self.isRequestBusy = false
@@ -96,7 +96,7 @@ class MWMovieListViewController: MWViewController {
             self.tableView.reloadData()
         }
     }
-    
+
     private func requestMovies(page: Int, completion: @escaping (MWMovieRequestResult) -> Void) {
         guard let section = self.section else { return }
         section.requestParameters["page"] = page
@@ -108,7 +108,7 @@ class MWMovieListViewController: MWViewController {
             error.printInConsole()
         }
     }
-    
+
     @objc private func refreshTableView() {
         self.section?.clearResults()
         self.tableView.reloadData()
@@ -117,26 +117,28 @@ class MWMovieListViewController: MWViewController {
     }
 }
 
-//MARK: - UICollectionViewDelegate, UICollectionViewDataSource
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 
 extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return MWS.sh.genres[.movie]?.count ?? 0
     }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell =
             collectionView.dequeueReusableCell(withReuseIdentifier: MWTagCollectionViewCell.reuseID,
                                                for: indexPath)
         guard let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return cell }
-        
+
         (cell as? MWTagCollectionViewCell)?.button.setTitle(genre.name, for: .init())
         if self.section?.genreIds?.contains(genre.id) ?? false {
             cell.isSelected = true
         }
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let section = self.section,
             let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return }
@@ -147,7 +149,7 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
         }
         self.refreshTableView()
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return }
         self.section?.genreIds?.remove(genre.id)
@@ -155,10 +157,10 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
     }
 }
 
-//MARK: - MWTagCollectionViewLayoutDelegate
+// MARK: - MWTagCollectionViewLayoutDelegate
 
 extension MWMovieListViewController: MWTagCollectionViewLayoutDelegate {
-    
+
     func collectionView(_ collectionView: UICollectionView, widthForTagAtIndexPath indexPath: IndexPath) -> CGFloat {
         let genreName = MWS.sh.genres[.movie]?[indexPath.row].name as NSString? ?? ""
         let genreNameWidth =
@@ -168,20 +170,20 @@ extension MWMovieListViewController: MWTagCollectionViewLayoutDelegate {
     }
 }
 
-//MARK: - UITableViewDelegate, UITableViewDataSource
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource {
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.section?.movies.count ?? 0
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell =
             tableView.dequeueReusableCell(withIdentifier: MWMovieCardTableViewCell.reuseID,
                                           for: indexPath)
         guard let movies = self.section?.movies else { return cell }
-        
+
         (cell as? MWMovieCardTableViewCell)?.setup(movies[indexPath.row])
 
         if indexPath.row == movies.count - 5 {
@@ -189,11 +191,11 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
         }
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         (cell as? MWMovieCardTableViewCell)?.posterImageView.kf.cancelDownloadTask()
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return self.collectionView
     }

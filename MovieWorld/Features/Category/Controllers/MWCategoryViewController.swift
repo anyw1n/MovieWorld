@@ -9,13 +9,13 @@
 import UIKit
 
 class MWCategoryViewController: MWViewController {
-    
-    //MARK: - variables
-    
+
+    // MARK: - variables
+
     var categories: [String] = Array(repeating: "Top 250", count: 25)
-    
-    //MARK: - gui variables
-    
+
+    // MARK: - gui variables
+
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: CGRect.zero, style: .grouped)
         view.delegate = self
@@ -26,19 +26,19 @@ class MWCategoryViewController: MWViewController {
         view.showsVerticalScrollIndicator = false
         return view
     }()
-    
-    //MARK: - init
+
+    // MARK: - init
 
     override func initController() {
         super.initController()
         self.navigationItem.title = "Category".localized()
-        
+
         self.view.addSubview(self.tableView)
         self.makeConstraints()
     }
-    
-    //MARK: - constraints
-    
+
+    // MARK: - constraints
+
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -46,36 +46,36 @@ class MWCategoryViewController: MWViewController {
     }
 }
 
-//MARK: - UITableViewDelegate, UITableViewDataSource
+// MARK: - UITableViewDelegate, UITableViewDataSource
 
 extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return self.categories.count
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = UIView()
         header.backgroundColor = .white
         return header
     }
-    
+
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView()
     }
-    
+
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return CGFloat.leastNonzeroMagnitude
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 16
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MWTitleArrowCell.reuseID,
                                                  for: indexPath)

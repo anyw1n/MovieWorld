@@ -9,12 +9,12 @@
 import UIKit
 
 class MWSearchViewController: MWViewController {
-    
-    //MARK: - init
-    
+
+    // MARK: - init
+
     override func initController() {
         super.initController()
-        
+
         self.navigationItem.title = "Search".localized()
     }
 }

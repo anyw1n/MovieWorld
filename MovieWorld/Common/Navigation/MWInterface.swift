@@ -11,35 +11,35 @@ import UIKit
 typealias MWI = MWInterface
 
 class MWInterface {
-    
-    //MARK: - variables
-    
+
+    // MARK: - variables
+
     static let sh = MWInterface()
-    
+
     let tabBarController = MWMainTabBarController()
 
     weak var window: UIWindow?
-    
-    //MARK: - init
-    
+
+    // MARK: - init
+
     private init() {}
-    
-    //MARK: - utility
-    
+
+    // MARK: - utility
+
     func push(_ vc: UIViewController) {
         (self.tabBarController.selectedViewController as? UINavigationController)?
             .pushViewController(vc, animated: true)
     }
-    
+
     func pop() {
         (self.tabBarController.selectedViewController as? UINavigationController)?
             .popViewController(animated: true)
     }
-    
-    //MARK: - setters
-    
+
+    // MARK: - setters
+
     func setup(window: UIWindow?) {
-        
+
         self.window = window
 
         self.setupNavigationBarStyle()
@@ -47,14 +47,14 @@ class MWInterface {
         window?.rootViewController = MWInitController()
         window?.makeKeyAndVisible()
     }
-    
+
     private func setupNavigationBarStyle() {
         let standartNavBar = UINavigationBar.appearance()
         standartNavBar.tintColor = UIColor(named: "accentColor")
         standartNavBar.prefersLargeTitles = true
         standartNavBar.largeTitleTextAttributes =
             [.foregroundColor: UIColor(named: "textColor") ?? UIColor.black]
-        
+
         if #available(iOS 13.0, *) {
             let newNavBar = UINavigationBarAppearance()
             newNavBar.configureWithDefaultBackground()

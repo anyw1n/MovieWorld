@@ -10,26 +10,26 @@ import UIKit
 import Kingfisher
 
 class MWMovie: Decodable {
-    
-    //MARK: - enum
-    
+
+    // MARK: - enum
+
     private enum CodingKeys: String, CodingKey {
         case title, id, genreIDs = "genre_ids", releaseDate = "release_date",
         posterPath = "poster_path"
     }
-    
-    //MARK: - variables
-    
-    //MARK: public stored
+
+    // MARK: - variables
+
+    // MARK: public stored
 
     var title: String?
     var id: Int?
     var genreIDs: [Int]?
     var releaseDate: String?
     var posterPath: String?
-    
-    //MARK: public computed
-    
+
+    // MARK: public computed
+
     var releaseYear: String {
         return String(self.releaseDate?.split(separator: "-").first ?? "")
     }
@@ -43,9 +43,9 @@ class MWMovie: Decodable {
         }
         return genres
     }
-    
-    //MARK: - init
-    
+
+    // MARK: - init
+
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.title = (try? container.decode(String.self, forKey: .title))
@@ -54,16 +54,16 @@ class MWMovie: Decodable {
         self.genreIDs = (try? container.decode([Int].self, forKey: .genreIDs))
         self.posterPath = (try? container.decode(String.self, forKey: .posterPath))
     }
-    
-    //MARK: - functions
-    
+
+    // MARK: - functions
+
     func showImage(size: Sizes, in imageView: UIImageView) {
         guard let posterPath = self.posterPath,
             let baseURL = MWS.sh.configuration?.secureBaseURL else {
                 imageView.image = UIImage(named: "noImage")
                 return
         }
-        
+
         let url = URL(string: baseURL + size.rawValue + posterPath)
         var options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
                                               .transition(.fade(1)),
@@ -72,7 +72,7 @@ class MWMovie: Decodable {
             let processor = DownsamplingImageProcessor(size: imageView.bounds.size)
             options.append(.processor(processor))
         }
-        
+
         imageView.kf.indicatorType = .activity
         imageView.kf.setImage(with: url,
                               options: options)

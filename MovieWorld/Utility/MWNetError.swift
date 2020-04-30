@@ -9,13 +9,14 @@
 import Foundation
 
 enum MWNetError {
+
     case incorrectUrl(url: String)
     case networkError(_ error: Error)
     case serverError(statusCode: Int)
     case parsingError(_ error: Error)
     case unauthError(apiKey: String)
     case unknown(error: Error)
-    
+
     func printInConsole() {
         switch self {
         case .incorrectUrl(let url):
