@@ -12,7 +12,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
 
     // MARK: - variables
 
-    static let reuseId = "movieCardTableViewCell"
+    static let reuseId = "MWMovieCardTableViewCell"
 
     // MARK: - gui variables
 
@@ -26,7 +26,6 @@ class MWMovieCardTableViewCell: UITableViewCell {
         self.backgroundColor = .white
         self.selectionStyle = .none
         self.contentView.addSubview(self.layout)
-        self.makeConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -36,14 +35,10 @@ class MWMovieCardTableViewCell: UITableViewCell {
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.makeConstraints()
-        super.updateConstraints()
-    }
-
-    private func makeConstraints() {
         self.layout.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        self.layout.makeInternalConstraints()
+        self.layout.makeConstraints()
+        super.updateConstraints()
     }
 }

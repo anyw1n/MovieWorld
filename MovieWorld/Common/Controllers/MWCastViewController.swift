@@ -118,16 +118,17 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
         case 0:
             let cell = tableView
                 .dequeueReusableCell(withIdentifier: MWActorTableViewCell.reuseId, for: indexPath)
-                as? MWActorTableViewCell ?? MWActorTableViewCell()
 
-            cell.setup(actor: credits.cast[indexPath.row])
+            (cell as? MWActorTableViewCell)?.setup(actor: credits.cast[indexPath.row])
+            cell.setNeedsUpdateConstraints()
             return cell
         default:
             let cell = tableView
                 .dequeueReusableCell(withIdentifier: MWCreatorTableViewCell.reuseId, for: indexPath)
-            as? MWCreatorTableViewCell ?? MWCreatorTableViewCell()
 
-            cell.setup(creator: self.creators[indexPath.section - 1].creators[indexPath.row])
+            (cell as? MWCreatorTableViewCell)?.setup(
+                creator: self.creators[indexPath.section - 1].creators[indexPath.row])
+            cell.setNeedsUpdateConstraints()
             return cell
         }
     }

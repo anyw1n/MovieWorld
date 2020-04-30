@@ -67,22 +67,22 @@ class MWActorCardView: UIView {
     // MARK: - constraints
 
     func makeConstraints() {
-        self.profileImageView.snp.makeConstraints { (make) in
+        self.profileImageView.snp.updateConstraints { (make) in
             make.left.top.equalToSuperview().inset(self.imageInsets)
             make.bottom.lessThanOrEqualToSuperview()
             make.size.equalTo(self.imageSize)
         }
-        self.titleLabel.snp.makeConstraints { (make) in
+        self.titleLabel.snp.updateConstraints { (make) in
             make.top.equalToSuperview().inset(self.imageInsets)
             make.left.equalTo(self.profileImageView.snp.right).offset(self.offset)
             make.right.lessThanOrEqualToSuperview()
         }
-        self.subtitleLabel.snp.makeConstraints { (make) in
+        self.subtitleLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.titleLabel.snp.bottom).offset(3)
             make.left.equalTo(self.profileImageView.snp.right).offset(self.offset)
             make.right.lessThanOrEqualToSuperview()
         }
-        self.birthLabel.snp.makeConstraints { (make) in
+        self.birthLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.subtitleLabel.snp.bottom).offset(1)
             make.left.equalTo(self.profileImageView.snp.right).offset(self.offset)
             make.right.lessThanOrEqualToSuperview().offset(-self.offset)

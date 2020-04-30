@@ -73,7 +73,7 @@ class MWMovieCardView: UIView {
 
     // MARK: - constraints
 
-    func makeInternalConstraints() {
+    func makeConstraints() {
         self.posterImageView.snp.updateConstraints { (make) in
             make.top.left.equalToSuperview().inset(self.imageInsets)
             make.bottom.lessThanOrEqualToSuperview().inset(self.imageInsets)
@@ -104,25 +104,26 @@ class MWMovieCardView: UIView {
 
     // MARK: - functions
 
-    func setup(_ movie: Movieable) {
+    func setup(_ movie: Movieable, completionHandler: (() -> Void)? = nil) {
         movie.showImage(size: .w92, in: self.posterImageView)
         self.titleLabel.text = movie.title
 
         if let movie = movie as? MWMovie, movie.details == nil {
             movie.detailsLoaded = { [weak self] in
                 self?.setSubtitle(movie: movie)
-                self?.setNeedsUpdateConstraints()
+                completionHandler?()
             }
         } else if let movie = movie as? MWShow, movie.details == nil {
             movie.detailsLoaded = { [weak self] in
                 self?.setSubtitle(movie: movie)
-                self?.setNeedsUpdateConstraints()
+                completionHandler?()
             }
         }
 
         self.setSubtitle(movie: movie)
         self.genreLabel.text = movie.genres.joined(separator: ", ")
         self.ratingLabel.text = "IMDB -, KP -"
+        completionHandler?()
     }
 
     private func setSubtitle(movie: Movieable) {

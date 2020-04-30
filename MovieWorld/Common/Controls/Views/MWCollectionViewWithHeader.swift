@@ -98,27 +98,27 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     // MARK: - constraints
 
     func makeConstraints() {
-        self.headerView.snp.makeConstraints { (make) in
+        self.headerView.snp.updateConstraints { (make) in
             make.left.top.right.equalToSuperview()
         }
-        self.titleLabel.snp.makeConstraints { (make) in
+        self.titleLabel.snp.updateConstraints { (make) in
             make.top.equalToSuperview().inset(self.insets)
             make.left.equalToSuperview().inset(self.sectionInsets)
             make.right.lessThanOrEqualTo(self.allButton.snp.left).inset(16)
             make.bottom.lessThanOrEqualToSuperview()
         }
-        self.allButton.snp.makeConstraints { (make) in
+        self.allButton.snp.updateConstraints { (make) in
             make.top.bottom.equalToSuperview().inset(self.insets)
             make.right.equalToSuperview().inset(self.sectionInsets)
             make.size.equalTo(self.allButtonSize)
         }
-        self.collectionView.snp.makeConstraints { (make) in
+        self.collectionView.snp.updateConstraints { (make) in
             make.top.equalTo(self.headerView.snp.bottom)
             make.left.right.equalToSuperview()
             make.height.equalTo(Cell.itemSize.height)
             make.bottom.equalToSuperview()
         }
-        self.retryButton.snp.makeConstraints { (make) in
+        self.retryButton.snp.updateConstraints { (make) in
             make.center.equalTo(self.collectionView)
             make.size.equalTo(self.retryButtonSize)
         }
@@ -175,10 +175,11 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         let cell = collectionView
             .dequeueReusableCell(withReuseIdentifier: Cell.reuseId,
                                  for: indexPath)
-            as? Cell ?? Cell()
+
         guard let item = self.items?[indexPath.row] else { return cell }
 
-        cell.setup(item)
+        (cell as? Cell)?.setup(item)
+        cell.setNeedsUpdateConstraints()
         return cell
     }
 

@@ -86,7 +86,7 @@ class MWMovieDetailsViewController: MWViewController {
             make.top.equalToSuperview().offset(16)
             make.left.right.equalTo(self.view)
         }
-        self.movieCardView.makeInternalConstraints()
+        self.movieCardView.makeConstraints()
         self.moviePlayerView.snp.makeConstraints { (make) in
             make.top.equalTo(self.movieCardView.snp.bottom).offset(18)
             make.left.right.equalTo(self.view).inset(self.contentInsets)

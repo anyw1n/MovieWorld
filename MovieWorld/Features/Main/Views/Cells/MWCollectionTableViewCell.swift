@@ -12,7 +12,7 @@ class MWCollectionTableViewCell: UITableViewCell {
 
     // MARK: - variables
 
-    static let reuseId = "collectionViewTableViewCell"
+    static let reuseId = "MWCollectionTableViewCell"
 
     // MARK: - gui variables
 
@@ -33,14 +33,20 @@ class MWCollectionTableViewCell: UITableViewCell {
         self.backgroundColor = .white
         self.selectionStyle = .none
         self.contentView.addSubview(self.collectionView)
-        self.collectionView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
-        }
-        self.collectionView.makeConstraints()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    //MARK: - constraints
+
+    override func updateConstraints() {
+        self.collectionView.snp.updateConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
+        self.collectionView.makeConstraints()
+        super.updateConstraints()
     }
 
     // MARK: - functions

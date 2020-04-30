@@ -12,7 +12,7 @@ class MWActorTableViewCell: UITableViewCell {
 
     // MARK: - variables
 
-    static let reuseId = "actorTableViewCell"
+    static let reuseId = "MWActorTableViewCell"
     static let height: CGFloat = 90
 
     // MARK: - gui variables
@@ -26,7 +26,6 @@ class MWActorTableViewCell: UITableViewCell {
 
         self.selectionStyle = .none
         self.contentView.addSubview(self.layout)
-        self.makeConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -34,12 +33,12 @@ class MWActorTableViewCell: UITableViewCell {
     }
 
     // MARK: - constraints
-
-    private func makeConstraints() {
-        self.layout.snp.makeConstraints { (make) in
+    override func updateConstraints() {
+        self.layout.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
         self.layout.makeConstraints()
+        super.updateConstraints()
     }
 
     // MARK: - functions

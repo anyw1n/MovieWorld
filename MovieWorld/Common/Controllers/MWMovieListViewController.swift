@@ -145,7 +145,9 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
                                           for: indexPath)
 
         guard let section = self.section else { return cell }
-        (cell as? MWMovieCardTableViewCell)?.layout.setup(section.movies[indexPath.row])
+        (cell as? MWMovieCardTableViewCell)?.layout.setup(section.movies[indexPath.row]) {
+            cell.setNeedsUpdateConstraints()
+        }
 
         if indexPath.row == section.movies.count - 5, !section.isStaticSection {
             self.loadMovies()

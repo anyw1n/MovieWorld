@@ -12,7 +12,7 @@ class MWCreatorTableViewCell: UITableViewCell {
 
     // MARK: - variables
 
-    static let reuseId = "creatorTableViewCell"
+    static let reuseId = "MWCreatorTableViewCell"
     static let height: CGFloat = 44
     private let insets = UIEdgeInsets(top: 11, left: 16, bottom: 0, right: 0)
 
@@ -32,14 +32,20 @@ class MWCreatorTableViewCell: UITableViewCell {
 
         self.selectionStyle = .none
         self.contentView.addSubview(self.titleLabel)
-        self.titleLabel.snp.makeConstraints { (make) in
-            make.left.top.equalToSuperview().inset(self.insets)
-            make.right.bottom.lessThanOrEqualToSuperview()
-        }
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    //MARK: - constraints
+
+    override func updateConstraints() {
+        self.titleLabel.snp.updateConstraints { (make) in
+            make.left.top.equalToSuperview().inset(self.insets)
+            make.right.bottom.lessThanOrEqualToSuperview()
+        }
+        super.updateConstraints()
     }
 
     // MARK: - functions

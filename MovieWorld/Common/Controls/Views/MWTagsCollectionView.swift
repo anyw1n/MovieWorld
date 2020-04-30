@@ -98,12 +98,12 @@ extension MWTagsCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
         let cell = self.collectionView
             .dequeueReusableCell(withReuseIdentifier: MWTagCollectionViewCell.reuseId,
                                  for: indexPath)
-            as? MWTagCollectionViewCell ?? MWTagCollectionViewCell()
+
         guard let genre = self.section?.category == nil
             ? MWS.sh.allGenres[indexPath.row]
             : MWS.sh.genres[self.section!.category!]?[indexPath.row] else { return cell }
 
-        cell.button.setTitle(genre.name, for: .init())
+        (cell as? MWTagCollectionViewCell)?.button.setTitle(genre.name, for: .init())
         if self.section?.genreIds?.contains(genre.id) ?? false {
             cell.isSelected = true
         }

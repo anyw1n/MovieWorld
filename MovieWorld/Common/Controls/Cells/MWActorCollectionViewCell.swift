@@ -13,7 +13,7 @@ class MWActorCollectionViewCell: MWCollectionViewCell {
     // MARK: - variables
 
     private let imageSize = CGSize(width: 72, height: 72)
-    override class var reuseId: String { "actorCollectionViewCell" }
+    override class var reuseId: String { "MWActorCollectionViewCell" }
     override class var itemSize: CGSize { CGSize(width: 72, height: 124) }
 
     // MARK: - gui variables
@@ -39,7 +39,6 @@ class MWActorCollectionViewCell: MWCollectionViewCell {
 
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.subtitleLabel)
-        self.makeConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -48,7 +47,7 @@ class MWActorCollectionViewCell: MWCollectionViewCell {
 
     // MARK: - constraints
 
-    private func makeConstraints() {
+    override func updateConstraints() {
         self.imageView.snp.updateConstraints { (make) in
             make.left.top.equalToSuperview()
             make.right.lessThanOrEqualToSuperview()
@@ -63,6 +62,7 @@ class MWActorCollectionViewCell: MWCollectionViewCell {
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+        super.updateConstraints()
     }
 
     // MARK: - functions

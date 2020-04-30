@@ -12,7 +12,7 @@ class MWMediaCollectionViewCell: MWCollectionViewCell {
 
     // MARK: - variables
 
-    override class var reuseId: String { "mediaCollectionViewCell" }
+    override class var reuseId: String { "MWMediaCollectionViewCell" }
     override class var itemSize: CGSize { CGSize(width: 180, height: 87) }
     var isWidthCalculated: Bool = false
 
@@ -34,7 +34,6 @@ class MWMediaCollectionViewCell: MWCollectionViewCell {
         super.init(frame: frame)
 
         self.addSubview(self.playerView)
-        self.makeConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -43,13 +42,14 @@ class MWMediaCollectionViewCell: MWCollectionViewCell {
 
     // MARK: - constraints
 
-    private func makeConstraints() {
+    override func updateConstraints() {
         self.playerView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
         self.imageView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        super.updateConstraints()
     }
 
     // MARK: - functions

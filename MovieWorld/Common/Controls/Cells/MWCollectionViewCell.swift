@@ -10,7 +10,7 @@ import UIKit
 
 class MWCollectionViewCell: UICollectionViewCell {
 
-    class var reuseId: String { "collectionViewCell" }
+    class var reuseId: String { "MWCollectionViewCell" }
     class var itemSize: CGSize { CGSize() }
 
     private(set) lazy var imageView: UIImageView = {

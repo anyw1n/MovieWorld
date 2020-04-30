@@ -155,12 +155,12 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = self.tableView
             .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseId,
                                  for: indexPath)
-            as? MWCollectionTableViewCell ?? MWCollectionTableViewCell()
 
-        cell.setup(section: self.sections[indexPath.row]) { [weak self] in
-            self?.loadMovies(into: self?.sections[indexPath.row])
+        (cell as? MWCollectionTableViewCell)?
+            .setup(section: self.sections[indexPath.row]) { [weak self] in
+                self?.loadMovies(into: self?.sections[indexPath.row])
         }
-
+        cell.setNeedsUpdateConstraints()
         return cell
     }
 }

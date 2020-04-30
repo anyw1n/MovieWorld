@@ -13,7 +13,7 @@ class MWMovieCardCollectionViewCell: MWCollectionViewCell {
     // MARK: - variables
 
     private let imageSize = CGSize(width: 130, height: 185)
-    override class var reuseId: String { "movieCardCollectionViewCell" }
+    override class var reuseId: String { "MWMovieCardCollectionViewCell" }
     override class var itemSize: CGSize { CGSize(width: 130, height: 237) }
 
     // MARK: - gui variables
@@ -40,7 +40,6 @@ class MWMovieCardCollectionViewCell: MWCollectionViewCell {
         self.contentView.backgroundColor = .white
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.subtitleLabel)
-        self.makeConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -49,7 +48,7 @@ class MWMovieCardCollectionViewCell: MWCollectionViewCell {
 
     // MARK: - constraints
 
-    private func makeConstraints() {
+    override func updateConstraints() {
         self.imageView.snp.updateConstraints { (make) in
             make.top.left.equalToSuperview()
             make.right.lessThanOrEqualToSuperview()
@@ -65,6 +64,7 @@ class MWMovieCardCollectionViewCell: MWCollectionViewCell {
             make.left.bottom.equalToSuperview()
             make.right.lessThanOrEqualToSuperview()
         }
+        super.updateConstraints()
     }
 
     // MARK: - functions

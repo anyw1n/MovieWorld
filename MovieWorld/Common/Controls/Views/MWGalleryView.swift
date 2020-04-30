@@ -97,10 +97,11 @@ extension MWGalleryView: UICollectionViewDelegate, UICollectionViewDataSource, U
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: MWMediaCollectionViewCell.reuseId, for: indexPath)
-            as? MWMediaCollectionViewCell ?? MWMediaCollectionViewCell()
+
         guard let item = self.items?[indexPath.row] else { return cell }
 
-        cell.setup(item)
+        (cell as? MWMediaCollectionViewCell)?.setup(item)
+        cell.setNeedsUpdateConstraints()
         return cell
     }
 
