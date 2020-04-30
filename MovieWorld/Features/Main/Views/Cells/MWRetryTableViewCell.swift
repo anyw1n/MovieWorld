@@ -35,7 +35,7 @@ class MWRetryTableViewCell: UITableViewCell {
         
         self.backgroundColor = .white
         self.selectionStyle = .none
-        self.addSubviews()
+        self.contentView.addSubview(self.retryButton)
     }
     
     required init?(coder: NSCoder) {
@@ -44,19 +44,15 @@ class MWRetryTableViewCell: UITableViewCell {
     
     //MARK: - constraints
     
-    private func makeConstraints() {
+    override func updateConstraints() {
         self.retryButton.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
             make.size.equalTo(self.buttonSize)
         }
+        super.updateConstraints()
     }
     
     //MARK: - functions
-    
-    private func addSubviews() {
-        self.contentView.addSubview(self.retryButton)
-        self.makeConstraints()
-    }
     
     @objc private func retryButtonTapped() {
         self.retryTapped?()

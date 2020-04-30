@@ -12,9 +12,9 @@ class MWTableViewHeader: UITableViewHeaderFooterView {
     
     //MARK: - variables
     
-    static let reuseID = "titleButtonHeaderView"
+    static let reuseID = "MWTableViewHeader"
     
-    private let titleInsets = UIEdgeInsets(top: 24, left: 16, bottom: 12, right: 0)
+    private let titleInsets = UIEdgeInsets(top: 24, left: 16, bottom: 12, right: 10)
     private let buttonInsets = UIEdgeInsets(top: 28, left: 0, bottom: 0, right: 7)
     private let buttonSize = CGSize(width: 52, height: 24)
     
@@ -50,11 +50,13 @@ class MWTableViewHeader: UITableViewHeaderFooterView {
     private func makeConstraints() {
         self.titleLabel.snp.makeConstraints { (make) in
             make.top.left.equalToSuperview().inset(self.titleInsets)
-            make.right.lessThanOrEqualTo(self.rightButton.snp.left).offset(-10)
+            make.bottom.lessThanOrEqualToSuperview()
         }
         self.rightButton.snp.makeConstraints { (make) in
             make.top.right.equalToSuperview().inset(self.buttonInsets)
-            make.size.greaterThanOrEqualTo(self.buttonSize)
+            make.left.greaterThanOrEqualTo(self.titleLabel.snp.right).offset(self.titleInsets.right)
+            make.bottom.lessThanOrEqualToSuperview()
+            make.size.equalTo(self.buttonSize)
         }
     }
 }

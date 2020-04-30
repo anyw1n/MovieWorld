@@ -36,7 +36,6 @@ class MWTagCollectionViewCell: UICollectionViewCell {
 
         self.contentView.addSubview(self.button)
         self.contentView.alpha = 0.5
-        self.makeConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -45,9 +44,10 @@ class MWTagCollectionViewCell: UICollectionViewCell {
     
     //MARK: - constraints
     
-    private func makeConstraints() {
+    override func updateConstraints() {
         self.button.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        super.updateConstraints()
     }
 }

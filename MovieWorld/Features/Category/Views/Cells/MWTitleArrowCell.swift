@@ -38,7 +38,6 @@ class MWTitleArrowCell: UITableViewCell {
         self.contentView.addSubview(self.titleLabel)
         self.accessoryView = self.arrowImageView
         self.selectionStyle = .none
-        self.makeConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -47,12 +46,13 @@ class MWTitleArrowCell: UITableViewCell {
     
     //MARK: - constraints
     
-    private func makeConstraints() {
+    override func updateConstraints() {
         self.titleLabel.snp.updateConstraints { (make) in
             make.top.equalToSuperview().offset(self.offset)
             make.left.equalToSuperview().offset(16)
             make.right.lessThanOrEqualToSuperview()
             make.bottom.equalToSuperview().offset(-self.offset)
         }
+        super.updateConstraints()
     }
 }

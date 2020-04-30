@@ -50,7 +50,7 @@ class MWCollectionTableViewCell: UITableViewCell {
         
         self.backgroundColor = .white
         self.selectionStyle = .none
-        self.addSubviews()
+        self.contentView.addSubview(self.collectionView)
     }
     
     required init?(coder: NSCoder) {
@@ -59,17 +59,11 @@ class MWCollectionTableViewCell: UITableViewCell {
     
     //MARK: - constraints
     
-    private func makeConstraints() {
+    override func updateConstraints() {
         self.collectionView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
         }
-    }
-    
-    //MARK: - functions
-    
-    private func addSubviews() {
-        self.contentView.addSubview(self.collectionView)
-        self.makeConstraints()
+        super.updateConstraints()
     }
 }
 
@@ -91,7 +85,8 @@ extension MWCollectionTableViewCell: UICollectionViewDelegate, UICollectionViewD
         cardCell.titleLabel.text = movie?.title
         cardCell.subtitleLabel.text = "\(movie?.releaseYear ?? ""), \(movie?.genres.first ?? "")"
         movie?.showImage(size: .w154, in: cardCell.imageView)
-        return cell
+        cardCell.setNeedsUpdateConstraints()
+        return cardCell
     }
 
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {

@@ -54,7 +54,7 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
     
     //MARK: - constraints
     
-    private func makeConstraints() {
+    override func updateConstraints() {
         self.imageView.snp.updateConstraints { (make) in
             make.top.left.right.equalToSuperview()
             make.size.equalTo(self.imageSize)
@@ -67,6 +67,7 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
             make.top.equalTo(self.titleLabel.snp.bottom).offset(4)
             make.left.right.bottom.equalToSuperview()
         }
+        super.updateConstraints()
     }
     
     //MARK: - functions
@@ -75,6 +76,5 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
         self.contentView.addSubview(self.imageView)
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.subtitleLabel)
-        self.makeConstraints()
     }
 }

@@ -77,10 +77,10 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = self.tableView.dequeueReusableCell(withIdentifier: MWTitleArrowCell.reuseID,
-                                                      for: indexPath)
-            as? MWTitleArrowCell ?? MWTitleArrowCell()
-        cell.titleLabel.text = self.categories[indexPath.section]
+        let cell = tableView.dequeueReusableCell(withIdentifier: MWTitleArrowCell.reuseID,
+                                                 for: indexPath)
+        (cell as? MWTitleArrowCell)?.titleLabel.text = self.categories[indexPath.section]
+        cell.setNeedsUpdateConstraints()
         return cell
     }
 }

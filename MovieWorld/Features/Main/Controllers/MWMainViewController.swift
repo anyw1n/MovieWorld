@@ -126,7 +126,7 @@ class MWMainViewController: MWViewController {
 extension MWMainViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return self.tableView.dequeueReusableHeaderFooterView(withIdentifier: MWTableViewHeader.reuseID)
+        return tableView.dequeueReusableHeaderFooterView(withIdentifier: MWTableViewHeader.reuseID)
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -169,11 +169,12 @@ extension MWMainViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if self.sections[indexPath.section].movies.count != 0 {
-            let cell = tableView
-                .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseID,
-                                     for: indexPath)
+            let cell =
+                tableView.dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseID,
+                                              for: indexPath)
             (cell as? MWCollectionTableViewCell)?.movies = self.sections[indexPath.section].movies
             (cell as? MWCollectionTableViewCell)?.collectionView.reloadData()
+            cell.setNeedsUpdateConstraints()
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: MWRetryTableViewCell.reuseID,
@@ -181,6 +182,7 @@ extension MWMainViewController: UITableViewDataSource {
             (cell as? MWRetryTableViewCell)?.retryTapped = { [weak self] in
                 self?.loadMovies(into: self?.sections[indexPath.section])
             }
+            cell.setNeedsUpdateConstraints()
             return cell
         }
     }

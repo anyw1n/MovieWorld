@@ -66,7 +66,6 @@ class MWMovieCardTableViewCell: UITableViewCell {
         self.backgroundColor = .white
         self.selectionStyle = .none
         self.addSubviews()
-        self.makeConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -75,33 +74,34 @@ class MWMovieCardTableViewCell: UITableViewCell {
     
     //MARK: - constraints
     
-    private func makeConstraints() {
-        self.posterImageView.snp.makeConstraints { (make) in
+    override func updateConstraints() {
+        self.posterImageView.snp.updateConstraints { (make) in
             make.top.left.equalToSuperview().inset(self.imageInsets)
             make.bottom.lessThanOrEqualToSuperview().inset(self.imageInsets)
             make.size.equalTo(self.imageSize)
         }
-        self.titleLabel.snp.makeConstraints { (make) in
+        self.titleLabel.snp.updateConstraints { (make) in
             make.top.equalToSuperview().inset(10)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
             make.right.equalToSuperview().inset(self.textInsets)
         }
-        self.subtitleLabel.snp.makeConstraints { (make) in
+        self.subtitleLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.titleLabel.snp.bottom).offset(3)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
             make.right.equalToSuperview().inset(self.textInsets)
         }
-        self.genreLabel.snp.makeConstraints { (make) in
+        self.genreLabel.snp.updateConstraints { (make) in
             make.top.equalTo(self.subtitleLabel.snp.bottom).offset(1)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
             make.right.equalToSuperview().inset(self.textInsets)
         }
-        self.ratingLabel.snp.makeConstraints { (make) in
+        self.ratingLabel.snp.updateConstraints { (make) in
             make.top.greaterThanOrEqualTo(self.genreLabel.snp.bottom).offset(8)
             make.bottom.equalToSuperview().inset(8)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
             make.right.equalToSuperview().inset(self.textInsets)
         }
+        super.updateConstraints()
     }
     
     //MARK: - functions
@@ -120,5 +120,6 @@ class MWMovieCardTableViewCell: UITableViewCell {
         self.subtitleLabel.text = "\(movie.releaseYear)"
         self.genreLabel.text = movie.genres.joined(separator: ", ")
         self.ratingLabel.text = "IMDB 8.2, KP 8.3"
+        self.setNeedsUpdateConstraints()
     }
 }
