@@ -9,13 +9,13 @@
 import Foundation
 
 class MWActorDetails: Decodable {
-    
+
     private enum CodingKeys: String, CodingKey {
         case birthday, deathday, biography, movieCredits = "movie_credits", tvCredits = "tv_credits"
     }
-    
+
     // MARK: - variables
-    
+
     let birthday: String?
     let deathday: String?
     let biography: String
@@ -47,11 +47,11 @@ class MWActorDetails: Decodable {
 }
 
 struct MWActorCredits<T: Movieable>: Decodable {
-    
+
     struct Jobs: Decodable {
         let job: String
     }
-    
+
     var cast: [T]
     var crew: [Jobs]
 }

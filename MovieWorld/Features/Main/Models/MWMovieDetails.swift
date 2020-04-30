@@ -9,15 +9,15 @@
 import Foundation
 
 class MWMovieDetails: Detailable {
-    
+
     private enum CodingKeys: String, CodingKey {
         case productionCountries = "production_countries", runtime, credits, videos, images
     }
-    
+
     private enum VideoCodingKeys: String, CodingKey {
         case results
     }
-    
+
     // MARK: - variables
 
     let productionCountries: [MWCountry]
@@ -31,9 +31,9 @@ class MWMovieDetails: Detailable {
         self.productionCountries.forEach { names.append($0.name ?? "") }
         return names
     }
-    
+
     // MARK: - init
-    
+
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.productionCountries =

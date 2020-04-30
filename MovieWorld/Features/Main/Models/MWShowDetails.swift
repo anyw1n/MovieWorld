@@ -9,18 +9,18 @@
 import Foundation
 
 class MWShowDetails: Detailable {
-    
+
     private enum CodingKeys: String, CodingKey {
         case originCountryCodes = "origin_country", lastAirDate = "last_air_date",
         episodeRuntime = "episode_run_time", credits, videos, images
     }
-    
+
     private enum VideoCodingKeys: String, CodingKey {
         case results
     }
-    
+
     // MARK: - variables
-    
+
     let originCountryCodes: [String]
     let lastAirDate: String
     let episodeRuntime: [Int]
@@ -40,15 +40,15 @@ class MWShowDetails: Detailable {
         }
         return countries
     }
-    
+
     var countryNames: [String] {
         var names: [String] = []
         self.originCountries.forEach { names.append($0.name ?? "") }
         return names
     }
-    
+
     // MARK: - init
-    
+
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.originCountryCodes =

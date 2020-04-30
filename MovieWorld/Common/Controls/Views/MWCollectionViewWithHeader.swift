@@ -10,9 +10,9 @@ import UIKit
 
 class MWCollectionViewWithHeader<T, Cell: MWCollectionViewCell>:
 UIView, UICollectionViewDelegate, UICollectionViewDataSource {
-    
+
     // MARK: - variables
-    
+
     private let insets = UIEdgeInsets(top: 24, left: 0, bottom: 15, right: 0)
     private let allButtonSize = CGSize(width: 52, height: 24)
     private let retryButtonSize = CGSize(width: 150, height: 40)
@@ -28,27 +28,27 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     var retryButtonTapped: (() -> Void)?
 
     // MARK: - gui variables
-    
+
     private lazy var headerView: UIView = {
         let view = UIView()
         view.addSubview(self.titleLabel)
         view.addSubview(self.allButton)
         return view
     }()
-    
+
     private(set) lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textColor = UIColor(named: "textColor")
         return label
     }()
-    
+
     private lazy var allButton: MWRoundedButton = {
         let button = MWRoundedButton(text: "All".localized(), image: UIImage(named: "nextIcon"))
         button.addTarget(self, action: #selector(self.allButtonDidTap), for: .touchUpInside)
         return button
     }()
-    
+
     private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = Cell.itemSize
@@ -57,7 +57,7 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         layout.sectionInset = self.sectionInsets
         return layout
     }()
-    
+
     private lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: CGRect(),
                                     collectionViewLayout: self.collectionViewFlowLayout)
@@ -69,7 +69,7 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         view.backgroundColor = .white
         return view
     }()
-    
+
     private lazy var retryButton: UIButton = {
         let button = MWRoundedButton(text: "Retry".localized(),
                                      image: UIImage(named: "refreshIcon"))
@@ -80,23 +80,23 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         button.isHidden = true
         return button
     }()
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         self.addSubview(self.headerView)
         self.addSubview(self.collectionView)
         self.addSubview(self.retryButton)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - constraints
-    
+
     func makeConstraints() {
         self.headerView.snp.makeConstraints { (make) in
             make.left.top.right.equalToSuperview()
@@ -123,9 +123,9 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
             make.size.equalTo(self.retryButtonSize)
         }
     }
-    
+
     // MARK: - functions
-    
+
     func setup(title: String,
                items: [T],
                itemSpacing: CGFloat,
@@ -143,7 +143,7 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
             self.allButtonTapped = allButtonTapped
         }
         self.retryButtonTapped = retryButtonTapped
-        
+
         if items.isEmpty {
             self.collectionView.isHidden = true
             self.retryButton.isHidden = false
@@ -153,23 +153,23 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         }
         self.collectionView.reloadData()
     }
-    
+
     @objc private func allButtonDidTap() {
         self.allButtonTapped?()
     }
-    
+
     @objc private func retryButtonDidTap() {
         self.retryButtonTapped?()
     }
-    
+
     // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         guard let items = self.items else { return 0 }
         return items.count >= self.maximumItems ? self.maximumItems : items.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView
@@ -177,7 +177,7 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
                                  for: indexPath)
             as? Cell ?? Cell()
         guard let item = self.items?[indexPath.row] else { return cell }
-        
+
         cell.setup(item)
         return cell
     }
@@ -185,7 +185,7 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.cellTapped?(indexPath)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         didEndDisplaying cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {

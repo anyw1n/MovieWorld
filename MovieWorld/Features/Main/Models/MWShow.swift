@@ -9,12 +9,12 @@
 import UIKit
 
 class MWShow: Movieable {
-    
+
     private enum CodingKeys: String, CodingKey {
         case name, id, genreIds = "genre_ids", firstAirDate = "first_air_date",
         posterPath = "poster_path", overview
     }
-    
+
     // MARK: - variables
 
     let name: String
@@ -23,7 +23,7 @@ class MWShow: Movieable {
     let firstAirDate: String
     let posterPath: String?
     let overview: String
-    
+
     var firstAirYear: String {
         return String(self.firstAirDate.split(separator: "-").first ?? "")
     }
@@ -37,7 +37,7 @@ class MWShow: Movieable {
         }
         return genres
     }
-    
+
     var title: String { self.name }
     var releaseDate: String { self.firstAirDate }
     var releaseYear: String {
@@ -47,12 +47,12 @@ class MWShow: Movieable {
         }
         return self.firstAirYear
     }
-    
+
     var details: Detailable?
     var detailsLoaded: (() -> Void)?
-    
+
     // MARK: - init
-    
+
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.name = (try? container.decode(String.self, forKey: .name)) ?? ""
@@ -63,9 +63,9 @@ class MWShow: Movieable {
         self.overview = (try? container.decode(String.self, forKey: .overview)) ?? ""
         self.requestDetails()
     }
-    
+
     // MARK: - functions
-    
+
     func requestDetails(_ appends: [MovieAppendToResponse]? = nil,
                         completionHandler: (() -> Void)? = nil) {
         var appendNames: [String] = []

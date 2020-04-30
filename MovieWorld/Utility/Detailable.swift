@@ -9,7 +9,7 @@
 import Foundation
 
 protocol Detailable: Decodable {
-    
+
     var runtime: Int? { get }
     var countryNames: [String] { get }
     var credits: MWCredits? { get set }

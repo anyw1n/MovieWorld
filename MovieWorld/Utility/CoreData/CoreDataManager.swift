@@ -12,13 +12,13 @@ import Foundation
 typealias CDM = CoreDataManager
 
 class CoreDataManager {
-    
+
     // MARK: - variables
-    
+
     static let sh = CoreDataManager()
-    
+
     // MARK: - Core Data stack
-    
+
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "CoreDataModel")
         container.loadPersistentStores(completionHandler: { (_, error) in
@@ -30,13 +30,13 @@ class CoreDataManager {
             NSMergePolicy(merge: .mergeByPropertyObjectTrumpMergePolicyType)
         return container
     }()
-    
+
     // MARK: - init
-    
+
     private init() {}
-    
+
     // MARK: - functions
-    
+
     func fetchRequest<T: NSFetchRequestResult>(entityName: String,
                                                keysForSort: [String]? = nil,
                                                predicate: NSPredicate? = nil) -> NSFetchRequest<T> {
@@ -48,7 +48,7 @@ class CoreDataManager {
         request.predicate = predicate
         return request
     }
-    
+
     func loadData<T: NSFetchRequestResult>(entityName: String,
                                            keysForSort: [String]? = nil,
                                            predicate: NSPredicate? = nil) -> [T]? {
@@ -64,9 +64,9 @@ class CoreDataManager {
         }
         return data
     }
-    
+
     // MARK: - Core Data Saving support
-    
+
     func saveContext () {
         let context = persistentContainer.viewContext
         if context.hasChanges {
@@ -78,5 +78,4 @@ class CoreDataManager {
             }
         }
     }
-    
 }

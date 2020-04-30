@@ -9,12 +9,12 @@
 import Foundation
 
 class YoutubeDataVideoContentDetails: YoutubeDataVideo {
-    
+
     struct ContentDetails: Decodable {
         let definition: String
     }
-    
+
     static var part: String { "contentDetails" }
-    
+
     let contentDetails: ContentDetails
 }

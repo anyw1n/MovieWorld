@@ -9,13 +9,13 @@
 import Foundation
 
 class YoutubeDataVideoStatistics: YoutubeDataVideo {
-    
+
     struct Statistics: Decodable {
         let dislikeCount: String
         let likeCount: String
     }
-    
+
     static var part: String { "statistics" }
-    
+
     let statistics: Statistics
 }

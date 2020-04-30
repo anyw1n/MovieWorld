@@ -9,15 +9,15 @@
 import UIKit
 
 class MWGalleryView: UIView {
-    
+
     // MARK: - variables
-    
+
     private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     var items: [Mediable]?
     var viewController: UIViewController
-    
+
     // MARK: - gui variables
-    
+
     private lazy var collectionViewTitleLabel: UILabel = {
         let label = UILabel()
         label.text = "Trailers and gallery".localized()
@@ -25,7 +25,7 @@ class MWGalleryView: UIView {
         label.textColor = UIColor(named: "textColor")
         return label
     }()
-    
+
     private lazy var collectionViewFlowLayout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -33,7 +33,7 @@ class MWGalleryView: UIView {
         layout.sectionInset = self.contentInsets
         return layout
     }()
-    
+
     private lazy var collectionView: UICollectionView = {
         let view = UICollectionView(frame: CGRect(),
                                     collectionViewLayout: self.collectionViewFlowLayout)
@@ -46,23 +46,23 @@ class MWGalleryView: UIView {
         view.backgroundColor = .white
         return view
     }()
-    
+
     // MARK: - init
-    
+
     init(in viewController: UIViewController) {
         self.viewController = viewController
         super.init(frame: CGRect())
-        
+
         self.addSubview(self.collectionViewTitleLabel)
         self.addSubview(self.collectionView)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - constraints
-    
+
     func makeConstraints() {
         self.collectionViewTitleLabel.snp.makeConstraints { (make) in
             make.left.top.equalToSuperview().inset(self.contentInsets)
@@ -75,9 +75,9 @@ class MWGalleryView: UIView {
             make.bottom.equalToSuperview()
         }
     }
-    
+
     // MARK: - functions
-    
+
     func setup(items: [Mediable]) {
         self.items = items
         self.collectionView.reloadData()
@@ -87,30 +87,30 @@ class MWGalleryView: UIView {
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 
 extension MWGalleryView: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         return self.items?.count ?? 0
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: MWMediaCollectionViewCell.reuseId, for: indexPath)
             as? MWMediaCollectionViewCell ?? MWMediaCollectionViewCell()
         guard let item = self.items?[indexPath.row] else { return cell }
-        
+
         cell.setup(item)
         return cell
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         didEndDisplaying cell: UICollectionViewCell,
                         forItemAt indexPath: IndexPath) {
         (cell as? MWMediaCollectionViewCell)?.imageView.kf.cancelDownloadTask()
         (cell as? MWMediaCollectionViewCell)?.playerView.thumbnail.kf.cancelDownloadTask()
     }
-    
+
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -121,7 +121,7 @@ extension MWGalleryView: UICollectionViewDelegate, UICollectionViewDataSource, U
         }
         return size
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let image = self.items?[indexPath.row] as? MWMovieImage else { return }
         let controller = MWFullscreenImageViewController()

@@ -10,19 +10,19 @@ import Foundation
 import Kingfisher
 
 struct MWMovieVideo: Mediable {
-    
+
     enum Size {
         case `default`, medium, high, standard
     }
-    
+
     // MARK: - variables
-    
+
     let key: String
     let name: String
     let site: String
-    
+
     // MARK: - functions
-    
+
     func showThumbnail(size: Size, in imageView: UIImageView) {
         self.requestThumbnailUrl(size: size) { (url) in
             let options: KingfisherOptionsInfo = [.scaleFactor(UIScreen.main.scale),
@@ -33,7 +33,7 @@ struct MWMovieVideo: Mediable {
                                   options: options)
         }
     }
-    
+
     private func requestThumbnailUrl(size: Size, successHandler: @escaping (URL) -> Void) {
         YTApi.sh.request(videoId: self.key) { (response: YoutubeDataVideoSnippet) in
             var value = response.snippet.thumbnails.default

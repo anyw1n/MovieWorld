@@ -9,14 +9,14 @@
 import Foundation
 
 struct MWCredits: Decodable {
-    
+
     // MARK: - variables
-    
+
     let cast: [MWActor]
     let crew: [MWCreator]
-    
+
     // MARK: - functions
-    
+
     func getCreators(with job: String) -> [MWCreator] {
         return self.crew.filter { $0.job == job }
     }

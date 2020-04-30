@@ -12,16 +12,16 @@ import SnapKit
 class MWViewController: UIViewController {
 
     // MARK: - init
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self._initController()
         self.initController()
     }
-    
+
     // MARK: - functions
-    
+
     func initController() { }
 
     private func _initController() {

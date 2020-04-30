@@ -11,21 +11,21 @@ import UIKit
 class MWMoviePlayerView: UIView {
 
     // MARK: - variables
-    
+
     private let likeIconSize = CGSize(width: 18, height: 20)
     private let offset = 16
     private var videoId: String?
     private var playerSize: CGSize?
-    
+
     // MARK: - gui variables
-    
+
     private lazy var player: MWPlayer = {
         let player = MWPlayer()
         player.layer.cornerRadius = 5
         player.clipsToBounds = true
         return player
     }()
-    
+
     private lazy var dislikeImageView: UIImageView =
         UIImageView(image: UIImage(named: "dislikeImage"))
 
@@ -49,23 +49,23 @@ class MWMoviePlayerView: UIView {
     }()
 
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         self.addSubview(self.player)
         self.addSubview(self.dislikesCountLabel)
         self.addSubview(self.dislikeImageView)
         self.addSubview(self.likesCountLabel)
         self.addSubview(self.likeImageView)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - constraints
-    
+
     func makeInternalConstraints() {
         self.player.snp.makeConstraints { (make) in
             make.left.top.right.equalToSuperview()
@@ -94,15 +94,15 @@ class MWMoviePlayerView: UIView {
             make.size.equalTo(self.likeIconSize)
         }
     }
-    
+
     // MARK: - functions
-    
+
     override func layoutSubviews() {
         let width = self.player.bounds.size.width
         guard self.playerSize == nil,
             let videoId = self.videoId,
             !width.isZero else { return }
-        
+
         YTApi.sh.request(
             videoId: videoId,
             parameters: ["maxWidth": width]) { [weak self] (response: YoutubeDataVideoPlayer) in
@@ -112,18 +112,18 @@ class MWMoviePlayerView: UIView {
                 }
         }
     }
-    
+
     func setup(video: MWMovieVideo) {
         self.videoId = video.key
         self.player.setup(video)
         self.player.playTapped = { [weak self] in
             guard let self = self, let height = self.playerSize?.height else { return false }
-            
+
             self.player.snp.updateConstraints { (make) in
                 make.height.equalTo(height)
             }
             self.superview?.setNeedsUpdateConstraints()
-            
+
             UIView.animate(withDuration: 0.35, animations: {
                 self.superview?.layoutIfNeeded()
             }, completion: { (_) in
@@ -131,7 +131,7 @@ class MWMoviePlayerView: UIView {
             })
             return true
         }
-        
+
         YTApi.sh.request(videoId: video.key) { [weak self] (response: YoutubeDataVideoStatistics) in
                 self?.dislikesCountLabel.text = response.statistics.dislikeCount
                 self?.likesCountLabel.text = response.statistics.likeCount

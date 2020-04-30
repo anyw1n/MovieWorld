@@ -11,13 +11,13 @@ import UIKit
 class MWDescriptionView: UIView {
 
     // MARK: - variables
-    
+
     private let offset = 16
     private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     private var additionalInfoEnabled: Bool = false
-    
+
     // MARK: - gui variables
-    
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -25,7 +25,7 @@ class MWDescriptionView: UIView {
         label.textColor = UIColor(named: "textColor")
         return label
     }()
-    
+
     private(set) lazy var definitionLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15)
@@ -33,7 +33,7 @@ class MWDescriptionView: UIView {
         label.alpha = 0.5
         return label
     }()
-    
+
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15)
@@ -41,7 +41,7 @@ class MWDescriptionView: UIView {
         label.alpha = 0.5
         return label
     }()
-    
+
     private lazy var textLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 17)
@@ -51,7 +51,7 @@ class MWDescriptionView: UIView {
     }()
 
     // MARK: - init
-    
+
     init(additionalInfoEnabled: Bool) {
         super.init(frame: CGRect())
         self.additionalInfoEnabled = additionalInfoEnabled
@@ -62,13 +62,13 @@ class MWDescriptionView: UIView {
         }
         self.addSubview(self.textLabel)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - constraints
-    
+
     func makeConstraints() {
         self.titleLabel.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(24)
@@ -98,9 +98,9 @@ class MWDescriptionView: UIView {
             make.bottom.equalToSuperview()
         }
     }
-    
+
     // MARK: - functions
-    
+
     func setup(title: String?, definition: String? = nil, subtitle: String? = nil, text: String?) {
         self.titleLabel.text = title
         if self.additionalInfoEnabled {

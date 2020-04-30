@@ -9,6 +9,6 @@
 import Foundation
 
 protocol YoutubeDataVideo: Decodable {
-    
+
     static var part: String { get }
 }

@@ -12,20 +12,20 @@ import Alamofire
 typealias MWN = MWNetwork
 
 class MWNetwork {
-    
+
     // MARK: - variables
-    
+
     static let sh = MWNetwork()
-    
+
     private let apiKey = "79d5894567be5b76ab7434fc12879584"
     private let baseUrl = "https://api.themoviedb.org/3"
-    
+
     // MARK: - init
-    
+
     private init() {}
-    
+
     // MARK: - functions
-    
+
     func request<T: Decodable>(url path: String,
                                queryParameters: Parameters? = nil,
                                successHandler: @escaping (T) -> Void,
@@ -38,7 +38,7 @@ class MWNetwork {
         if let regionCode = Locale.current.regionCode, parameters["region"] == nil {
             parameters["region"] = regionCode
         }
-        
+
         AF.request(url, parameters: parameters).validate().responseJSON { (response) in
             switch response.result {
             case .success(let value):

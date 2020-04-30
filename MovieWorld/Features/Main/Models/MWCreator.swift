@@ -9,7 +9,7 @@
 import Foundation
 
 struct MWCreator: Decodable {
-    
+
     let name: String
     let job: String
 }

@@ -9,16 +9,22 @@
 import Foundation
 
 struct MWMovieRequestResult<T: Movieable>: Decodable {
-    
+
+    // MARK: - enum
+
     private enum CodingKeys: String, CodingKey {
         case page, results, totalResults = "total_results", totalPages = "total_pages"
     }
-    
+
+    // MARK: - variables
+
     let page: Int?
     let results: [T]?
     let totalResults: Int?
     let totalPages: Int?
-    
+
+    // MARK: - init
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.page = (try? container.decode(Int.self, forKey: .page))

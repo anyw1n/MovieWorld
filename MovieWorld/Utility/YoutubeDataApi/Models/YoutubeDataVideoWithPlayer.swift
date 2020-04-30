@@ -9,7 +9,7 @@
 import Foundation
 
 class YoutubeDataVideoPlayer: YoutubeDataVideo {
-    
+
     struct Player: Decodable {
         let embedHtml: String
         let embedHeight: String?
@@ -17,6 +17,6 @@ class YoutubeDataVideoPlayer: YoutubeDataVideo {
     }
 
     static var part: String { "player" }
-    
+
     let player: Player
 }

@@ -9,7 +9,7 @@
 import UIKit
 
 class MWMovieCardCollectionViewCell: MWCollectionViewCell {
-    
+
     // MARK: - variables
 
     private let imageSize = CGSize(width: 130, height: 185)
@@ -17,38 +17,38 @@ class MWMovieCardCollectionViewCell: MWCollectionViewCell {
     override class var itemSize: CGSize { CGSize(width: 130, height: 237) }
 
     // MARK: - gui variables
-    
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 17)
         label.textColor = UIColor(named: "textColor")
         return label
     }()
-    
+
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor(named: "textColor")
         return label
     }()
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         self.contentView.backgroundColor = .white
         self.contentView.addSubview(self.titleLabel)
         self.contentView.addSubview(self.subtitleLabel)
         self.makeConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - constraints
-    
+
     private func makeConstraints() {
         self.imageView.snp.updateConstraints { (make) in
             make.top.left.equalToSuperview()
@@ -66,12 +66,12 @@ class MWMovieCardCollectionViewCell: MWCollectionViewCell {
             make.right.lessThanOrEqualToSuperview()
         }
     }
-    
+
     // MARK: - functions
-    
+
     override func setup<T>(_ item: T) {
         guard let movie = item as? Movieable else { return }
-        
+
         self.titleLabel.text = movie.title
         self.subtitleLabel.text = "\(movie.releaseYear), \(movie.genres.first ?? "")"
         if let movie = movie as? MWShow, movie.details == nil {

@@ -9,15 +9,15 @@
 import UIKit
 
 class MWMediaCollectionViewCell: MWCollectionViewCell {
-    
+
     // MARK: - variables
-    
+
     override class var reuseId: String { "mediaCollectionViewCell" }
     override class var itemSize: CGSize { CGSize(width: 180, height: 87) }
     var isWidthCalculated: Bool = false
-    
+
     // MARK: - gui variables
-    
+
     private(set) lazy var playerView: MWPlayer = {
         let player = MWPlayer()
         player.defaultPlayerParameters["playsinline"] = 0
@@ -27,22 +27,22 @@ class MWMediaCollectionViewCell: MWCollectionViewCell {
         player.isHidden = true
         return player
     }()
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         self.addSubview(self.playerView)
         self.makeConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - constraints
-    
+
     private func makeConstraints() {
         self.playerView.snp.makeConstraints { (make) in
             make.edges.equalToSuperview()
@@ -51,9 +51,9 @@ class MWMediaCollectionViewCell: MWCollectionViewCell {
             make.edges.equalToSuperview()
         }
     }
-    
+
     // MARK: - functions
-    
+
     override func setup<T>(_ item: T) {
         if let video = item as? MWMovieVideo {
             self.playerView.isHidden = false

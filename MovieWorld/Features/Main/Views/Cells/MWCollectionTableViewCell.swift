@@ -9,13 +9,13 @@
 import UIKit
 
 class MWCollectionTableViewCell: UITableViewCell {
-    
+
     // MARK: - variables
-    
+
     static let reuseId = "collectionViewTableViewCell"
-    
+
     // MARK: - gui variables
-    
+
     private lazy var collectionView: MWCollectionViewWithHeader<Movieable,
         MWMovieCardCollectionViewCell> = {
             let view = MWCollectionViewWithHeader<Movieable, MWMovieCardCollectionViewCell>()
@@ -24,12 +24,12 @@ class MWCollectionTableViewCell: UITableViewCell {
             view.maximumItems = 20
             return view
     }()
-    
+
     // MARK: - init
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         self.backgroundColor = .white
         self.selectionStyle = .none
         self.contentView.addSubview(self.collectionView)
@@ -38,13 +38,13 @@ class MWCollectionTableViewCell: UITableViewCell {
         }
         self.collectionView.makeConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - functions
-    
+
     func setup(section: MWSection, retryButtonTapped: (() -> Void)?) {
         self.collectionView.setup(title: section.name,
                                   items: section.movies,

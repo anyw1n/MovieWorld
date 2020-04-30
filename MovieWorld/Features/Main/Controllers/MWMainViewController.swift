@@ -9,15 +9,15 @@
 import UIKit
 
 class MWMainViewController: MWViewController {
-    
+
     // MARK: - variables
-    
+
     private let dispatchGroup = DispatchGroup()
     private lazy var sections: [MWSection] = {
         let currentDate = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
-        
+
         return [MWSection(name: "New".localized(),
                           url: URLPaths.discoverMovies,
                           category: .movie,
@@ -40,9 +40,9 @@ class MWMainViewController: MWViewController {
                                        "sort_by": "popularity.desc"],
                           genreIds: [16])]
     }()
-    
+
     // MARK: - gui variables
-    
+
     private lazy var tableView: UITableView = {
         let view = UITableView()
         view.delegate = self
@@ -55,37 +55,37 @@ class MWMainViewController: MWViewController {
         view.refreshControl = self.refreshControl
         return view
     }()
-    
+
     private lazy var refreshControl: UIRefreshControl = {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(self.refreshTableView), for: .valueChanged)
         refresh.tintColor = UIColor(named: "accentColor")
         return refresh
     }()
-    
+
     // MARK: - init
-    
+
     override func initController() {
         super.initController()
         self.navigationItem.title = "Movie World"
 
         self.loadMovies()
-        
+
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
             self.view.addSubview(self.tableView)
             self.makeConstraints()
         }
     }
-    
+
     // MARK: - constraints
-    
+
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
             make.left.top.right.equalToSuperview()
             make.bottom.equalToSuperview().offset(-16)
         }
     }
-    
+
     // MARK: - functions
 
     @objc private func refreshTableView() {
@@ -96,16 +96,16 @@ class MWMainViewController: MWViewController {
         }
         self.refreshControl.endRefreshing()
     }
-    
+
     @objc private func allButtonTapped(sender: UIButton) {
         let controller = MWMovieListViewController()
         controller.section = self.sections[sender.tag].copy() as? MWSection
         MWI.sh.push(controller)
     }
-    
+
     private func loadMovies(into section: MWSection? = nil) {
         self.dispatchGroup.enter()
-        
+
         guard let section = section, let url = section.url, let category = section.category else {
             self.sections.forEach { self.loadMovies(into: $0) }
             self.dispatchGroup.leave()
@@ -150,17 +150,17 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.sections.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView
             .dequeueReusableCell(withIdentifier: MWCollectionTableViewCell.reuseId,
                                  for: indexPath)
             as? MWCollectionTableViewCell ?? MWCollectionTableViewCell()
-        
+
         cell.setup(section: self.sections[indexPath.row]) { [weak self] in
             self?.loadMovies(into: self?.sections[indexPath.row])
         }
-        
+
         return cell
     }
 }

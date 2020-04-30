@@ -9,14 +9,14 @@
 import UIKit
 
 class MWMovieCardView: UIView {
-    
+
     // MARK: - variables
-    
+
     private let imageInsets = UIEdgeInsets(top: 10, left: 16, bottom: 10, right: 0)
     private let textInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16)
     private let textOffset = 16
     private let imageSize = CGSize(width: 70, height: 100)
-    
+
     // MARK: - gui variables
 
     private(set) lazy var posterImageView: UIImageView = {
@@ -26,7 +26,7 @@ class MWMovieCardView: UIView {
         view.clipsToBounds = true
         return view
     }()
-    
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 17)
@@ -34,7 +34,7 @@ class MWMovieCardView: UIView {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private lazy var subtitleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
@@ -42,7 +42,7 @@ class MWMovieCardView: UIView {
         label.textColor = UIColor(named: "textColor")
         return label
     }()
-    
+
     private lazy var genreLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
@@ -51,7 +51,7 @@ class MWMovieCardView: UIView {
         label.textColor = UIColor(named: "textColor")
         return label
     }()
-    
+
     private lazy var ratingLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13)
@@ -60,19 +60,19 @@ class MWMovieCardView: UIView {
     }()
 
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
         self.addSubviews()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - constraints
-    
+
     func makeInternalConstraints() {
         self.posterImageView.snp.updateConstraints { (make) in
             make.top.left.equalToSuperview().inset(self.imageInsets)
@@ -101,13 +101,13 @@ class MWMovieCardView: UIView {
             make.right.equalToSuperview().inset(self.textInsets)
         }
     }
-    
+
     // MARK: - functions
-    
+
     func setup(_ movie: Movieable) {
         movie.showImage(size: .w92, in: self.posterImageView)
         self.titleLabel.text = movie.title
-        
+
         if let movie = movie as? MWMovie, movie.details == nil {
             movie.detailsLoaded = { [weak self] in
                 self?.setSubtitle(movie: movie)
@@ -119,12 +119,12 @@ class MWMovieCardView: UIView {
                 self?.setNeedsUpdateConstraints()
             }
         }
-        
+
         self.setSubtitle(movie: movie)
         self.genreLabel.text = movie.genres.joined(separator: ", ")
         self.ratingLabel.text = "IMDB -, KP -"
     }
-    
+
     private func setSubtitle(movie: Movieable) {
         if let details = movie.details, !(details.countryNames.isEmpty) {
             self.subtitleLabel.text =
@@ -133,7 +133,7 @@ class MWMovieCardView: UIView {
             self.subtitleLabel.text = "\(movie.releaseYear)"
         }
     }
-    
+
     private func addSubviews() {
         self.addSubview(self.posterImageView)
         self.addSubview(self.titleLabel)

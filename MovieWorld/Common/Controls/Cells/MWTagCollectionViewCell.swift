@@ -9,16 +9,17 @@
 import UIKit
 
 class MWTagCollectionViewCell: UICollectionViewCell {
-    
+
     // MARK: - variables
-    
-    static let reuseId = "tagCollectionViewCell"
+
+    static let reuseId = "MWTagCollectionViewCell"
+
     override var isSelected: Bool {
         didSet {
             self.contentView.alpha = self.isSelected ? 1 : 0.5
         }
     }
-    
+
     // MARK: - gui variables
 
     private(set) lazy var button: MWRoundedButton = {
@@ -27,26 +28,26 @@ class MWTagCollectionViewCell: UICollectionViewCell {
         button.titleEdgeInsets = UIEdgeInsets.zero
         return button
     }()
-    
+
     // MARK: - init
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         self.contentView.addSubview(self.button)
         self.contentView.alpha = 0.5
-        self.makeConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - constraints
-    
-    private func makeConstraints() {
+
+    override func updateConstraints() {
         self.button.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
+        super.updateConstraints()
     }
 }
