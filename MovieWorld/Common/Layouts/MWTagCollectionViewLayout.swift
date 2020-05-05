@@ -10,8 +10,6 @@ import UIKit
 
 class MWTagCollectionViewLayout: UICollectionViewLayout {
 
-    // MARK: - variables
-
     // MARK: public stored
 
     weak var delegate: MWTagCollectionViewLayoutDelegate?

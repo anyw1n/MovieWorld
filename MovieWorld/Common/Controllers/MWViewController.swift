@@ -11,7 +11,7 @@ import SnapKit
 
 class MWViewController: UIViewController {
 
-    // MARK: - init
+    // MARK: - lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +19,8 @@ class MWViewController: UIViewController {
         self._initController()
         self.initController()
     }
+
+    // MARK: - init
 
     private func _initController() {
         self.view.backgroundColor = .white

@@ -18,8 +18,6 @@ class MWMovie: Decodable {
         posterPath = "poster_path"
     }
 
-    // MARK: - variables
-
     // MARK: public stored
 
     var title: String?
@@ -42,17 +40,6 @@ class MWMovie: Decodable {
             genres.append("No genre".localized())
         }
         return genres
-    }
-
-    // MARK: - init
-
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.title = (try? container.decode(String.self, forKey: .title))
-        self.id = (try? container.decode(Int.self, forKey: .id)) ?? -1
-        self.releaseDate = (try? container.decode(String.self, forKey: .releaseDate))
-        self.genreIDs = (try? container.decode([Int].self, forKey: .genreIDs))
-        self.posterPath = (try? container.decode(String.self, forKey: .posterPath))
     }
 
     // MARK: - functions

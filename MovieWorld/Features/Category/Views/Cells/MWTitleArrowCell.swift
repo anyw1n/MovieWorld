@@ -13,7 +13,8 @@ class MWTitleArrowCell: UITableViewCell {
     // MARK: - variables
 
     static let reuseID = "MWTitleArrowCell"
-    private let offset = 11
+
+    private let titleInsets = UIEdgeInsets(top: 11, left: 16, bottom: 11, right: 0)
 
     // MARK: - gui variables
 
@@ -48,10 +49,8 @@ class MWTitleArrowCell: UITableViewCell {
 
     override func updateConstraints() {
         self.titleLabel.snp.updateConstraints { (make) in
-            make.top.equalToSuperview().offset(self.offset)
-            make.left.equalToSuperview().offset(16)
+            make.top.left.bottom.equalToSuperview().inset(self.titleInsets)
             make.right.lessThanOrEqualToSuperview()
-            make.bottom.equalToSuperview().offset(-self.offset)
         }
         super.updateConstraints()
     }

@@ -13,6 +13,7 @@ class MWMovieCardCollectionViewCell: UICollectionViewCell {
     // MARK: - variables
 
     static let reuseID = "MWMovieCardCollectionViewCell"
+
     private let imageSize = CGSize(width: 130, height: 185)
 
     // MARK: - gui variables

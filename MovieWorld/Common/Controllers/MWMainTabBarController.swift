@@ -36,7 +36,7 @@ class MWMainTabBarController: UITabBarController {
         return controller
     }()
 
-    // MARK: - init
+    // MARK: - lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()

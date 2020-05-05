@@ -13,9 +13,14 @@ class MWInitController: MWViewController {
     // MARK: - variables
 
     private let stackViewInsets = UIEdgeInsets(top: 0, left: 40, bottom: 0, right: 40)
+
     private let spinnerInsets = UIEdgeInsets(top: 0, left: 0, bottom: 76, right: 0)
     private let spinnerSize = CGSize(width: 35, height: 35)
+
     private let dispatchGroup = DispatchGroup()
+
+    private var genres: MWCategories = [:]
+    private var configuration: MWConfiguration?
 
     // MARK: - gui variables
 
@@ -67,6 +72,7 @@ class MWInitController: MWViewController {
         self.loadConfiguration()
 
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
+            CDM.sh.saveContext()
             MWI.sh.window?.rootViewController = MWI.sh.tabBarController
         }
     }
@@ -94,27 +100,15 @@ class MWInitController: MWViewController {
     private func loadGenres(category: MWCategory) {
         self.dispatchGroup.enter()
 
-        var url: String?
-        switch category {
-        case .movie:
-            url = URLPaths.movieGenres
-        case .tv:
-            url = URLPaths.tvGenres
-        }
-
         MWN.sh.request(
-            url: url ?? "",
+            url: category.url,
             successHandler: { [weak self] (response: [MWGenre]) in
                 response.forEach { $0.category = category.rawValue }
-                MWS.sh.genres[category] = response
+                self?.genres[category] = response
                 self?.dispatchGroup.leave()
             },
             errorHandler: { [weak self]  (error) in
                 error.printInConsole()
-                let predicate =
-                    NSPredicate(format: "category = %@", category.rawValue)
-                MWS.sh.genres[category] =
-                    CDM.sh.loadData(entityName: MWGenre.entityName, predicate: predicate)
                 self?.dispatchGroup.leave()
         })
     }
@@ -125,13 +119,11 @@ class MWInitController: MWViewController {
         MWN.sh.request(
             url: URLPaths.configuration,
             successHandler: { [weak self] (response: MWConfiguration) in
-                MWS.sh.configuration = response
+                self?.configuration = response
                 self?.dispatchGroup.leave()
             },
             errorHandler: { [weak self]  (error) in
                 error.printInConsole()
-                MWS.sh.configuration =
-                    CDM.sh.loadData(entityName: MWConfiguration.entityName)?.first
                 self?.dispatchGroup.leave()
         })
     }

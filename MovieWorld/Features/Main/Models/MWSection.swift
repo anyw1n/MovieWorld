@@ -10,8 +10,6 @@ import Foundation
 
 class MWSection: NSCopying {
 
-    // MARK: - variables
-
     // MARK: public stored
 
     let name: String

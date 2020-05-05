@@ -13,6 +13,7 @@ class MWRetryTableViewCell: UITableViewCell {
     // MARK: - variables
 
     static let reuseID = "MWRetryTableViewCell"
+
     let buttonSize = CGSize(width: 150, height: 40)
     var retryTapped: (() -> Void)?
 
@@ -45,7 +46,7 @@ class MWRetryTableViewCell: UITableViewCell {
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.retryButton.snp.makeConstraints { (make) in
+        self.retryButton.snp.updateConstraints { (make) in
             make.center.equalToSuperview()
             make.size.equalTo(self.buttonSize)
         }

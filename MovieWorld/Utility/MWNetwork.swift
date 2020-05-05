@@ -40,7 +40,10 @@ class MWNetwork {
             parameters["region"] = regionCode
         }
 
-        AF.request(url + key, parameters: parameters).validate().responseJSON { (response) in
+        AF
+            .request(url + key, parameters: parameters)
+            .validate()
+            .responseJSON { (response) in
             switch response.result {
             case .success(let value):
                 var data: Data?

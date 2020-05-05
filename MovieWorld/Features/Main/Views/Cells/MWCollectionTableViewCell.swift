@@ -60,7 +60,7 @@ class MWCollectionTableViewCell: UITableViewCell {
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.collectionView.snp.makeConstraints { (make) in
+        self.collectionView.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
         super.updateConstraints()

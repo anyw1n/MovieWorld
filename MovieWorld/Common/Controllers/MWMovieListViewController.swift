@@ -13,8 +13,10 @@ class MWMovieListViewController: MWViewController {
     // MARK: - variables
 
     var section: MWSection?
+
     private let collectionViewInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
     private let collectionViewHeight: CGFloat = 92
+
     private var isRequestBusy: Bool = false
 
     // MARK: - gui variables
@@ -65,7 +67,7 @@ class MWMovieListViewController: MWViewController {
     override func initController() {
         super.initController()
 
-        self.navigationItem.title = section?.name
+        self.navigationItem.title = self.section?.name
         self.view.addSubview(self.tableView)
         self.makeConstraints()
 
@@ -84,16 +86,18 @@ class MWMovieListViewController: MWViewController {
 
     // MARK: - functions
 
-    private func loadMovies() {
+    private func loadMovies(completionHandler: (() -> Void)? = nil) {
         guard !self.isRequestBusy,
-            self.section?.pagesLoaded != self.section?.totalPages else { return }
+            let section = self.section,
+            section.pagesLoaded != section.totalPages else { return }
         self.isRequestBusy = true
 
-        self.requestMovies(page: (self.section?.pagesLoaded ?? 0) + 1) { [weak self] (response) in
+        self.requestMovies(page: section.pagesLoaded + 1) { [weak self] (response) in
             guard let self = self else { return }
             self.isRequestBusy = false
-            self.section?.loadResults(from: response)
+            section.loadResults(from: response)
             self.tableView.reloadData()
+            completionHandler?()
         }
     }
 
@@ -112,8 +116,7 @@ class MWMovieListViewController: MWViewController {
     @objc private func refreshTableView() {
         self.section?.clearResults()
         self.tableView.reloadData()
-        self.loadMovies()
-        self.refreshControl.endRefreshing()
+        self.loadMovies { self.refreshControl.endRefreshing() }
     }
 }
 
@@ -132,10 +135,11 @@ extension MWMovieListViewController: UICollectionViewDelegate, UICollectionViewD
                                                for: indexPath)
         guard let genre = MWS.sh.genres[.movie]?[indexPath.row] else { return cell }
 
-        (cell as? MWTagCollectionViewCell)?.button.setTitle(genre.name, for: .init())
+        (cell as? MWTagCollectionViewCell)?.setup(title: genre.name)
         if self.section?.genreIds?.contains(genre.id) ?? false {
             cell.isSelected = true
         }
+        cell.setNeedsUpdateConstraints()
         return cell
     }
 

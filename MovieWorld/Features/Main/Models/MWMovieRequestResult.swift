@@ -22,14 +22,4 @@ class MWMovieRequestResult: Decodable {
     let results: [MWMovie]?
     let totalResults: Int?
     let totalPages: Int?
-
-    // MARK: - init
-
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.page = (try? container.decode(Int.self, forKey: .page))
-        self.results = (try? container.decode([MWMovie].self, forKey: .results))
-        self.totalResults = (try? container.decode(Int.self, forKey: .totalResults))
-        self.totalPages = (try? container.decode(Int.self, forKey: .totalPages))
-    }
 }
