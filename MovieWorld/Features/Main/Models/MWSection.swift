@@ -8,9 +8,7 @@
 
 import Foundation
 
-class MWSection: NSCopying {
-
-    // MARK: - variables
+class MWSection {
 
     // MARK: public stored
 
@@ -66,7 +64,7 @@ class MWSection: NSCopying {
 
     // MARK: - functions
 
-    func copy(with zone: NSZone? = nil) -> Any {
+    func copy() -> MWSection {
         let copy = MWSection(name: self.name,
                              url: self.url,
                              category: self.category,

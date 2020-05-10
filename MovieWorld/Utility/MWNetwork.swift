@@ -39,31 +39,34 @@ class MWNetwork {
             parameters["region"] = regionCode
         }
 
-        AF.request(url, parameters: parameters).validate().responseJSON { (response) in
-            switch response.result {
-            case .success(let value):
-                do {
-                    if let data = try? JSONSerialization.data(withJSONObject: value,
-                                                              options: .prettyPrinted) {
-                        try successHandler(JSONDecoder().decode(T.self, from: data))
+        AF
+            .request(url, parameters: parameters)
+            .validate()
+            .responseJSON { (response) in
+                switch response.result {
+                case .success(let value):
+                    do {
+                        if let data = try? JSONSerialization.data(withJSONObject: value,
+                                                                  options: .prettyPrinted) {
+                            try successHandler(JSONDecoder().decode(T.self, from: data))
+                        }
+                    } catch {
+                        errorHandler(.parsingError(error))
                     }
-                } catch {
-                    errorHandler(.parsingError(error))
-                }
-            case .failure(let error):
-                if let code = error.responseCode {
-                    switch code {
-                    case 401:
-                        errorHandler(.unauthError(apiKey: self.apiKey))
-                    case 404:
-                        errorHandler(.incorrectUrl(url: url))
-                    default:
-                        errorHandler(.serverError(statusCode: code))
-                    }
-                } else {
+                case .failure(let error):
+                    if let code = error.responseCode {
+                        switch code {
+                        case 401:
+                            errorHandler(.unauthError(apiKey: self.apiKey))
+                        case 404:
+                            errorHandler(.incorrectUrl(url: url))
+                        default:
+                            errorHandler(.serverError(statusCode: code))
+                        }
+                    } else {
                         errorHandler(.unknown(error: error))
+                    }
                 }
-            }
         }
     }
 }

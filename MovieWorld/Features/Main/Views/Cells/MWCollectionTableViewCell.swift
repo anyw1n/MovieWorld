@@ -61,7 +61,7 @@ class MWCollectionTableViewCell: UITableViewCell {
                                     MWI.sh.push(controller)
         }, allButtonTapped: {
             let controller = MWMovieListViewController()
-            controller.section = section
+            controller.section = section.copy()
             MWI.sh.push(controller)
         }, retryButtonTapped: retryButtonTapped)
     }

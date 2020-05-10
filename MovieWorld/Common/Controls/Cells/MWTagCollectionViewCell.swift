@@ -22,7 +22,7 @@ class MWTagCollectionViewCell: UICollectionViewCell {
 
     // MARK: - gui variables
 
-    private(set) lazy var button: MWRoundedButton = {
+    private lazy var button: MWRoundedButton = {
         let button = MWRoundedButton()
         button.isUserInteractionEnabled = false
         button.titleEdgeInsets = UIEdgeInsets.zero
@@ -49,5 +49,11 @@ class MWTagCollectionViewCell: UICollectionViewCell {
             make.edges.equalToSuperview()
         }
         super.updateConstraints()
+    }
+
+    // MARK: - setup
+
+    func setup(title: String?) {
+        self.button.setTitle(title, for: .init())
     }
 }

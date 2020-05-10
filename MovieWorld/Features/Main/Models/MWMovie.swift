@@ -17,8 +17,6 @@ class MWMovie: Movieable {
         posterPath = "poster_path", overview
     }
 
-    // MARK: - variables
-
     // MARK: public stored
 
     let title: String

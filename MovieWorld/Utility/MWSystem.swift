@@ -13,6 +13,15 @@ typealias MWCategories = [MWCategory: [MWGenre]]
 
 enum MWCategory: String, CaseIterable {
     case movie, tv
+
+    var url: String {
+        switch self {
+        case .movie:
+            return URLPaths.movieGenres
+        case .tv:
+            return URLPaths.tvGenres
+        }
+    }
 }
 
 class MWSystem {
@@ -21,9 +30,22 @@ class MWSystem {
 
     static let sh = MWSystem()
 
-    var configuration: MWConfiguration?
-    var genres: MWCategories = [:]
-    var countries: [MWCountry]?
+    let animatedMoviesGenreId: Int64 = 16
+
+    lazy var configuration: MWConfiguration? =
+        CDM.sh.loadData(entityName: MWConfiguration.entityName)?.first
+    lazy var genres: MWCategories = {
+        var genres: MWCategories = [:]
+        MWCategory.allCases.forEach { category in
+            let predicate = NSPredicate(format: "category = %@", category.rawValue)
+            genres[category] = CDM.sh.loadData(entityName: MWGenre.entityName,
+                                               keysForSort: ["name"],
+                                               predicate: predicate)
+        }
+        return genres
+    }()
+    lazy var countries: [MWCountry]? = CDM.sh.loadData(entityName: MWCountry.entityName)
+
     var allGenres: [MWGenre] {
         var genres: [MWGenre] = []
         for category in MWCategory.allCases {

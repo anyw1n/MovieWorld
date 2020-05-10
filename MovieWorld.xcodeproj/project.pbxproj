@@ -66,6 +66,7 @@
 		502915C7243AFA0400FDF4ED /* Detailable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502915C6243AFA0400FDF4ED /* Detailable.swift */; };
 		502BF5DB2433583100737AF0 /* MWShow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502BF5DA2433583100737AF0 /* MWShow.swift */; };
 		502CDB6B244200860094DA73 /* YoutubeDataApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502CDB6A244200860094DA73 /* YoutubeDataApi.swift */; };
+		50474A442461D8FC00EB56D4 /* Date+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50474A432461D8FC00EB56D4 /* Date+Ex.swift */; };
 		5071F4EC2414F6FC0093CDF8 /* MWSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5071F4EB2414F6FC0093CDF8 /* MWSystem.swift */; };
 		507F690D240B85C600564DEC /* MWMovieCardCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507F690C240B85C600564DEC /* MWMovieCardCollectionViewCell.swift */; };
 		507F690F240B892E00564DEC /* MWCollectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507F690E240B892E00564DEC /* MWCollectionTableViewCell.swift */; };
@@ -149,6 +150,7 @@
 		502915C6243AFA0400FDF4ED /* Detailable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Detailable.swift; sourceTree = "<group>"; };
 		502BF5DA2433583100737AF0 /* MWShow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWShow.swift; sourceTree = "<group>"; };
 		502CDB6A244200860094DA73 /* YoutubeDataApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeDataApi.swift; sourceTree = "<group>"; };
+		50474A432461D8FC00EB56D4 /* Date+Ex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Ex.swift"; sourceTree = "<group>"; };
 		5071F4EB2414F6FC0093CDF8 /* MWSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWSystem.swift; sourceTree = "<group>"; };
 		507F690C240B85C600564DEC /* MWMovieCardCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWMovieCardCollectionViewCell.swift; sourceTree = "<group>"; };
 		507F690E240B892E00564DEC /* MWCollectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MWCollectionTableViewCell.swift; sourceTree = "<group>"; };
@@ -296,6 +298,7 @@
 			children = (
 				5019069E240BB039008D1009 /* String+Ex.swift */,
 				5020D7B024596CC7007453D8 /* UIActivityIndicatorView+Ex.swift */,
+				50474A432461D8FC00EB56D4 /* Date+Ex.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -665,6 +668,7 @@
 				50272DCF2414E831009BD61B /* URLPaths.swift in Sources */,
 				50E10E78240168B000F774F9 /* MWSearchViewController.swift in Sources */,
 				502295132442F82F009D7E70 /* YoutubeDataVideoWithPlayer.swift in Sources */,
+				50474A442461D8FC00EB56D4 /* Date+Ex.swift in Sources */,
 				50F700EA23F7AEE00029A997 /* MWViewController.swift in Sources */,
 				501906A3240BB1A8008D1009 /* MWNetwork.swift in Sources */,
 				50188B162435FFC300CAC18F /* MWCountry+CoreDataClass.swift in Sources */,

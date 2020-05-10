@@ -10,36 +10,64 @@ import UIKit
 
 class MWMainViewController: MWViewController {
 
+    // MARK: - enum
+
+    private enum Sections: CaseIterable {
+
+        private static let currentDateString = Date().formatted(dateFormat: "yyyy-MM-dd")
+
+        private static let newSection =
+            MWSection(name: "New".localized(),
+                      url: URLPaths.discoverMovies,
+                      category: .movie,
+                      parameters: ["release_date.lte": Sections.currentDateString,
+                                   "sort_by": "release_date.desc"])
+
+        private static let moviesSection =
+            MWSection(name: "Movies".localized(),
+                      url: URLPaths.discoverMovies,
+                      category: .movie,
+                      parameters: ["release_date.lte": Sections.currentDateString,
+                                   "sort_by": "popularity.desc"])
+
+        private static let tvSection =
+            MWSection(name: "Series and shows".localized(),
+                      url: URLPaths.discoverTVs,
+                      category: .tv,
+                      parameters: ["first_air_date.lte": Sections.currentDateString,
+                                   "sort_by": "popularity.desc"])
+
+        private static let animatedSection =
+            MWSection(name: "Animated movies".localized(),
+                      url: URLPaths.discoverMovies,
+                      category: .movie,
+                      parameters: ["release_date.lte": Sections.currentDateString,
+                                   "sort_by": "popularity.desc"],
+                      genreIds: [MWS.sh.animatedMoviesGenreId])
+
+        case new, movies, tv, animated
+
+        func get() -> MWSection {
+            switch self {
+            case .new:
+                return Sections.newSection
+            case .movies:
+                return Sections.moviesSection
+            case .tv:
+                return Sections.tvSection
+            case .animated:
+                return Sections.animatedSection
+            }
+        }
+    }
+
     // MARK: - variables
 
-    private let dispatchGroup = DispatchGroup()
-    private lazy var sections: [MWSection] = {
-        let currentDate = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
+    private let sections: [Sections] = Sections.allCases
 
-        return [MWSection(name: "New".localized(),
-                          url: URLPaths.discoverMovies,
-                          category: .movie,
-                          parameters: ["release_date.lte": formatter.string(from: currentDate),
-                                       "sort_by": "release_date.desc"]),
-                MWSection(name: "Movies".localized(),
-                          url: URLPaths.discoverMovies,
-                          category: .movie,
-                          parameters: ["release_date.lte": formatter.string(from: currentDate),
-                                       "sort_by": "popularity.desc"]),
-                MWSection(name: "Series and shows".localized(),
-                          url: URLPaths.discoverTVs,
-                          category: .tv,
-                          parameters: ["first_air_date.lte": formatter.string(from: currentDate),
-                                       "sort_by": "popularity.desc"]),
-                MWSection(name: "Animated movies".localized(),
-                          url: URLPaths.discoverMovies,
-                          category: .movie,
-                          parameters: ["release_date.lte": formatter.string(from: currentDate),
-                                       "sort_by": "popularity.desc"],
-                          genreIds: [16])]
-    }()
+    private let dispatchGroup = DispatchGroup()
+
+    private let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
 
     // MARK: - gui variables
 
@@ -53,6 +81,8 @@ class MWMainViewController: MWViewController {
         view.showsHorizontalScrollIndicator = false
         view.showsVerticalScrollIndicator = false
         view.refreshControl = self.refreshControl
+        view.contentInset = self.contentInsets
+        view.alpha = 0
         return view
     }()
 
@@ -69,11 +99,12 @@ class MWMainViewController: MWViewController {
         super.initController()
         self.navigationItem.title = "Movie World"
 
-        self.loadMovies()
+        self.loadMovies(into: self.sections)
+        self.view.addSubview(self.tableView)
+        self.makeConstraints()
 
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
-            self.view.addSubview(self.tableView)
-            self.makeConstraints()
+            UIView.animate(withDuration: 0.3) { self.tableView.alpha = 1 }
         }
     }
 
@@ -81,64 +112,57 @@ class MWMainViewController: MWViewController {
 
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
-            make.left.top.right.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-16)
+            make.top.left.right.bottom.equalToSuperview()
         }
     }
 
     // MARK: - functions
 
     @objc private func refreshTableView() {
-        self.tableView.isHidden = true
-        self.loadMovies()
+        UIView.animate(withDuration: 0.3) { self.tableView.alpha = 0 }
+
+        self.loadMovies(into: Sections.allCases)
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
-            self.tableView.isHidden = false
+            UIView.animate(withDuration: 0.3) { self.tableView.alpha = 1 }
+            self.refreshControl.endRefreshing()
         }
-        self.refreshControl.endRefreshing()
     }
 
-    @objc private func allButtonTapped(sender: UIButton) {
-        let controller = MWMovieListViewController()
-        controller.section = self.sections[sender.tag].copy() as? MWSection
-        MWI.sh.push(controller)
-    }
+    private func loadMovies(into sections: [Sections]) {
+        for (i, sectionCase) in sections.enumerated() {
+            let section = sectionCase.get()
+            guard let url = section.url, let category = section.category else { return }
 
-    private func loadMovies(into section: MWSection? = nil) {
-        self.dispatchGroup.enter()
+            self.dispatchGroup.enter()
 
-        guard let section = section, let url = section.url, let category = section.category else {
-            self.sections.forEach { self.loadMovies(into: $0) }
-            self.dispatchGroup.leave()
-            return
-        }
-        let index = self.sections.firstIndex { $0.name == section.name } ?? -1
-        switch category {
-        case .movie:
-            MWN.sh.request(
-                url: url,
-                queryParameters: section.requestParameters,
-                successHandler: { [weak self] (response: MWMovieRequestResult<MWMovie>) in
-                    section.loadResults(from: response)
-                    self?.tableView.reloadRows(at: [IndexPath(row: index, section: 0)],
-                                               with: .automatic)
-                    self?.dispatchGroup.leave()
-                }, errorHandler: { [weak self] error in
-                    error.printInConsole()
-                    self?.dispatchGroup.leave()
-            })
-        case .tv:
-            MWN.sh.request(
-                url: url,
-                queryParameters: section.requestParameters,
-                successHandler: { [weak self] (response: MWMovieRequestResult<MWShow>) in
-                    section.loadResults(from: response)
-                    self?.tableView.reloadRows(at: [IndexPath(row: index, section: 0)],
-                                               with: .automatic)
-                    self?.dispatchGroup.leave()
-                }, errorHandler: { [weak self] error in
-                    error.printInConsole()
-                    self?.dispatchGroup.leave()
-            })
+            switch category {
+            case .movie:
+                MWN.sh.request(
+                    url: url,
+                    queryParameters: section.requestParameters,
+                    successHandler: { [weak self] (response: MWMovieRequestResult<MWMovie>) in
+                        section.loadResults(from: response)
+                        self?.tableView.reloadRows(at: [IndexPath(row: i, section: 0)],
+                                                   with: .automatic)
+                        self?.dispatchGroup.leave()
+                    }, errorHandler: { [weak self] error in
+                        error.printInConsole()
+                        self?.dispatchGroup.leave()
+                })
+            case .tv:
+                MWN.sh.request(
+                    url: url,
+                    queryParameters: section.requestParameters,
+                    successHandler: { [weak self] (response: MWMovieRequestResult<MWShow>) in
+                        section.loadResults(from: response)
+                        self?.tableView.reloadRows(at: [IndexPath(row: i, section: 0)],
+                                                   with: .automatic)
+                        self?.dispatchGroup.leave()
+                    }, errorHandler: { [weak self] error in
+                        error.printInConsole()
+                        self?.dispatchGroup.leave()
+                })
+            }
         }
     }
 }
@@ -157,8 +181,9 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
                                  for: indexPath)
 
         (cell as? MWCollectionTableViewCell)?
-            .setup(section: self.sections[indexPath.row]) { [weak self] in
-                self?.loadMovies(into: self?.sections[indexPath.row])
+            .setup(section: self.sections[indexPath.row].get()) { [weak self] in
+                guard let self = self else { return }
+                self.loadMovies(into: [self.sections[indexPath.row]])
         }
         cell.setNeedsUpdateConstraints()
         return cell

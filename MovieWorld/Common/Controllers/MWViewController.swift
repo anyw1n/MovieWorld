@@ -11,7 +11,7 @@ import SnapKit
 
 class MWViewController: UIViewController {
 
-    // MARK: - init
+    // MARK: - lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,7 +20,7 @@ class MWViewController: UIViewController {
         self.initController()
     }
 
-    // MARK: - functions
+    // MARK: - init
 
     func initController() { }
 

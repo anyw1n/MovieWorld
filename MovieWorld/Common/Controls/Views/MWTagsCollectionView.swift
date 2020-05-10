@@ -103,7 +103,7 @@ extension MWTagsCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
             ? MWS.sh.allGenres[indexPath.row]
             : MWS.sh.genres[self.section!.category!]?[indexPath.row] else { return cell }
 
-        (cell as? MWTagCollectionViewCell)?.button.setTitle(genre.name, for: .init())
+        (cell as? MWTagCollectionViewCell)?.setup(title: genre.name)
         if self.section?.genreIds?.contains(genre.id) ?? false {
             cell.isSelected = true
         }

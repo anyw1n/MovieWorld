@@ -20,6 +20,7 @@ class MWMovieListViewController: MWViewController {
             }
         }
     }
+
     private var isRequestBusy: Bool = false
 
     // MARK: - gui variables
@@ -70,7 +71,7 @@ class MWMovieListViewController: MWViewController {
 
     // MARK: - functions
 
-    private func loadMovies() {
+    private func loadMovies(completionHandler: (() -> Void)? = nil) {
         guard !self.isRequestBusy,
             let section = self.section,
             !section.isStaticSection,
@@ -86,6 +87,7 @@ class MWMovieListViewController: MWViewController {
                 self.isRequestBusy = false
                 section.loadResults(from: response)
                 self.tableView.reloadData()
+                completionHandler?()
             }
         case .tv:
             self.requestMovies(
@@ -94,6 +96,7 @@ class MWMovieListViewController: MWViewController {
                 self.isRequestBusy = false
                 section.loadResults(from: response)
                 self.tableView.reloadData()
+                completionHandler?()
             }
         }
     }
@@ -125,9 +128,8 @@ class MWMovieListViewController: MWViewController {
                 return true
             }
             self.tableView.reloadData()
-        } else { self.loadMovies() }
-
-        self.refreshControl.endRefreshing()
+            self.refreshControl.endRefreshing()
+        } else { self.loadMovies(completionHandler: { self.refreshControl.endRefreshing() }) }
     }
 }
 
