@@ -11,6 +11,8 @@ import Kingfisher
 
 struct MWMovieVideo: Mediable {
 
+    // MARK: - enum
+
     enum Size {
         case `default`, medium, high, standard
     }

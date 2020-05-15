@@ -16,7 +16,9 @@ class MWMovieListViewController: MWViewController {
         didSet {
             guard let section = self.section else { return }
             self.tagCollectionView.setup(section: section) { [weak self] in
-                self?.refreshTableView()
+                guard let self = self else { return }
+                self.isRequestBusy = false
+                self.loadMovies(nextPage: false)
             }
         }
     }
@@ -40,9 +42,15 @@ class MWMovieListViewController: MWViewController {
         return view
     }()
 
+    private lazy var retryView: MWRetryView = {
+        let view = MWRetryView()
+        view.delegate = self
+        return view
+    }()
+
     private lazy var refreshControl: UIRefreshControl = {
         let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(self.refreshTableView), for: .valueChanged)
+        refresh.addTarget(self, action: #selector(self.refreshAction), for: .valueChanged)
         refresh.tintColor = UIColor(named: "accentColor")
         return refresh
     }()
@@ -53,11 +61,12 @@ class MWMovieListViewController: MWViewController {
         super.initController()
 
         self.navigationItem.title = self.section?.name
+        self.view.addSubview(self.retryView)
         self.view.addSubview(self.tableView)
         self.makeConstraints()
 
         if let section = self.section, section.pagesLoaded == 0, !section.isStaticSection {
-            self.loadMovies()
+            self.loadMovies(nextPage: true)
         }
     }
 
@@ -65,71 +74,72 @@ class MWMovieListViewController: MWViewController {
 
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.left.right.bottom.equalToSuperview()
         }
+        self.retryView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+                .offset(MWTagsCollectionView.height)
+            make.left.right.bottom.equalToSuperview()
+        }
+        self.retryView.makeConstraints()
     }
 
     // MARK: - functions
 
-    private func loadMovies(completionHandler: (() -> Void)? = nil) {
-        guard !self.isRequestBusy,
-            let section = self.section,
-            !section.isStaticSection,
-            section.pagesLoaded != section.totalPages,
-            let category = section.category else { return }
-        self.isRequestBusy = true
-
-        switch category {
-        case .movie:
-            self.requestMovies(
-            page: (section.pagesLoaded) + 1) { [weak self] (response: MWMovieRequestResult<MWMovie>) in
-                guard let self = self else { return }
-                self.isRequestBusy = false
-                section.loadResults(from: response)
-                self.tableView.reloadData()
-                completionHandler?()
-            }
-        case .tv:
-            self.requestMovies(
-            page: (section.pagesLoaded) + 1) { [weak self] (response: MWMovieRequestResult<MWShow>) in
-                guard let self = self else { return }
-                self.isRequestBusy = false
-                section.loadResults(from: response)
-                self.tableView.reloadData()
-                completionHandler?()
-            }
+    private func reloadData() {
+        if self.section?.movies.isEmpty ?? true {
+            self.tableView.isScrollEnabled = false
+            self.retryView.show(retryButtonEnabled: false)
+        } else {
+            self.tableView.isScrollEnabled = true
+            self.retryView.hide()
+            self.tableView.reloadData()
         }
     }
 
-    private func requestMovies<T>(page: Int, completion: @escaping (MWMovieRequestResult<T>) -> Void) {
-        guard let section = self.section, let url = section.url else { return }
-        section.requestParameters["page"] = page
-        MWN.sh.request(url: url,
-                       queryParameters: section.requestParameters,
-                       successHandler: { (response: MWMovieRequestResult) in
-                        completion(response)
-        }, errorHandler: { (error) in
-            error.printInConsole()
-        })
+    private func loadMovies(nextPage: Bool,
+                            enableSpinner: Bool = true,
+                            completionHandler: (() -> Void)? = nil) {
+        guard !self.isRequestBusy,
+            let section = self.section else { return }
+        self.isRequestBusy = true
+
+        if enableSpinner {
+            self.startSpinner()
+            self.tableView.isScrollEnabled = false
+        }
+        if !nextPage {
+            self.section?.clear()
+            self.tableView.reloadData()
+        }
+
+        section.loadMovies(completionHandler: { [weak self] in
+            guard let self = self else { return }
+            self.isRequestBusy = false
+            self.reloadData()
+            self.stopSpinner()
+            completionHandler?()
+        }) { [weak self] (error) in
+            guard let self = self else { return }
+            switch error {
+            case .unknown(error: let aferror) where aferror.isExplicitlyCancelledError:
+                break
+            default:
+                self.stopSpinner()
+                self.tableView.isScrollEnabled = false
+                self.retryView.show(retryButtonEnabled: true)
+            }
+            self.isRequestBusy = false
+            completionHandler?()
+        }
     }
 
-    @objc private func refreshTableView() {
-        guard let section = self.section else { return }
-        section.clearResults()
-        self.tableView.reloadData()
+    // MARK: - actions
 
-        if section.isStaticSection,
-            let originalMovies = section.originalMovies,
-            let genreIds = section.genreIds {
-            section.movies = originalMovies.filter { (movie) -> Bool in
-                for id in genreIds {
-                    if !movie.genreIds.contains(Int(id)) { return false }
-                }
-                return true
-            }
-            self.tableView.reloadData()
-            self.refreshControl.endRefreshing()
-        } else { self.loadMovies(completionHandler: { self.refreshControl.endRefreshing() }) }
+    @objc private func refreshAction() {
+        self.loadMovies(nextPage: false,
+                        enableSpinner: false) { self.tableView.refreshControl?.endRefreshing() }
     }
 }
 
@@ -147,12 +157,14 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
                                           for: indexPath)
 
         guard let section = self.section else { return cell }
-        (cell as? MWMovieCardTableViewCell)?.layout.setup(section.movies[indexPath.row]) {
+        (cell as? MWMovieCardTableViewCell)?.setup(section.movies[indexPath.row]) {
             cell.setNeedsUpdateConstraints()
         }
 
-        if indexPath.row == section.movies.count - 5, !section.isStaticSection {
-            self.loadMovies()
+        if indexPath.row == section.movies.count - 5,
+            !section.isStaticSection,
+            section.pagesLoaded != section.totalPages {
+            self.loadMovies(nextPage: true, enableSpinner: false)
         }
         return cell
     }
@@ -164,7 +176,7 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        (cell as? MWMovieCardTableViewCell)?.layout.posterImageView.kf.cancelDownloadTask()
+        (cell as? MWMovieCardTableViewCell)?.cancelDownloadTask()
         guard let section = self.section, !section.movies.isEmpty else { return }
         section.movies[indexPath.row].detailsLoaded = nil
     }
@@ -184,4 +196,15 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView()
     }
+}
+
+// MARK: - MWRetryViewDelegate
+
+extension MWMovieListViewController: MWRetryViewDelegate {
+
+    func retryButtonTapped() {
+        self.loadMovies(nextPage: false)
+    }
+
+    func message() -> String? { self.section?.message }
 }

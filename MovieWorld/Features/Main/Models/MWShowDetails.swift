@@ -10,6 +10,8 @@ import Foundation
 
 class MWShowDetails: Detailable {
 
+    // MARK: - enum
+
     private enum CodingKeys: String, CodingKey {
         case originCountryCodes = "origin_country", lastAirDate = "last_air_date",
         episodeRuntime = "episode_run_time", credits, videos, images
@@ -19,7 +21,7 @@ class MWShowDetails: Detailable {
         case results
     }
 
-    // MARK: - variables
+    // MARK: public stored
 
     let originCountryCodes: [String]
     let lastAirDate: String
@@ -27,6 +29,8 @@ class MWShowDetails: Detailable {
     var credits: MWCredits?
     var videos: [MWMovieVideo]?
     var images: MWImages?
+
+    // MARK: public computed
 
     var lastAirYear: String { String(self.lastAirDate.split(separator: "-").first ?? "") }
     var runtime: Int? { self.episodeRuntime.first }

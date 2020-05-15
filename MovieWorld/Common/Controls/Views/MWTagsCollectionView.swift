@@ -13,7 +13,9 @@ class MWTagsCollectionView: UIView {
     // MARK: - variables
 
     static let height: CGFloat = 92
+
     private let collectionViewInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+
     private var section: MWSection?
     private var tagTapped: (() -> Void)?
 

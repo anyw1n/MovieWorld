@@ -13,7 +13,6 @@ class MWPlayer: UIView {
 
     // MARK: - variables
 
-    private let playImageSize = CGSize(width: 52, height: 52)
     var defaultPlayerParameters: [String: Any] =
         ["hl": Locale.current.languageCode ?? "en",
          "controls": 2,
@@ -24,6 +23,8 @@ class MWPlayer: UIView {
          "autoplay": 1]
     var playTapped: (() -> Bool)?
     var videoId: String?
+
+    private let playImageSize = CGSize(width: 52, height: 52)
 
     // MARK: - gui variables
 

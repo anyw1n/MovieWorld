@@ -7,30 +7,39 @@
 //
 
 import Foundation
+import Alamofire
 
 enum MWNetError {
 
     case incorrectUrl(url: String)
-    case networkError(_ error: Error)
+    case networkError(_ error: AFError)
     case serverError(statusCode: Int)
     case parsingError(_ error: Error)
     case unauthError(apiKey: String)
-    case unknown(error: Error)
+    case unknown(error: AFError)
 
     func printInConsole() {
+        print(self.getDescription())
+    }
+
+    func getDescription() -> String {
         switch self {
         case .incorrectUrl(let url):
-            print("Error! Incorrect URL: %@".localized(args: url))
+            return "Error! Incorrect URL: %@".localized(args: url)
         case .networkError(let error):
-            print("Network error: %@".localized(args: error.localizedDescription))
+            let localizedError =
+                error.underlyingError?.localizedDescription ?? error.localizedDescription
+            return "Network error: %@".localized(args: localizedError)
         case .serverError(let statusCode):
-            print("Server error, status code: %@".localized(args: statusCode))
+            return "Server error, status code: %@".localized(args: statusCode)
         case .parsingError(let error):
-            print("Error! Can't parse: %@".localized(args: error.localizedDescription))
+            return "Error! Can't parse: %@".localized(args: error.localizedDescription)
         case .unauthError(let apiKey):
-            print("Error! Incorrect api key: %@".localized(args: apiKey))
+            return "Error! Incorrect api key: %@".localized(args: apiKey)
         case .unknown(let error):
-            print("Unknown error! %@".localized(args: error.localizedDescription))
+            let localizedError =
+                error.underlyingError?.localizedDescription ?? error.localizedDescription
+            return "Error! %@".localized(args: localizedError)
         }
     }
 }

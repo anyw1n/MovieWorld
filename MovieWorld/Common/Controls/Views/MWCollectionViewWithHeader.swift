@@ -11,21 +11,23 @@ import UIKit
 class MWCollectionViewWithHeader<T, Cell: MWCollectionViewCell>:
 UIView, UICollectionViewDelegate, UICollectionViewDataSource {
 
-    // MARK: - variables
+    // MARK: - public stored
 
-    private let insets = UIEdgeInsets(top: 24, left: 0, bottom: 15, right: 0)
-    private let allButtonSize = CGSize(width: 52, height: 24)
-    private let retryButtonSize = CGSize(width: 150, height: 40)
-    var items: [T]?
     var maximumItems: Int = 10
     var sectionInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 7) {
         didSet {
             self.collectionViewFlowLayout.sectionInset = self.sectionInsets
         }
     }
-    var allButtonTapped: (() -> Void)?
-    var cellTapped: ((IndexPath) -> Void)?
-    var retryButtonTapped: (() -> Void)?
+
+    weak var delegate: MWCollectionViewWithHeaderDelegate?
+
+    // MARK: - private stored
+
+    private let insets = UIEdgeInsets(top: 24, left: 0, bottom: 15, right: 0)
+    private let allButtonSize = CGSize(width: 52, height: 24)
+
+    private var items: [T]?
 
     // MARK: - gui variables
 
@@ -53,7 +55,6 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = Cell.itemSize
         layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 8
         layout.sectionInset = self.sectionInsets
         return layout
     }()
@@ -70,15 +71,10 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         return view
     }()
 
-    private lazy var retryButton: UIButton = {
-        let button = MWRoundedButton(text: "Retry".localized(),
-                                     image: UIImage(named: "refreshIcon"))
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-        button.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-        button.imageView?.contentMode = .scaleAspectFit
-        button.addTarget(self, action: #selector(self.retryButtonDidTap), for: .touchUpInside)
-        button.isHidden = true
-        return button
+    private lazy var retryView: MWRetryView = {
+        let view = MWRetryView()
+        view.delegate = self
+        return view
     }()
 
     // MARK: - init
@@ -88,7 +84,7 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
 
         self.addSubview(self.headerView)
         self.addSubview(self.collectionView)
-        self.addSubview(self.retryButton)
+        self.addSubview(self.retryView)
     }
 
     required init?(coder: NSCoder) {
@@ -118,48 +114,38 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
             make.height.equalTo(Cell.itemSize.height)
             make.bottom.equalToSuperview()
         }
-        self.retryButton.snp.updateConstraints { (make) in
-            make.center.equalTo(self.collectionView)
-            make.size.equalTo(self.retryButtonSize)
+        self.retryView.snp.updateConstraints { (make) in
+            make.edges.equalTo(self.collectionView)
         }
+        self.retryView.makeConstraints()
     }
 
-    // MARK: - functions
+    // MARK: - setters
 
     func setup(title: String,
                items: [T],
-               itemSpacing: CGFloat,
-               cellTapped: ((IndexPath) -> Void)? = nil,
-               allButtonTapped: (() -> Void)? = nil,
-               retryButtonTapped: (() -> Void)? = nil) {
+               itemSpacing: CGFloat = 8,
+               allButtonEnabled: Bool = true,
+               retryButtonEnabled: Bool = true) {
         self.titleLabel.text = title
         self.items = items
         self.collectionViewFlowLayout.minimumInteritemSpacing = itemSpacing
-        self.cellTapped = cellTapped
-        if allButtonTapped == nil {
-            self.allButton.isHidden = true
-        } else {
-            self.allButton.isHidden = false
-            self.allButtonTapped = allButtonTapped
-        }
-        self.retryButtonTapped = retryButtonTapped
 
         if items.isEmpty {
-            self.collectionView.isHidden = true
-            self.retryButton.isHidden = false
+            self.retryView.show(retryButtonEnabled: retryButtonEnabled)
+            self.allButton.isHidden = true
         } else {
-            self.collectionView.isHidden = false
-            self.retryButton.isHidden = true
+            self.retryView.hide()
+            self.allButton.isHidden = !allButtonEnabled
         }
+
         self.collectionView.reloadData()
     }
 
-    @objc private func allButtonDidTap() {
-        self.allButtonTapped?()
-    }
+    // MARK: - actions
 
-    @objc private func retryButtonDidTap() {
-        self.retryButtonTapped?()
+    @objc private func allButtonDidTap() {
+        self.delegate?.allButtonTapped()
     }
 
     // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
@@ -184,7 +170,7 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.cellTapped?(indexPath)
+        self.delegate?.cellTapped(indexPath: indexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -192,4 +178,37 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
                         forItemAt indexPath: IndexPath) {
         (cell as? Cell)?.imageView.kf.cancelDownloadTask()
     }
+}
+
+// MARK: - MWRetryViewDelegate
+
+extension MWCollectionViewWithHeader: MWRetryViewDelegate {
+
+    func retryButtonTapped() {
+        self.delegate?.retryButtonTapped()
+    }
+
+    func message() -> String? {
+        self.delegate?.message()
+    }
+}
+
+// MARK: - MWCollectionViewWithHeaderDelegate
+
+protocol MWCollectionViewWithHeaderDelegate: AnyObject {
+
+    func cellTapped(indexPath: IndexPath)
+    func retryButtonTapped()
+    func message() -> String?
+    func allButtonTapped()
+}
+
+extension MWCollectionViewWithHeaderDelegate {
+
+    func cellTapped(indexPath: IndexPath) { }
+    func retryButtonTapped() { }
+    func message() -> String? {
+        return "Oops, something went wrong(".localized()
+    }
+    func allButtonTapped() { }
 }

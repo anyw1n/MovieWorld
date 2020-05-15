@@ -26,10 +26,11 @@ class MWNetwork {
 
     // MARK: - functions
 
+    @discardableResult
     func request<T: Decodable>(url path: String,
                                queryParameters: Parameters? = nil,
                                successHandler: @escaping (T) -> Void,
-                               errorHandler: @escaping (MWNetError) -> Void) {
+                               errorHandler: @escaping (MWNetError) -> Void) -> DataRequest {
         let url = self.baseUrl + path + "?api_key=" + self.apiKey
         var parameters: Parameters = queryParameters ?? [:]
         if let languageCode = Locale.current.languageCode, parameters["language"] == nil {
@@ -39,7 +40,7 @@ class MWNetwork {
             parameters["region"] = regionCode
         }
 
-        AF
+        return AF
             .request(url, parameters: parameters)
             .validate()
             .responseJSON { (response) in

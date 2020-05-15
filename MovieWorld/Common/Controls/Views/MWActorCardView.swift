@@ -16,6 +16,8 @@ class MWActorCardView: UIView {
     private let imageInsets = UIEdgeInsets(top: 10, left: 16, bottom: 0, right: 0)
     private let offset = 16
 
+    private var imageTapped: (() -> Void)?
+
     // MARK: - gui variables
 
     private(set) lazy var profileImageView: UIImageView = {
@@ -23,6 +25,9 @@ class MWActorCardView: UIView {
         view.layer.cornerRadius = 5
         view.clipsToBounds = true
         view.contentMode = .scaleAspectFill
+        view.addGestureRecognizer(
+            UITapGestureRecognizer(target: self,
+                                   action: #selector(self.profileImageTapped)))
         return view
     }()
 
@@ -90,9 +95,9 @@ class MWActorCardView: UIView {
         }
     }
 
-    // MARK: - functions
+    // MARK: - setters
 
-    func setup(actor: MWActor) {
+    func setup(actor: MWActor, imageTapped: (() -> Void)? = nil) {
         actor.showProfileImage(size: .w92, in: self.profileImageView)
         self.titleLabel.text = String(actor.name.split(separator: " ").first ?? "")
         self.subtitleLabel.text =
@@ -104,6 +109,13 @@ class MWActorCardView: UIView {
             actor.detailsLoaded = { [weak self] in
                 self?.setBirth(details: actor.details)
             }
+        }
+
+        if imageTapped != nil {
+            self.profileImageView.isUserInteractionEnabled = true
+            self.imageTapped = imageTapped
+        } else {
+            self.profileImageView.isUserInteractionEnabled = false
         }
     }
 
@@ -128,5 +140,11 @@ class MWActorCardView: UIView {
             self.birthLabel.text = "%@ to date (%d years)"
                 .localized(args: dateFormatter.string(from: birthDate), age.year ?? 0)
         }
+    }
+
+    // MARK: - actions
+
+    @objc private func profileImageTapped() {
+        self.imageTapped?()
     }
 }

@@ -17,7 +17,7 @@ struct MWCredits: Decodable {
 
     // MARK: - functions
 
-    func getCreators(with job: String) -> [MWCreator] {
+    func getCreators(job: String) -> [MWCreator] {
         return self.crew.filter { $0.job == job }
     }
 }

@@ -13,7 +13,9 @@ class MWCreatorTableViewCell: UITableViewCell {
     // MARK: - variables
 
     static let reuseId = "MWCreatorTableViewCell"
+
     static let height: CGFloat = 44
+
     private let insets = UIEdgeInsets(top: 11, left: 16, bottom: 0, right: 0)
 
     // MARK: - gui variables

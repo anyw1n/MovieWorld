@@ -10,6 +10,8 @@ import Foundation
 
 class MWMovieDetails: Detailable {
 
+    // MARK: - enum
+
     private enum CodingKeys: String, CodingKey {
         case productionCountries = "production_countries", runtime, credits, videos, images
     }

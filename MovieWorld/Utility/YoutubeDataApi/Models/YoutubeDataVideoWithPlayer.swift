@@ -11,7 +11,6 @@ import Foundation
 class YoutubeDataVideoPlayer: YoutubeDataVideo {
 
     struct Player: Decodable {
-        let embedHtml: String
         let embedHeight: String?
         let embedWidth: String?
     }

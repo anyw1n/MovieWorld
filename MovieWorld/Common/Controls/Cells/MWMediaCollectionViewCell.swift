@@ -13,8 +13,8 @@ class MWMediaCollectionViewCell: MWCollectionViewCell {
     // MARK: - variables
 
     override class var reuseId: String { "MWMediaCollectionViewCell" }
+
     override class var itemSize: CGSize { CGSize(width: 180, height: 87) }
-    var isWidthCalculated: Bool = false
 
     // MARK: - gui variables
 

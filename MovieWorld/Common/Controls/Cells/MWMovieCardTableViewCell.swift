@@ -16,7 +16,7 @@ class MWMovieCardTableViewCell: UITableViewCell {
 
     // MARK: - gui variables
 
-    let layout: MWMovieCardView = MWMovieCardView()
+    private let layout: MWMovieCardView = MWMovieCardView()
 
     // MARK: - init
 
@@ -40,5 +40,15 @@ class MWMovieCardTableViewCell: UITableViewCell {
         }
         self.layout.makeConstraints()
         super.updateConstraints()
+    }
+
+    // MARK: - functions
+
+    func setup(_ movie: Movieable, completionHandler: (() -> Void)? = nil) {
+        self.layout.setup(movie, completionHandler: completionHandler)
+    }
+
+    func cancelDownloadTask() {
+        self.layout.posterImageView.kf.cancelDownloadTask()
     }
 }

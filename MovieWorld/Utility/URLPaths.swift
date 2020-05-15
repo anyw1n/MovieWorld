@@ -10,10 +10,7 @@ import Foundation
 
 struct URLPaths {
     static let movieDetails: String = "/movie/"
-    static let popularMovies: String = "/movie/popular"
-    static let topMovies: String = "movie/top_rated"
     static let discoverMovies: String = "/discover/movie"
-    static let upcomingMovies: String = "/movie/upcoming"
     static let movieGenres: String = "/genre/movie/list"
     static let tvGenres: String = "/genre/tv/list"
     static let configuration: String = "/configuration"

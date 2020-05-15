@@ -14,6 +14,7 @@ class MWMoviePlayerView: UIView {
 
     private let likeIconSize = CGSize(width: 18, height: 20)
     private let offset = 16
+
     private var videoId: String?
     private var playerSize: CGSize?
 
@@ -66,7 +67,7 @@ class MWMoviePlayerView: UIView {
 
     // MARK: - constraints
 
-    func makeInternalConstraints() {
+    func makeConstraints() {
         self.player.snp.makeConstraints { (make) in
             make.left.top.right.equalToSuperview()
             make.height.equalTo(166)

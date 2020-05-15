@@ -60,7 +60,8 @@ class MWMovie: Movieable {
     // MARK: - functions
 
     func requestDetails(_ appends: [MovieAppendToResponse]? = nil,
-                        completionHandler: (() -> Void)? = nil) {
+                        completionHandler: (() -> Void)? = nil,
+                        errorHandler: ((MWNetError) -> Void)? = nil) {
         var appendNames: [String] = []
         appends?.forEach { appendNames.append($0.rawValue) }
         let url = URLPaths.movieDetails + String(self.id)
@@ -77,6 +78,7 @@ class MWMovie: Movieable {
                         completionHandler?()
             }, errorHandler: { (error) in
                 error.printInConsole()
+                errorHandler?(error)
         })
     }
 }

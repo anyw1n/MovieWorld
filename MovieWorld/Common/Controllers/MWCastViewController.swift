@@ -10,20 +10,29 @@ import UIKit
 
 class MWCastViewController: MWViewController {
 
-    // MARK: - variables
+    private enum Crew: String, CaseIterable {
 
-    private let contentInsets = UIEdgeInsets(top: 16, left: 0, bottom: 10, right: 0)
-    var credits: MWCredits? {
-        didSet {
-            guard let credits = self.credits else { return }
-            credits.cast.forEach { $0.requestDetails() }
+        static var credits: MWCredits?
 
-            self.creators.append(("Director".localized(), credits.getCreators(with: "Director")))
-            self.creators.append(("Scenario".localized(), credits.getCreators(with: "Screenplay")))
-            self.creators.append(("Producers".localized(), credits.getCreators(with: "Producer")))
+        case director, screenplay, producer
+
+        func getCreators() -> [MWCreator] {
+            return Crew.credits?.getCreators(job: self.rawValue.capitalizedFirstLetter()) ?? []
         }
     }
-    var creators: [(name: String, creators: [MWCreator])] = []
+
+    // MARK: - variables
+
+    var credits: MWCredits? {
+        didSet {
+            Crew.credits = self.credits
+            self.credits?.cast.forEach { $0.requestDetails() }
+        }
+    }
+
+    private let contentInsets = UIEdgeInsets(top: 16, left: 0, bottom: 10, right: 0)
+
+    private var creators = Crew.allCases
 
     // MARK: - gui variables
 
@@ -60,28 +69,15 @@ class MWCastViewController: MWViewController {
 
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.left.right.bottom.equalToSuperview()
         }
     }
 }
 
-// MARK: - UITableViewDelegate, UITableViewDataSource
+// MARK: - UITableViewDelegate
 
-extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
-
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
-    }
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        guard let credits = self.credits else { return 0 }
-        switch section {
-        case 0:
-            return credits.cast.count
-        default:
-            return self.creators[section - 1].creators.count
-        }
-    }
+extension MWCastViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return tableView
@@ -96,7 +92,9 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
                    willDisplayHeaderView view: UIView,
                    forSection section: Int) {
         guard let view = view as? MWTitleTableViewHeader else { return }
-        view.titleLabel.text = self.creators[section - 1].name
+        let creators = self.creators[section - 1], creatorsCount = creators.getCreators().count
+
+        view.titleLabel.text = "\(creators.rawValue)\( creatorsCount > 1 ? "s" : "")".localized()
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -110,27 +108,6 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return CGFloat.leastNonzeroMagnitude
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let credits = self.credits else { return UITableViewCell() }
-        switch indexPath.section {
-        case 0:
-            let cell = tableView
-                .dequeueReusableCell(withIdentifier: MWActorTableViewCell.reuseId, for: indexPath)
-
-            (cell as? MWActorTableViewCell)?.setup(actor: credits.cast[indexPath.row])
-            cell.setNeedsUpdateConstraints()
-            return cell
-        default:
-            let cell = tableView
-                .dequeueReusableCell(withIdentifier: MWCreatorTableViewCell.reuseId, for: indexPath)
-
-            (cell as? MWCreatorTableViewCell)?.setup(
-                creator: self.creators[indexPath.section - 1].creators[indexPath.row])
-            cell.setNeedsUpdateConstraints()
-            return cell
-        }
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -153,9 +130,49 @@ extension MWCastViewController: UITableViewDelegate, UITableViewDataSource {
             if indexPath.row == cast.count - 1 { return MWActorTableViewCell.height }
             return MWActorTableViewCell.height + 3
         default:
-            let creators = self.creators[indexPath.section - 1].creators
+            let creators = self.creators[indexPath.section - 1].getCreators()
             if indexPath.row == creators.count - 1 { return MWCreatorTableViewCell.height }
             return MWCreatorTableViewCell.height + 16
+        }
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension MWCastViewController: UITableViewDataSource {
+
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 4
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let credits = self.credits else { return 0 }
+        switch section {
+        case 0:
+            return credits.cast.count
+        default:
+            return self.creators[section - 1].getCreators().count
+        }
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let credits = self.credits else { return UITableViewCell() }
+        switch indexPath.section {
+        case 0:
+            let cell = tableView
+                .dequeueReusableCell(withIdentifier: MWActorTableViewCell.reuseId, for: indexPath)
+
+            (cell as? MWActorTableViewCell)?.setup(actor: credits.cast[indexPath.row])
+            cell.setNeedsUpdateConstraints()
+            return cell
+        default:
+            let cell = tableView
+                .dequeueReusableCell(withIdentifier: MWCreatorTableViewCell.reuseId, for: indexPath)
+
+            (cell as? MWCreatorTableViewCell)?.setup(
+                creator: self.creators[indexPath.section - 1].getCreators()[indexPath.row])
+            cell.setNeedsUpdateConstraints()
+            return cell
         }
     }
 }

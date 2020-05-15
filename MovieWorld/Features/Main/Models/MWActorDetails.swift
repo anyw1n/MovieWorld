@@ -10,17 +10,22 @@ import Foundation
 
 class MWActorDetails: Decodable {
 
+    // MARK: - enum
+
     private enum CodingKeys: String, CodingKey {
         case birthday, deathday, biography, movieCredits = "movie_credits", tvCredits = "tv_credits"
     }
 
-    // MARK: - variables
+    // MARK: public stored
 
     let birthday: String?
     let deathday: String?
     let biography: String
     var movieCredits: MWActorCredits<MWMovie>?
     var tvCredits: MWActorCredits<MWShow>?
+
+    // MARK: public computed
+
     var birthDate: Date? {
         guard let birthday = self.birthday else { return nil }
         let dateFormatter = DateFormatter()
@@ -44,14 +49,4 @@ class MWActorDetails: Decodable {
         }
         return jobs
     }
-}
-
-struct MWActorCredits<T: Movieable>: Decodable {
-
-    struct Jobs: Decodable {
-        let job: String
-    }
-
-    var cast: [T]
-    var crew: [Jobs]
 }

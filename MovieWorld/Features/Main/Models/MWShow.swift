@@ -10,12 +10,14 @@ import UIKit
 
 class MWShow: Movieable {
 
+    // MARK: - enum
+
     private enum CodingKeys: String, CodingKey {
         case name, id, genreIds = "genre_ids", firstAirDate = "first_air_date",
         posterPath = "poster_path", overview
     }
 
-    // MARK: - variables
+    // MARK: public stored
 
     let name: String
     let id: Int
@@ -23,6 +25,10 @@ class MWShow: Movieable {
     let firstAirDate: String
     let posterPath: String?
     let overview: String
+    var details: Detailable?
+    var detailsLoaded: (() -> Void)?
+
+    // MARK: public computed
 
     var firstAirYear: String {
         return String(self.firstAirDate.split(separator: "-").first ?? "")
@@ -48,9 +54,6 @@ class MWShow: Movieable {
         return self.firstAirYear
     }
 
-    var details: Detailable?
-    var detailsLoaded: (() -> Void)?
-
     // MARK: - init
 
     required init(from decoder: Decoder) throws {
@@ -67,7 +70,8 @@ class MWShow: Movieable {
     // MARK: - functions
 
     func requestDetails(_ appends: [MovieAppendToResponse]? = nil,
-                        completionHandler: (() -> Void)? = nil) {
+                        completionHandler: (() -> Void)? = nil,
+                        errorHandler: ((MWNetError) -> Void)? = nil) {
         var appendNames: [String] = []
         appends?.forEach { appendNames.append($0.rawValue) }
         let url = URLPaths.tvDetails + String(self.id)
@@ -84,6 +88,7 @@ class MWShow: Movieable {
                         completionHandler?()
             }, errorHandler: { (error) in
                 error.printInConsole()
+                errorHandler?(error)
         })
     }
 }

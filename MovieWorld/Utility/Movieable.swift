@@ -28,10 +28,13 @@ protocol Movieable: Decodable {
     var detailsLoaded: (() -> Void)? { get set }
 
     func showImage(size: Sizes, in imageView: UIImageView)
-    func requestDetails(_ appends: [MovieAppendToResponse]?, completionHandler: (() -> Void)?)
+    func requestDetails(_ appends: [MovieAppendToResponse]?,
+                        completionHandler: (() -> Void)?,
+                        errorHandler: ((MWNetError) -> Void)?)
 }
 
 extension Movieable {
+
     func showImage(size: Sizes, in imageView: UIImageView) {
         guard let posterPath = self.posterPath,
             let baseUrl = MWS.sh.configuration?.secureBaseUrl else {

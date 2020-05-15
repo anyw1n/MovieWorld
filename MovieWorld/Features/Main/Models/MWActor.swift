@@ -11,6 +11,12 @@ import Kingfisher
 
 class MWActor: Decodable {
 
+    // MARK: - enum
+
+    enum AppendToResponse: String {
+        case movieCredits = "movie_credits", tvCredits = "tv_credits"
+    }
+
     private enum CodingKeys: String, CodingKey {
         case character, name, profilePath = "profile_path", id
     }
@@ -43,8 +49,9 @@ class MWActor: Decodable {
                               options: options)
     }
 
-    func requestDetails(_ appends: [ActorAppendToResponse]? = nil,
-                        completionHandler: (() -> Void)? = nil) {
+    func requestDetails(_ appends: [AppendToResponse]? = nil,
+                        completionHandler: (() -> Void)? = nil,
+                        errorHandler: ((MWNetError) -> Void)? = nil) {
         var appendNames: [String] = []
         appends?.forEach { appendNames.append($0.rawValue) }
         let url = URLPaths.person + String(self.id)
@@ -56,10 +63,7 @@ class MWActor: Decodable {
                         completionHandler?()
             }, errorHandler: { (error) in
                 error.printInConsole()
+                errorHandler?(error)
         })
     }
-}
-
-enum ActorAppendToResponse: String {
-    case movieCredits = "movie_credits", tvCredits = "tv_credits"
 }

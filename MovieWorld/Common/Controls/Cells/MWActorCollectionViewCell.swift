@@ -12,9 +12,11 @@ class MWActorCollectionViewCell: MWCollectionViewCell {
 
     // MARK: - variables
 
-    private let imageSize = CGSize(width: 72, height: 72)
     override class var reuseId: String { "MWActorCollectionViewCell" }
+
     override class var itemSize: CGSize { CGSize(width: 72, height: 124) }
+
+    private let imageSize = CGSize(width: 72, height: 72)
 
     // MARK: - gui variables
 

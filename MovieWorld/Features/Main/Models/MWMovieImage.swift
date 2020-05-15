@@ -11,12 +11,18 @@ import Kingfisher
 
 struct MWMovieImage: Mediable {
 
+    // MARK: - enum
+
     private enum CodingKeys: String, CodingKey {
         case filePath = "file_path", aspectRatio = "aspect_ratio"
     }
 
+    // MARK: - variables
+
     let filePath: String
     let aspectRatio: CGFloat
+
+    // MARK: - functions
 
     func showImage(size: Sizes, in imageView: UIImageView) {
         guard let baseUrl = MWS.sh.configuration?.secureBaseUrl else {

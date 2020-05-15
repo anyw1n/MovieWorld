@@ -13,15 +13,14 @@ class MWMovieDetailsViewController: MWViewController {
     // MARK: - variables
 
     private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-    private let dispatchGroup = DispatchGroup()
+
     var movie: Movieable? {
         didSet {
-            self.dispatchGroup.enter()
-            self.movie?.requestDetails([.credits, .images, .videos]) { [weak self] in
-                self?.dispatchGroup.leave()
-            }
+            self.retryButtonTapped()
         }
     }
+
+    private var error: String?
 
     // MARK: - gui variables
 
@@ -34,6 +33,7 @@ class MWMovieDetailsViewController: MWViewController {
     private lazy var castView: MWCollectionViewWithHeader<MWActor, MWActorCollectionViewCell> = {
         let view = MWCollectionViewWithHeader<MWActor, MWActorCollectionViewCell>()
         view.sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 26)
+        view.delegate = self
         return view
     }()
 
@@ -48,6 +48,13 @@ class MWMovieDetailsViewController: MWViewController {
         view.addSubview(self.descriptionView)
         view.addSubview(self.castView)
         view.addSubview(self.galleryView)
+        view.alpha = 0
+        return view
+    }()
+
+    private lazy var retryView: MWRetryView = {
+        let view = MWRetryView()
+        view.delegate = self
         return view
     }()
 
@@ -55,16 +62,14 @@ class MWMovieDetailsViewController: MWViewController {
 
     override func initController() {
         super.initController()
+        self.startSpinner()
 
         self.view.addSubview(self.scrollView)
-        self.scrollView.isHidden = true
-
-        self.dispatchGroup.notify(queue: DispatchQueue.main) {
-            self.setup()
-            self.makeConstraints()
-            self.scrollView.isHidden = false
-        }
+        self.view.addSubview(self.retryView)
+        self.makeConstraints()
     }
+
+    // MARK: - lifecycle
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -80,7 +85,8 @@ class MWMovieDetailsViewController: MWViewController {
 
     private func makeConstraints() {
         self.scrollView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.left.right.bottom.equalToSuperview()
         }
         self.movieCardView.snp.makeConstraints { (make) in
             make.top.equalToSuperview().offset(16)
@@ -91,7 +97,7 @@ class MWMovieDetailsViewController: MWViewController {
             make.top.equalTo(self.movieCardView.snp.bottom).offset(18)
             make.left.right.equalTo(self.view).inset(self.contentInsets)
         }
-        self.moviePlayerView.makeInternalConstraints()
+        self.moviePlayerView.makeConstraints()
         self.descriptionView.snp.makeConstraints { (make) in
             make.top.equalTo(self.moviePlayerView.snp.bottom)
             make.left.right.equalTo(self.view)
@@ -108,22 +114,20 @@ class MWMovieDetailsViewController: MWViewController {
             make.bottom.equalToSuperview().offset(-10)
         }
         self.galleryView.makeConstraints()
+        self.retryView.snp.makeConstraints { (make) in
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.left.right.bottom.equalToSuperview()
+        }
+        self.retryView.makeConstraints()
     }
 
     // MARK: - functions
 
-    @objc private func allCastButtonTapped() {
-        let controller = MWCastViewController()
-        controller.credits = self.movie?.details?.credits
-        MWI.sh.push(controller)
-    }
-
     private func setup() {
         guard let movie = self.movie, let details = movie.details else { return }
+        self.stopSpinner()
 
         self.movieCardView.setup(movie)
-
-        let subtitle = "X minutes".localized(args: movie.details?.runtime ?? 0)
 
         if let youtubeVideo = details.videos?.first(where: { $0.site == "YouTube" }) {
             self.moviePlayerView.setup(video: youtubeVideo)
@@ -135,25 +139,18 @@ class MWMovieDetailsViewController: MWViewController {
             }
         }
 
+        let subtitle = "X minutes".localized(args: movie.details?.runtime ?? 0)
         self.descriptionView.setup(title: "Description".localized(),
                                    definition: "",
                                    subtitle: subtitle,
                                    text: movie.overview)
 
         if let cast = details.credits?.cast {
+            self.error = "Nothing to show here..".localized()
             self.castView.setup(title: "Cast".localized(),
                                 items: cast,
                                 itemSpacing: 16,
-                                cellTapped: { (indexPath) in
-                                    let controller = MWActorDetailsViewController()
-                                    controller.actor = cast[indexPath.row]
-                                    MWI.sh.push(controller)
-            },
-                                allButtonTapped: {
-                                    let controller = MWCastViewController()
-                                    controller.credits = details.credits
-                                    MWI.sh.push(controller)
-            })
+                                retryButtonEnabled: false)
         }
 
         if let images = details.images,
@@ -163,4 +160,46 @@ class MWMovieDetailsViewController: MWViewController {
             self.galleryView.setup(items: items)
         }
     }
+}
+
+// MARK: - MWCollectionViewWithHeaderDelegate
+
+extension MWMovieDetailsViewController: MWCollectionViewWithHeaderDelegate {
+
+    func cellTapped(indexPath: IndexPath) {
+        if let cast = self.movie?.details?.credits?.cast {
+            let controller = MWActorDetailsViewController()
+            controller.actor = cast[indexPath.row]
+            MWI.sh.push(controller)
+        }
+    }
+
+    func allButtonTapped() {
+        if let credits = self.movie?.details?.credits {
+            let controller = MWCastViewController()
+            controller.credits = credits
+            MWI.sh.push(controller)
+        }
+    }
+}
+
+// MARK: - MWRetryViewDelegate
+
+extension MWMovieDetailsViewController: MWRetryViewDelegate {
+
+    func retryButtonTapped() {
+        self.movie?.requestDetails([.credits, .images, .videos],
+                                   completionHandler: { [weak self] in
+                                    self?.setup()
+                                    UIView.animate(withDuration: 0.3) {
+                                        self?.scrollView.alpha = 1
+                                    }
+                                    self?.retryView.hide()
+        }) { [weak self] (error) in
+            self?.error = error.getDescription()
+            self?.retryView.show()
+        }
+    }
+
+    func message() -> String? { self.error }
 }

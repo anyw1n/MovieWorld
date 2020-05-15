@@ -15,6 +15,7 @@ class MWMovieCardCollectionViewCell: MWCollectionViewCell {
     override class var reuseId: String { "MWMovieCardCollectionViewCell" }
 
     override class var itemSize: CGSize { CGSize(width: 130, height: 237) }
+
     private let imageSize = CGSize(width: 130, height: 185)
 
     // MARK: - gui variables

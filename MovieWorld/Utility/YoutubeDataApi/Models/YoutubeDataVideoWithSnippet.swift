@@ -32,5 +32,4 @@ struct VideoThumbnails: Decodable {
     let medium: Values
     let high: Values
     let standard: Values
-    let maxres: Values?
 }

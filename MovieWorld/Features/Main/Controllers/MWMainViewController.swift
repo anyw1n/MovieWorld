@@ -97,6 +97,7 @@ class MWMainViewController: MWViewController {
 
     override func initController() {
         super.initController()
+        self.startSpinner()
         self.navigationItem.title = "Movie World"
 
         self.loadMovies(into: self.sections)
@@ -104,6 +105,7 @@ class MWMainViewController: MWViewController {
         self.makeConstraints()
 
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
+            self.stopSpinner()
             UIView.animate(withDuration: 0.3) { self.tableView.alpha = 1 }
         }
     }
@@ -119,49 +121,27 @@ class MWMainViewController: MWViewController {
     // MARK: - functions
 
     @objc private func refreshTableView() {
-        UIView.animate(withDuration: 0.3) { self.tableView.alpha = 0 }
-
-        self.loadMovies(into: Sections.allCases)
+        self.loadMovies(into: self.sections)
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
-            UIView.animate(withDuration: 0.3) { self.tableView.alpha = 1 }
             self.refreshControl.endRefreshing()
         }
     }
 
     private func loadMovies(into sections: [Sections]) {
-        for (i, sectionCase) in sections.enumerated() {
+        for sectionCase in sections {
             let section = sectionCase.get()
-            guard let url = section.url, let category = section.category else { return }
+            guard let index = self.sections.firstIndex(of: sectionCase) else { return }
 
             self.dispatchGroup.enter()
 
-            switch category {
-            case .movie:
-                MWN.sh.request(
-                    url: url,
-                    queryParameters: section.requestParameters,
-                    successHandler: { [weak self] (response: MWMovieRequestResult<MWMovie>) in
-                        section.loadResults(from: response)
-                        self?.tableView.reloadRows(at: [IndexPath(row: i, section: 0)],
-                                                   with: .automatic)
-                        self?.dispatchGroup.leave()
-                    }, errorHandler: { [weak self] error in
-                        error.printInConsole()
-                        self?.dispatchGroup.leave()
-                })
-            case .tv:
-                MWN.sh.request(
-                    url: url,
-                    queryParameters: section.requestParameters,
-                    successHandler: { [weak self] (response: MWMovieRequestResult<MWShow>) in
-                        section.loadResults(from: response)
-                        self?.tableView.reloadRows(at: [IndexPath(row: i, section: 0)],
-                                                   with: .automatic)
-                        self?.dispatchGroup.leave()
-                    }, errorHandler: { [weak self] error in
-                        error.printInConsole()
-                        self?.dispatchGroup.leave()
-                })
+            section.loadMovies(completionHandler: { [weak self] in
+                self?.tableView.reloadRows(at: [IndexPath(row: index, section: 0)],
+                                           with: .automatic)
+                self?.dispatchGroup.leave()
+            }) { [weak self] (_) in
+                self?.tableView.reloadRows(at: [IndexPath(row: index, section: 0)],
+                                           with: .automatic)
+                self?.dispatchGroup.leave()
             }
         }
     }
@@ -181,10 +161,12 @@ extension MWMainViewController: UITableViewDelegate, UITableViewDataSource {
                                  for: indexPath)
 
         (cell as? MWCollectionTableViewCell)?
-            .setup(section: self.sections[indexPath.row].get()) { [weak self] in
-                guard let self = self else { return }
-                self.loadMovies(into: [self.sections[indexPath.row]])
-        }
+            .setup(section: self.sections[indexPath.row].get(),
+                   retryButtonTapped: { [weak self] in
+                    guard let self = self else { return }
+                    self.loadMovies(into: [self.sections[indexPath.row]])
+            })
+
         cell.setNeedsUpdateConstraints()
         return cell
     }

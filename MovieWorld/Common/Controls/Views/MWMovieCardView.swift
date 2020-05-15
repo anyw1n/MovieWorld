@@ -52,13 +52,6 @@ class MWMovieCardView: UIView {
         return label
     }()
 
-    private lazy var ratingLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 13)
-        label.textColor = UIColor(named: "textColor")
-        return label
-    }()
-
     // MARK: - init
 
     override init(frame: CGRect) {
@@ -93,12 +86,7 @@ class MWMovieCardView: UIView {
             make.top.equalTo(self.subtitleLabel.snp.bottom).offset(1)
             make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
             make.right.equalToSuperview().inset(self.textInsets)
-        }
-        self.ratingLabel.snp.updateConstraints { (make) in
-            make.top.greaterThanOrEqualTo(self.genreLabel.snp.bottom).offset(8)
-            make.bottom.equalToSuperview().inset(8)
-            make.left.equalTo(self.posterImageView.snp.right).offset(self.textOffset)
-            make.right.equalToSuperview().inset(self.textInsets)
+            make.bottom.lessThanOrEqualToSuperview()
         }
     }
 
@@ -122,7 +110,6 @@ class MWMovieCardView: UIView {
 
         self.setSubtitle(movie: movie)
         self.genreLabel.text = movie.genres.joined(separator: ", ")
-        self.ratingLabel.text = "IMDB -, KP -"
         completionHandler?()
     }
 
@@ -140,6 +127,5 @@ class MWMovieCardView: UIView {
         self.addSubview(self.titleLabel)
         self.addSubview(self.subtitleLabel)
         self.addSubview(self.genreLabel)
-        self.addSubview(self.ratingLabel)
     }
 }

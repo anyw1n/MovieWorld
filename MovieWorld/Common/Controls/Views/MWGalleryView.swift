@@ -12,9 +12,11 @@ class MWGalleryView: UIView {
 
     // MARK: - variables
 
-    private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     var items: [Mediable]?
     var viewController: UIViewController
+
+    private let messageInsets = UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20)
+    private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
 
     // MARK: - gui variables
 
@@ -47,6 +49,18 @@ class MWGalleryView: UIView {
         return view
     }()
 
+    private lazy var messageLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = UIColor(named: "textColor")
+        label.text = "Nothing to show here..".localized()
+        label.alpha = 0.5
+        label.font = .systemFont(ofSize: 13)
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.isHidden = true
+        return label
+    }()
+
     // MARK: - init
 
     init(in viewController: UIViewController) {
@@ -55,6 +69,7 @@ class MWGalleryView: UIView {
 
         self.addSubview(self.collectionViewTitleLabel)
         self.addSubview(self.collectionView)
+        self.addSubview(self.messageLabel)
     }
 
     required init?(coder: NSCoder) {
@@ -74,13 +89,25 @@ class MWGalleryView: UIView {
             make.height.equalTo(MWMediaCollectionViewCell.itemSize.height)
             make.bottom.equalToSuperview()
         }
+        self.messageLabel.snp.makeConstraints { (make) in
+            make.top.equalTo(self.collectionView.snp.top).inset(self.messageInsets)
+            make.left.greaterThanOrEqualToSuperview().inset(self.messageInsets)
+            make.right.lessThanOrEqualToSuperview().inset(self.messageInsets)
+            make.centerX.equalToSuperview()
+            make.bottom.lessThanOrEqualToSuperview()
+        }
     }
 
     // MARK: - functions
 
     func setup(items: [Mediable]) {
-        self.items = items
-        self.collectionView.reloadData()
+        if !items.isEmpty {
+            self.messageLabel.isHidden = true
+            self.items = items
+            self.collectionView.reloadData()
+        } else {
+            self.messageLabel.isHidden = false
+        }
     }
 }
 

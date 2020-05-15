@@ -14,6 +14,7 @@ class MWDescriptionView: UIView {
 
     private let offset = 16
     private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+
     private var additionalInfoEnabled: Bool = false
 
     // MARK: - gui variables

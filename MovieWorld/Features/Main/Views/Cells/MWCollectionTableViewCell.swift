@@ -14,6 +14,10 @@ class MWCollectionTableViewCell: UITableViewCell {
 
     static let reuseId = "MWCollectionTableViewCell"
 
+    private var section: MWSection?
+    private var retryTapped: (() -> Void)?
+    private var error: String?
+
     // MARK: - gui variables
 
     private lazy var collectionView: MWCollectionViewWithHeader<Movieable,
@@ -22,6 +26,7 @@ class MWCollectionTableViewCell: UITableViewCell {
             view.titleLabel.font = .boldSystemFont(ofSize: 24)
             view.sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 7)
             view.maximumItems = 20
+            view.delegate = self
             return view
     }()
 
@@ -51,18 +56,37 @@ class MWCollectionTableViewCell: UITableViewCell {
 
     // MARK: - functions
 
-    func setup(section: MWSection, retryButtonTapped: (() -> Void)?) {
+    func setup(section: MWSection,
+               retryButtonTapped: (() -> Void)?) {
+        self.section = section
+        self.retryTapped = retryButtonTapped
+        self.error = section.message
         self.collectionView.setup(title: section.name,
-                                  items: section.movies,
-                                  itemSpacing: 8,
-                                  cellTapped: { (indexPath) in
-                                    let controller = MWMovieDetailsViewController()
-                                    controller.movie = section.movies[indexPath.row]
-                                    MWI.sh.push(controller)
-        }, allButtonTapped: {
-            let controller = MWMovieListViewController()
-            controller.section = section.copy()
-            MWI.sh.push(controller)
-        }, retryButtonTapped: retryButtonTapped)
+                                  items: section.movies)
+    }
+}
+
+// MARK: - MWCollectionViewWithHeaderDelegate
+
+extension MWCollectionTableViewCell: MWCollectionViewWithHeaderDelegate {
+
+    func cellTapped(indexPath: IndexPath) {
+        let controller = MWMovieDetailsViewController()
+        controller.movie = self.section?.movies[indexPath.row]
+        MWI.sh.push(controller)
+    }
+
+    func allButtonTapped() {
+        let controller = MWMovieListViewController()
+        controller.section = self.section?.copy()
+        MWI.sh.push(controller)
+    }
+
+    func retryButtonTapped() {
+        self.retryTapped?()
+    }
+
+    func message() -> String? {
+        return self.error
     }
 }
