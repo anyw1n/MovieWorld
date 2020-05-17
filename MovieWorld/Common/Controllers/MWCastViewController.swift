@@ -10,6 +10,8 @@ import UIKit
 
 class MWCastViewController: MWViewController {
 
+    // MARK: - enum
+
     private enum Crew: String, CaseIterable {
 
         static var credits: MWCredits?

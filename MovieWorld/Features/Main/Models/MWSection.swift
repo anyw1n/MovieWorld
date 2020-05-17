@@ -145,13 +145,13 @@ class MWSection {
         self.currentRequest = MWN.sh
             .request(url: url,
                      queryParameters: self.requestParameters,
-                     successHandler: { (response: MWMovieRequestResult<T>) in
-                        self.loadResults(from: response)
+                     successHandler: { [weak self] (response: MWMovieRequestResult<T>) in
+                        self?.loadResults(from: response)
                         completionHandler?(response)
             },
-                     errorHandler: { (error) in
+                     errorHandler: { [weak self] (error) in
                         error.printInConsole()
-                        self.message = error.getDescription()
+                        self?.message = error.getDescription()
                         errorHandler?(error)
             })
     }

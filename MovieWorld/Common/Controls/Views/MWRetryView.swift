@@ -15,7 +15,7 @@ class MWRetryView: UIView {
     weak var delegate: MWRetryViewDelegate?
 
     private let buttonSize = CGSize(width: 150, height: 40)
-    private var insets = UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20)
+    private let insets = UIEdgeInsets(top: 20, left: 20, bottom: 0, right: 20)
 
     // MARK: - gui variables
 

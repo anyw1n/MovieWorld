@@ -11,6 +11,8 @@ import Foundation
 typealias MWS = MWSystem
 typealias MWCategories = [MWCategory: [MWGenre]]
 
+// MARK: - MWCategory
+
 enum MWCategory: String, CaseIterable {
     case movie, tv
 
@@ -56,26 +58,21 @@ class MWSystem {
                 MWSystem.sh.loadCountries(completionHandler: completionHandler)
             }
         }
-
-        func isNil() -> Bool {
-            switch self {
-            case .configuration:
-                return MWSystem.sh.configuration == nil
-            case .genres(let category):
-                return MWSystem.sh.genres[category] == nil
-                    || MWSystem.sh.genres[category]?.isEmpty ?? true
-            case .countries:
-                return MWSystem.sh.countries == nil
-            }
-        }
     }
 
-    // MARK: - variables
+    // MARK: - static
 
     static let sh = MWSystem()
 
+    // MARK: - public stored
+
     let animatedMoviesGenreId: Int64 = 16
+
+    // MARK: - private stored
+
     private var isNetworkListenerExist = false
+
+    // MARK: - public computed
 
     var configuration: MWConfiguration? {
         CDM.sh.loadData(entityName: MWConfiguration.entityName)?.first

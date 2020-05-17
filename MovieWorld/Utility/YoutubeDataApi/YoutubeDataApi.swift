@@ -35,18 +35,21 @@ class YoutubeDataApi {
         parameters["id"] = videoId
         parameters["key"] = self.apiKey
 
-        AF.request(url, parameters: parameters).validate().responseJSON { (response) in
-            switch response.result {
-            case .success(let value):
-                guard let data = try? JSONSerialization.data(withJSONObject: value,
-                                                             options: .prettyPrinted),
-                    let videoList = try? JSONDecoder().decode(YoutubeDataVideoList<T>.self,
-                                                              from: data),
-                    let video = videoList.items.first else { return }
-                successHandler(video)
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
+        AF
+            .request(url, parameters: parameters)
+            .validate()
+            .responseJSON { (response) in
+                switch response.result {
+                case .success(let value):
+                    guard let data = try? JSONSerialization.data(withJSONObject: value,
+                                                                 options: .prettyPrinted),
+                        let videoList = try? JSONDecoder().decode(YoutubeDataVideoList<T>.self,
+                                                                  from: data),
+                        let video = videoList.items.first else { return }
+                    successHandler(video)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
         }
     }
 }

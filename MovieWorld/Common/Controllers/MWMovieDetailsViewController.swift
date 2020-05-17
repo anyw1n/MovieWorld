@@ -12,13 +12,13 @@ class MWMovieDetailsViewController: MWViewController {
 
     // MARK: - variables
 
-    private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
-
     var movie: Movieable? {
         didSet {
             self.retryButtonTapped()
         }
     }
+
+    private let contentInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
 
     private var error: String?
 

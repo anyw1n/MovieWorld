@@ -13,6 +13,7 @@ class MWMovieListViewController: MWViewController {
     // MARK: - variables
 
     private var section: MWSection?
+
     private var isRequestBusy: Bool = false
     private var isHeaderEnabled: Bool = true
 
@@ -159,9 +160,8 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell =
-            tableView.dequeueReusableCell(withIdentifier: MWMovieCardTableViewCell.reuseId,
-                                          for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: MWMovieCardTableViewCell.reuseId,
+                                                 for: indexPath)
 
         guard let section = self.section else { return cell }
         (cell as? MWMovieCardTableViewCell)?.setup(section.movies[indexPath.row]) {

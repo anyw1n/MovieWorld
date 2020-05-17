@@ -15,6 +15,7 @@ class MWCollectionTableViewCell: UITableViewCell {
     static let reuseId = "MWCollectionTableViewCell"
 
     private var section: MWSection?
+
     private var retryTapped: (() -> Void)?
     private var error: String?
 

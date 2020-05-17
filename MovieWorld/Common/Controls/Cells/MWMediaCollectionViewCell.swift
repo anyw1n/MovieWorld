@@ -43,10 +43,10 @@ class MWMediaCollectionViewCell: MWCollectionViewCell {
     // MARK: - constraints
 
     override func updateConstraints() {
-        self.playerView.snp.makeConstraints { (make) in
+        self.playerView.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
-        self.imageView.snp.makeConstraints { (make) in
+        self.imageView.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
         super.updateConstraints()

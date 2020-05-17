@@ -62,7 +62,7 @@ class MWCategoryViewController: MWViewController {
         self.navigationItem.title = "Category".localized()
 
         self.view.addSubview(self.segmentedControl)
-        self.view.insertSubview(self.tableView, at: 0)
+        self.view.addSubview(self.tableView)
         self.view.addSubview(self.retryView)
         self.makeConstraints()
     }
@@ -153,6 +153,8 @@ extension MWCategoryViewController: UITableViewDelegate, UITableViewDataSource {
         MWI.sh.push(controller)
     }
 }
+
+// MARK: - MWRetryViewDelegate
 
 extension MWCategoryViewController: MWRetryViewDelegate {
 

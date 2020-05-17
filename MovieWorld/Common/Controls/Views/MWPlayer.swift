@@ -52,10 +52,7 @@ class MWPlayer: UIView {
         return view
     }()
 
-    private(set) lazy var player: YoutubePlayerView = {
-        let view = YoutubePlayerView()
-        return view
-    }()
+    private(set) lazy var player = YoutubePlayerView()
 
     // MARK: - init
 
@@ -84,6 +81,9 @@ class MWPlayer: UIView {
             make.size.equalTo(self.playImageSize)
             make.center.equalToSuperview()
         }
+        self.player.snp.makeConstraints { (make) in
+            make.edges.equalToSuperview()
+        }
     }
 
     // MARK: - functions
@@ -94,7 +94,7 @@ class MWPlayer: UIView {
     }
 
     func play() {
-        self.player.snp.makeConstraints { (make) in
+        self.player.snp.updateConstraints { (make) in
             make.edges.equalToSuperview()
         }
         self.player.loadWithVideoId(self.videoId ?? "", with: self.defaultPlayerParameters)

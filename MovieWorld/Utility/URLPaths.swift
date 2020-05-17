@@ -18,4 +18,5 @@ struct URLPaths {
     static let discoverTVs: String = "/discover/tv"
     static let tvDetails: String = "/tv/"
     static let person: String = "/person/"
+    static let searchMovies: String = "/search/movie"
 }

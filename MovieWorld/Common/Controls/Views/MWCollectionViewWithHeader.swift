@@ -14,6 +14,7 @@ UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     // MARK: - public stored
 
     var maximumItems: Int = 10
+
     var sectionInsets: UIEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 7) {
         didSet {
             self.collectionViewFlowLayout.sectionInset = self.sectionInsets

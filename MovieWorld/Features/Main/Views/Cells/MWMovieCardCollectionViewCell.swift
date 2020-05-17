@@ -77,10 +77,10 @@ class MWMovieCardCollectionViewCell: MWCollectionViewCell {
         self.titleLabel.text = movie.title
         self.subtitleLabel.text = "\(movie.releaseYear), \(movie.genres.first ?? "")"
         if let movie = movie as? MWShow, movie.details == nil {
-            movie.detailsLoaded = {
-                self.subtitleLabel.text =
+            movie.detailsLoaded = { [weak self] in
+                self?.subtitleLabel.text =
                 "\(movie.releaseYear), \(movie.genres.first ?? "")"
-                self.setNeedsUpdateConstraints()
+                self?.setNeedsUpdateConstraints()
             }
         }
         movie.showImage(size: .w154, in: self.imageView)
