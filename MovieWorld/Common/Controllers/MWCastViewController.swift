@@ -30,7 +30,7 @@ class MWCastViewController: MWViewController {
         }
     }
 
-    private let contentInsets = UIEdgeInsets(top: 16, left: 0, bottom: 10, right: 0)
+    private let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
 
     private var creators = Crew.allCases
 
@@ -61,7 +61,7 @@ class MWCastViewController: MWViewController {
 
         self.navigationItem.title = "Cast".localized()
 
-        self.view.addSubview(self.tableView)
+        self.view.insertSubview(self.tableView, at: 0)
         self.makeConstraints()
     }
 

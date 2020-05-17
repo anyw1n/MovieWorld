@@ -19,10 +19,6 @@ class MWInitController: MWViewController {
 
     private let dispatchGroup = DispatchGroup()
 
-    private var genres: MWCategories = [:]
-    private var configuration: MWConfiguration?
-    private var countries: [MWCountry]?
-
     // MARK: - gui variables
 
     private lazy var textLabel: UILabel = {
@@ -69,12 +65,14 @@ class MWInitController: MWViewController {
 
         self.spinner.startAnimating()
 
-        MWCategory.allCases.forEach { self.loadGenres(category: $0) }
-        self.loadConfiguration()
-        self.loadCountries()
+        for value in MWS.Values.allCases {
+            self.dispatchGroup.enter()
+            value.load { [weak self] in
+                self?.dispatchGroup.leave()
+            }
+        }
 
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
-            CDM.sh.saveContext()
             MWI.sh.window?.rootViewController = MWI.sh.tabBarController
         }
     }
@@ -95,53 +93,5 @@ class MWInitController: MWViewController {
             make.centerX.equalToSuperview()
             make.size.equalTo(self.spinnerSize)
         }
-    }
-
-    // MARK: - functions
-
-    private func loadGenres(category: MWCategory) {
-        self.dispatchGroup.enter()
-
-        MWN.sh.request(
-            url: category.url,
-            successHandler: { [weak self] (response: [String: [MWGenre]]) in
-                response["genres"]?.forEach { $0.category = category.rawValue }
-                self?.genres[category] = response["genres"]
-                self?.dispatchGroup.leave()
-            },
-            errorHandler: { [weak self]  (error) in
-                error.printInConsole()
-                self?.dispatchGroup.leave()
-        })
-    }
-
-    private func loadConfiguration() {
-        self.dispatchGroup.enter()
-
-        MWN.sh.request(
-            url: URLPaths.configuration,
-            successHandler: { [weak self] (response: MWConfiguration) in
-                self?.configuration = response
-                self?.dispatchGroup.leave()
-            },
-            errorHandler: { [weak self]  (error) in
-                error.printInConsole()
-                self?.dispatchGroup.leave()
-        })
-    }
-
-    private func loadCountries() {
-        self.dispatchGroup.enter()
-
-        MWN.sh.request(
-            url: URLPaths.countries,
-            successHandler: { [weak self] (response: [MWCountry]) in
-                self?.countries = response
-                self?.dispatchGroup.leave()
-            },
-            errorHandler: { [weak self]  (error) in
-                error.printInConsole()
-                self?.dispatchGroup.leave()
-        })
     }
 }

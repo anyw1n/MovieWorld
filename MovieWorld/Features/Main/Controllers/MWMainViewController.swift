@@ -14,7 +14,7 @@ class MWMainViewController: MWViewController {
 
     private enum Sections: CaseIterable {
 
-        private static let currentDateString = Date().formatted(dateFormat: "yyyy-MM-dd")
+        private static let currentDateString = Date().formatted(dateFormat: MWN.sh.tmdbDateFormat)
 
         private static let newSection =
             MWSection(name: "New".localized(),
@@ -101,7 +101,7 @@ class MWMainViewController: MWViewController {
         self.navigationItem.title = "Movie World"
 
         self.loadMovies(into: self.sections)
-        self.view.addSubview(self.tableView)
+        self.view.insertSubview(self.tableView, at: 0)
         self.makeConstraints()
 
         self.dispatchGroup.notify(queue: DispatchQueue.main) {
@@ -114,7 +114,7 @@ class MWMainViewController: MWViewController {
 
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
-            make.top.left.right.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
     }
 

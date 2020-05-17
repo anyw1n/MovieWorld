@@ -153,9 +153,9 @@ extension MWActorDetailsViewController: MWCollectionViewWithHeaderDelegate {
 
     func allButtonTapped() {
         let controller = MWMovieListViewController()
-        controller.section = MWSection(name: "Filmography".localized(),
-                                       movies: self.filmography,
-                                       isStaticSection: true)
+        controller.setup(section: MWSection(name: "Filmography".localized(),
+                                            movies: self.filmography,
+                                            isStaticSection: true))
         MWI.sh.push(controller)
     }
 }

@@ -72,7 +72,7 @@ extension MWTagsCollectionView: MWTagCollectionViewLayoutDelegate {
 
     func collectionView(_ collectionView: UICollectionView, widthForTagAtIndexPath indexPath: IndexPath) -> CGFloat {
         guard let genre = self.section?.category == nil
-            ? MWS.sh.allGenres[indexPath.row]
+            ? MWS.sh.allUniqueGenres[indexPath.row]
             : MWS.sh.genres[self.section!.category!]?[indexPath.row] else { return 0 }
 
         let genreName = genre.name as NSString? ?? ""
@@ -91,7 +91,7 @@ extension MWTagsCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
         if let category = self.section?.category {
             return MWS.sh.genres[category]?.count ?? 0
         } else {
-            return MWS.sh.allGenres.count
+            return MWS.sh.allUniqueGenres.count
         }
     }
 
@@ -102,7 +102,7 @@ extension MWTagsCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
                                  for: indexPath)
 
         guard let genre = self.section?.category == nil
-            ? MWS.sh.allGenres[indexPath.row]
+            ? MWS.sh.allUniqueGenres[indexPath.row]
             : MWS.sh.genres[self.section!.category!]?[indexPath.row] else { return cell }
 
         (cell as? MWTagCollectionViewCell)?.setup(title: genre.name)
@@ -115,7 +115,7 @@ extension MWTagsCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let genre = self.section?.category == nil
-            ? MWS.sh.allGenres[indexPath.row]
+            ? MWS.sh.allUniqueGenres[indexPath.row]
             : MWS.sh.genres[self.section!.category!]?[indexPath.row] else { return }
 
         if self.section?.genreIds != nil {
@@ -128,7 +128,7 @@ extension MWTagsCollectionView: UICollectionViewDelegate, UICollectionViewDataSo
 
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         guard let genre = self.section?.category == nil
-            ? MWS.sh.allGenres[indexPath.row]
+            ? MWS.sh.allUniqueGenres[indexPath.row]
             : MWS.sh.genres[self.section!.category!]?[indexPath.row] else { return }
 
         self.section?.genreIds?.remove(genre.id)

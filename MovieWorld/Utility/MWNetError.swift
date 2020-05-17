@@ -16,6 +16,7 @@ enum MWNetError {
     case serverError(statusCode: Int)
     case parsingError(_ error: Error)
     case unauthError(apiKey: String)
+    case networkUnreachable
     case unknown(error: AFError)
 
     func printInConsole() {
@@ -36,6 +37,8 @@ enum MWNetError {
             return "Error! Can't parse: %@".localized(args: error.localizedDescription)
         case .unauthError(let apiKey):
             return "Error! Incorrect api key: %@".localized(args: apiKey)
+        case .networkUnreachable:
+            return "Error! The Internet connection appears to be offline".localized()
         case .unknown(let error):
             let localizedError =
                 error.underlyingError?.localizedDescription ?? error.localizedDescription

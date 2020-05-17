@@ -26,18 +26,9 @@ class MWActorDetails: Decodable {
 
     // MARK: public computed
 
-    var birthDate: Date? {
-        guard let birthday = self.birthday else { return nil }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter.date(from: birthday)
-    }
-    var deathDate: Date? {
-        guard let deathday = self.deathday else { return nil }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        return dateFormatter.date(from: deathday)
-    }
+    var birthDate: Date? { birthday?.date(format: MWN.sh.tmdbDateFormat) }
+    var deathDate: Date? { deathday?.date(format: MWN.sh.tmdbDateFormat) }
+
     var jobs: Set<String>? {
         guard let movies = self.movieCredits?.crew,
             let tv = self.tvCredits?.crew else { return nil }

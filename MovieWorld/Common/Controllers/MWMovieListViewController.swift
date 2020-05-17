@@ -12,22 +12,13 @@ class MWMovieListViewController: MWViewController {
 
     // MARK: - variables
 
-    var section: MWSection? {
-        didSet {
-            guard let section = self.section else { return }
-            self.tagCollectionView.setup(section: section) { [weak self] in
-                guard let self = self else { return }
-                self.isRequestBusy = false
-                self.loadMovies(nextPage: false)
-            }
-        }
-    }
-
+    private var section: MWSection?
     private var isRequestBusy: Bool = false
+    private var isHeaderEnabled: Bool = true
 
     // MARK: - gui variables
 
-    private let tagCollectionView = MWTagsCollectionView()
+    private lazy var tagCollectionView = MWTagsCollectionView()
 
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: CGRect(), style: .grouped)
@@ -62,7 +53,7 @@ class MWMovieListViewController: MWViewController {
 
         self.navigationItem.title = self.section?.name
         self.view.addSubview(self.retryView)
-        self.view.addSubview(self.tableView)
+        self.view.insertSubview(self.tableView, at: 0)
         self.makeConstraints()
 
         if let section = self.section, section.pagesLoaded == 0, !section.isStaticSection {
@@ -74,12 +65,11 @@ class MWMovieListViewController: MWViewController {
 
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            make.left.right.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         self.retryView.snp.makeConstraints { (make) in
             make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-                .offset(MWTagsCollectionView.height)
+                .offset(self.isHeaderEnabled ? MWTagsCollectionView.height : 0)
             make.left.right.bottom.equalToSuperview()
         }
         self.retryView.makeConstraints()
@@ -135,6 +125,23 @@ class MWMovieListViewController: MWViewController {
         }
     }
 
+    // MARK: - setters
+
+    func setup(section: MWSection?, isHeaderEnabled: Bool = true) {
+        guard let section = section else { return }
+
+        self.section = section
+        self.isHeaderEnabled = isHeaderEnabled
+
+        if isHeaderEnabled {
+            self.tagCollectionView.setup(section: section) { [weak self] in
+                guard let self = self else { return }
+                self.isRequestBusy = false
+                self.loadMovies(nextPage: false)
+            }
+        }
+    }
+
     // MARK: - actions
 
     @objc private func refreshAction() {
@@ -182,11 +189,11 @@ extension MWMovieListViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return self.tagCollectionView
+        return self.isHeaderEnabled ? self.tagCollectionView : nil
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return MWTagsCollectionView.height
+        return self.isHeaderEnabled ? MWTagsCollectionView.height : CGFloat.leastNonzeroMagnitude
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {

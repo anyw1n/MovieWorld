@@ -78,7 +78,7 @@ extension MWCollectionTableViewCell: MWCollectionViewWithHeaderDelegate {
 
     func allButtonTapped() {
         let controller = MWMovieListViewController()
-        controller.section = self.section?.copy()
+        controller.setup(section: self.section?.copy())
         MWI.sh.push(controller)
     }
 

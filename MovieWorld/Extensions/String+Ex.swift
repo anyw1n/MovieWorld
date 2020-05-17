@@ -21,4 +21,10 @@ extension String {
     func capitalizedFirstLetter() -> String {
         return self.prefix(1).uppercased() + self.dropFirst()
     }
+
+    func date(format: String) -> Date? {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = format
+        return dateFormatter.date(from: self)
+    }
 }

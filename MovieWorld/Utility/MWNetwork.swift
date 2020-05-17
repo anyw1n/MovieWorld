@@ -17,8 +17,12 @@ class MWNetwork {
 
     static let sh = MWNetwork()
 
+    let tmdbDateFormat = "yyyy-MM-dd"
+
     private let apiKey = "79d5894567be5b76ab7434fc12879584"
     private let baseUrl = "https://api.themoviedb.org/3"
+
+    let networkReachabilityManager = NetworkReachabilityManager()
 
     // MARK: - init
 
@@ -30,7 +34,12 @@ class MWNetwork {
     func request<T: Decodable>(url path: String,
                                queryParameters: Parameters? = nil,
                                successHandler: @escaping (T) -> Void,
-                               errorHandler: @escaping (MWNetError) -> Void) -> DataRequest {
+                               errorHandler: @escaping (MWNetError) -> Void) -> DataRequest? {
+        if let manager = self.networkReachabilityManager, !manager.isReachable {
+            errorHandler(.networkUnreachable)
+            return nil
+        }
+
         let url = self.baseUrl + path + "?api_key=" + self.apiKey
         var parameters: Parameters = queryParameters ?? [:]
         if let languageCode = Locale.current.languageCode, parameters["language"] == nil {
