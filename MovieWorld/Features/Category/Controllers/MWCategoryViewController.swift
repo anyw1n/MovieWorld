@@ -30,7 +30,7 @@ class MWCategoryViewController: MWViewController {
                                   animated: false)
         }
         control.selectedSegmentIndex = 0
-        control.backgroundColor = #colorLiteral(red: 0.9333333333, green: 0.9333333333, blue: 0.937254902, alpha: 1)
+        control.backgroundColor = #colorLiteral(red: 0.8745098039, green: 0.8745098039, blue: 0.8823529412, alpha: 1)
         control.tintColor = .white
         control.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
         control.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .normal)

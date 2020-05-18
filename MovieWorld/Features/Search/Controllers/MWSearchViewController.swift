@@ -81,8 +81,7 @@ class MWSearchViewController: MWViewController {
 
     private func makeConstraints() {
         self.tableView.snp.makeConstraints { (make) in
-            make.top.equalToSuperview()
-            make.left.right.bottom.equalToSuperview()
+            make.edges.equalToSuperview()
         }
         self.placeholder.snp.makeConstraints { (make) in
             make.center.equalToSuperview()
